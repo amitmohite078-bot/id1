@@ -3,8 +3,8 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SalonBridge — Customer Discovery & Booking App</title>
-  <meta name="description" content="Discover top-rated salons, compare services side-by-side, and lock real-time slots." />
+  <title>SalonBridge — Direct Salon Booking & Services Menu</title>
+  <meta name="description" content="View live salon service menu, transparent pricing, and lock real-time appointment slots instantly." />
   <script src="https://cdn.tailwindcss.com"></script>
   <style>
     .glass-pearl {
@@ -34,321 +34,473 @@
       transform: translateY(-1px);
       box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.35);
     }
+    .category-pill.active {
+      background: #18181b;
+      color: #ffffff;
+      border-color: #18181b;
+    }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-zinc-50 to-stone-100/50 text-zinc-900 antialiased font-sans">
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-zinc-50 to-stone-100/50 text-zinc-900 antialiased font-sans pb-16">
 
-  <!-- Customer Navbar -->
-  <header class="sticky top-0 z-50 border-b border-white/80 bg-white/70 backdrop-blur-2xl">
-    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+  <!-- Clean Customer Header (No cross-app demo links) -->
+  <header class="sticky top-0 z-50 border-b border-white/80 bg-white/75 backdrop-blur-2xl">
+    <div class="mx-auto flex max-w-4xl items-center justify-between px-6 py-4">
       <div class="flex items-center gap-3">
-        <a href="../" class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
+        <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
           S
-        </a>
+        </div>
         <div>
           <span class="text-lg font-bold tracking-tight text-zinc-900">SalonBridge</span>
           <span class="ml-2 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">
-            Customer App (Port 3000)
+            Verified Booking Portal
           </span>
         </div>
       </div>
-      <div class="flex items-center gap-3">
-        <a href="../salon/" class="text-xs font-semibold text-zinc-600 hover:text-zinc-900">Partner App →</a>
-        <a href="../admin/" class="text-xs font-semibold text-zinc-600 hover:text-zinc-900">Admin Panel →</a>
-        <a href="../" class="rounded-xl border border-zinc-200 bg-white/80 px-3.5 py-1.5 text-xs font-semibold text-zinc-800 hover:bg-white">
-          ← Hub
+      <div class="flex items-center gap-3 text-xs">
+        <a href="tel:+919876543210" class="rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm flex items-center gap-1.5">
+          <span>📞</span>
+          <span class="hidden sm:inline">Call Salon</span>
         </a>
       </div>
     </div>
   </header>
 
-  <!-- Main Discovery Container -->
-  <main class="mx-auto max-w-6xl px-6 py-8 space-y-8">
+  <main class="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-8 space-y-6">
 
-    <!-- Search & Location Filter Bar -->
-    <div class="glass-pearl rounded-3xl p-6 sm:p-8">
-      <div class="flex flex-wrap items-center justify-between gap-4">
+    <!-- QR Scan Notice / Scanned Standee Banner -->
+    <div class="rounded-2xl border border-emerald-500/20 bg-emerald-50/70 p-3.5 sm:p-4 text-emerald-900 text-xs flex items-center justify-between gap-3">
+      <div class="flex items-center gap-2">
+        <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-xs">✓</span>
+        <span><strong>Front Desk Standee Scanned:</strong> You are viewing live pricing & real-time slots for this salon.</span>
+      </div>
+      <span class="rounded-full bg-emerald-600 text-white font-bold px-2.5 py-0.5 text-[10px] uppercase tracking-wider hidden sm:inline-block">Direct Desk Pass</span>
+    </div>
+
+    <!-- Particular Salon Profile Showcase -->
+    <div class="glass-pearl rounded-3xl p-6 sm:p-8 space-y-4">
+      <div class="flex flex-wrap items-start justify-between gap-4">
         <div>
-          <span class="rounded-full bg-zinc-900/5 px-2.5 py-0.5 text-[11px] font-semibold text-zinc-700">
-            📍 Geospatial Discovery (PostGIS ST_DWithin)
-          </span>
-          <h1 class="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
-            Discover Salons Near You
+          <div class="flex items-center gap-2 flex-wrap">
+            <span class="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[11px] font-bold text-emerald-700 border border-emerald-500/20">
+              ● Open Now (09:30 AM – 09:00 PM)
+            </span>
+            <span class="rounded-full bg-zinc-900/5 px-2.5 py-0.5 text-[11px] font-semibold text-zinc-700">
+              Instant Desk Check-in
+            </span>
+          </div>
+          <h1 id="salonName" class="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
+            Glow Studio Indiranagar
           </h1>
-          <p class="text-xs text-zinc-500">Real-time distance calculation, live reviews, and verified availability</p>
+          <p id="salonAddress" class="text-xs text-zinc-500 mt-1">
+            📍 100ft Road, Indiranagar, Bengaluru · Manager: Priya Sharma
+          </p>
         </div>
 
-        <!-- Filter Controls -->
-        <div class="flex flex-wrap items-center gap-2">
-          <select id="locationSelect" onchange="filterSalons()" class="rounded-xl border border-zinc-200/90 bg-white/90 px-3 py-2 text-xs font-semibold text-zinc-800">
-            <option value="all">All Locations (Bengaluru)</option>
-            <option value="indiranagar">Indiranagar (100ft Rd)</option>
-            <option value="koramangala">Koramangala (5th Block)</option>
-            <option value="hsr">HSR Layout (Sector 2)</option>
-          </select>
-          <select id="genderSelect" onchange="filterSalons()" class="rounded-xl border border-zinc-200/90 bg-white/90 px-3 py-2 text-xs font-semibold text-zinc-800">
-            <option value="all">All Categories</option>
-            <option value="unisex">Unisex</option>
-            <option value="women">Women Only</option>
-            <option value="men">Men Only</option>
-          </select>
+        <div class="flex flex-col items-end">
+          <div class="flex items-center gap-1 rounded-2xl bg-zinc-900 px-3 py-1.5 text-white shadow-sm">
+            <span class="text-amber-400 font-bold text-sm">★</span>
+            <span id="salonRating" class="text-xs font-bold">4.9</span>
+            <span class="text-[10px] text-zinc-400">(248 reviews)</span>
+          </div>
+          <span class="mt-1 text-[11px] font-semibold text-emerald-600">✓ 100% Verified Services</span>
+        </div>
+      </div>
+
+      <!-- Salon Amenities & Guarantees -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-2 pt-2 border-t border-zinc-100 text-xs text-zinc-600">
+        <div class="flex items-center gap-1.5 p-2 rounded-xl bg-white/60">
+          <span>⚡</span>
+          <span>Zero Wait Time</span>
+        </div>
+        <div class="flex items-center gap-1.5 p-2 rounded-xl bg-white/60">
+          <span>🧴</span>
+          <span>L'Oréal & Olaplex</span>
+        </div>
+        <div class="flex items-center gap-1.5 p-2 rounded-xl bg-white/60">
+          <span>☕</span>
+          <span>Complimentary Beverages</span>
+        </div>
+        <div class="flex items-center gap-1.5 p-2 rounded-xl bg-white/60">
+          <span>💬</span>
+          <span>WhatsApp Reminders</span>
         </div>
       </div>
     </div>
 
-    <!-- Comparison Bar (Triggered when 2-4 salons selected) -->
-    <div id="compareBar" class="hidden glass-pearl rounded-2xl p-4 border-2 border-zinc-900 flex items-center justify-between">
-      <div class="flex items-center gap-2">
-        <span class="rounded-full bg-zinc-900 text-white text-xs px-2.5 py-0.5 font-bold" id="compareCount">2 Salons</span>
-        <span class="text-xs font-semibold text-zinc-800">Ready for side-by-side rate comparison</span>
-      </div>
-      <button onclick="openCompareModal()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold">
-        Compare Rates & Distance →
+    <!-- Category Filter Bar (No comparison) -->
+    <div class="flex items-center gap-2 overflow-x-auto pb-1 text-xs">
+      <button onclick="filterCategory('all', this)" class="category-pill active whitespace-nowrap rounded-xl border border-zinc-200 bg-white/80 px-4 py-2 font-bold text-zinc-800 shadow-sm transition-all">
+        All Services (7)
+      </button>
+      <button onclick="filterCategory('hair', this)" class="category-pill whitespace-nowrap rounded-xl border border-zinc-200 bg-white/80 px-4 py-2 font-semibold text-zinc-700 hover:bg-white shadow-sm transition-all">
+        💇 Haircut & Styling
+      </button>
+      <button onclick="filterCategory('skin', this)" class="category-pill whitespace-nowrap rounded-xl border border-zinc-200 bg-white/80 px-4 py-2 font-semibold text-zinc-700 hover:bg-white shadow-sm transition-all">
+        ✨ Facial & Skin
+      </button>
+      <button onclick="filterCategory('grooming', this)" class="category-pill whitespace-nowrap rounded-xl border border-zinc-200 bg-white/80 px-4 py-2 font-semibold text-zinc-700 hover:bg-white shadow-sm transition-all">
+        💈 Grooming & Beard
+      </button>
+      <button onclick="filterCategory('spa', this)" class="category-pill whitespace-nowrap rounded-xl border border-zinc-200 bg-white/80 px-4 py-2 font-semibold text-zinc-700 hover:bg-white shadow-sm transition-all">
+        💆 Massage & Spa
       </button>
     </div>
 
-    <!-- Salon Discovery Cards Grid -->
-    <div id="salonsGrid" class="grid gap-6 md:grid-cols-3">
-      <!-- Salon 1 -->
-      <div class="salon-card glass-pearl rounded-3xl p-6 transition-all hover:scale-[1.01]" data-location="indiranagar" data-gender="unisex">
-        <div class="flex items-center justify-between">
-          <span class="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">
-            Instant Confirmation
-          </span>
-          <span class="text-xs font-bold text-zinc-900">★ 4.9 (248)</span>
-        </div>
-        <h3 class="mt-3 text-lg font-bold text-zinc-900">Glow Studio Indiranagar</h3>
-        <p class="text-xs text-zinc-500">100ft Road, Indiranagar · 1.2 km away</p>
-
-        <div class="mt-4 space-y-2 border-t border-zinc-100 pt-3 text-xs">
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Haircut & Styling:</span>
-            <span class="font-bold text-zinc-900">₹799</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Balayage & Hair Spa:</span>
-            <span class="font-bold text-zinc-900">₹3,499</span>
-          </div>
-        </div>
-
-        <div class="mt-5 flex gap-2">
-          <button onclick="selectForBooking('Glow Studio Indiranagar', 'Haircut & Styling', 799)" class="btn-gloss-noir flex-1 rounded-xl py-2 text-xs font-bold">
-            Book Slot
-          </button>
-          <button onclick="toggleCompare('Glow Studio Indiranagar', this)" class="compare-btn rounded-xl border border-zinc-200 bg-white/80 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-white">
-            + Compare
-          </button>
-        </div>
-      </div>
-
-      <!-- Salon 2 -->
-      <div class="salon-card glass-pearl rounded-3xl p-6 transition-all hover:scale-[1.01]" data-location="koramangala" data-gender="unisex">
-        <div class="flex items-center justify-between">
-          <span class="rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold text-amber-700 border border-amber-500/20">
-            Popular Grooming
-          </span>
-          <span class="text-xs font-bold text-zinc-900">★ 4.8 (192)</span>
-        </div>
-        <h3 class="mt-3 text-lg font-bold text-zinc-900">Urban Cuts Koramangala</h3>
-        <p class="text-xs text-zinc-500">5th Block, Koramangala · 3.4 km away</p>
-
-        <div class="mt-4 space-y-2 border-t border-zinc-100 pt-3 text-xs">
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Executive Haircut:</span>
-            <span class="font-bold text-zinc-900">₹699</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Beard Grooming & Spa:</span>
-            <span class="font-bold text-zinc-900">₹1,199</span>
-          </div>
-        </div>
-
-        <div class="mt-5 flex gap-2">
-          <button onclick="selectForBooking('Urban Cuts Koramangala', 'Executive Haircut', 699)" class="btn-gloss-noir flex-1 rounded-xl py-2 text-xs font-bold">
-            Book Slot
-          </button>
-          <button onclick="toggleCompare('Urban Cuts Koramangala', this)" class="compare-btn rounded-xl border border-zinc-200 bg-white/80 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-white">
-            + Compare
-          </button>
-        </div>
-      </div>
-
-      <!-- Salon 3 -->
-      <div class="salon-card glass-pearl rounded-3xl p-6 transition-all hover:scale-[1.01]" data-location="hsr" data-gender="women">
-        <div class="flex items-center justify-between">
-          <span class="rounded-full bg-rose-500/10 px-2.5 py-0.5 text-[10px] font-bold text-rose-700 border border-rose-500/20">
-            Luxury Spa
-          </span>
-          <span class="text-xs font-bold text-zinc-900">★ 4.95 (310)</span>
-        </div>
-        <h3 class="mt-3 text-lg font-bold text-zinc-900">Aura Botanical Lounge</h3>
-        <p class="text-xs text-zinc-500">Sector 2, HSR Layout · 4.8 km away</p>
-
-        <div class="mt-4 space-y-2 border-t border-zinc-100 pt-3 text-xs">
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Organic Scalp Detox:</span>
-            <span class="font-bold text-zinc-900">₹1,499</span>
-          </div>
-          <div class="flex justify-between items-center">
-            <span class="text-zinc-600">Keratin Silk Infusion:</span>
-            <span class="font-bold text-zinc-900">₹4,299</span>
-          </div>
-        </div>
-
-        <div class="mt-5 flex gap-2">
-          <button onclick="selectForBooking('Aura Botanical Lounge', 'Organic Scalp Detox', 1499)" class="btn-gloss-noir flex-1 rounded-xl py-2 text-xs font-bold">
-            Book Slot
-          </button>
-          <button onclick="toggleCompare('Aura Botanical Lounge', this)" class="compare-btn rounded-xl border border-zinc-200 bg-white/80 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-white">
-            + Compare
-          </button>
-        </div>
-      </div>
+    <!-- Particular Salon Services & Rates List (Pure, No compare section) -->
+    <div id="servicesContainer" class="space-y-3">
+      <!-- Injected dynamically by script based on salon dataset -->
     </div>
 
-    <!-- Interactive Slot Locking Modal / Drawer -->
-    <div id="bookingDrawer" class="hidden glass-pearl rounded-3xl p-8 border-2 border-zinc-900 space-y-6">
-      <div class="flex items-center justify-between border-b border-zinc-200/80 pb-4">
+    <!-- Interactive Slot Locking & Booking Drawer -->
+    <div id="bookingDrawer" class="hidden glass-pearl rounded-3xl p-6 sm:p-8 border-2 border-zinc-900 space-y-6 shadow-2xl">
+      <div class="flex items-center justify-between border-b border-zinc-200 pb-4">
         <div>
-          <span class="rounded-full bg-zinc-900 px-3 py-1 text-[11px] font-bold text-white uppercase">
+          <span class="rounded-full bg-zinc-900 px-3 py-1 text-[11px] font-bold text-white uppercase tracking-wider">
             7-Min Slot Lock Active
           </span>
-          <h2 id="drawerSalonName" class="mt-2 text-xl font-bold text-zinc-900">Glow Studio Indiranagar</h2>
-          <p id="drawerServiceName" class="text-xs text-zinc-500">Haircut & Styling · ₹799</p>
+          <h3 id="drawerServiceName" class="mt-2 text-xl font-extrabold text-zinc-900">Haircut & Styling</h3>
+          <p id="drawerDurationPrice" class="text-xs text-zinc-500">45 mins · ₹799 (Inclusive of all taxes)</p>
         </div>
         <div class="text-right">
-          <span class="text-xs text-zinc-400">Lock TTL:</span>
-          <p id="drawerTimer" class="font-mono text-lg font-bold text-emerald-600">07:00</p>
+          <span class="text-[11px] font-semibold text-zinc-400">Lock Expires In:</span>
+          <p id="drawerTimer" class="font-mono text-xl font-bold text-emerald-600">07:00</p>
         </div>
       </div>
 
-      <div class="grid gap-6 sm:grid-cols-2">
-        <div>
-          <label class="block text-xs font-semibold text-zinc-700 mb-2">Select Appointment Slot Today:</label>
-          <div class="grid grid-cols-3 gap-2">
-            <button onclick="chooseSlot(this, '10:30 AM')" class="slot-choice rounded-xl bg-zinc-900 text-white p-2.5 text-xs font-bold shadow-md">10:30 AM</button>
-            <button onclick="chooseSlot(this, '01:00 PM')" class="slot-choice rounded-xl bg-white border border-zinc-200 p-2.5 text-xs font-semibold hover:bg-zinc-100">01:00 PM</button>
-            <button onclick="chooseSlot(this, '04:30 PM')" class="slot-choice rounded-xl bg-white border border-zinc-200 p-2.5 text-xs font-semibold hover:bg-zinc-100">04:30 PM</button>
+      <div class="grid gap-6 md:grid-cols-2">
+        <!-- Step 1: Stylist & Slot Selection -->
+        <div class="space-y-4">
+          <div>
+            <label class="block text-xs font-bold text-zinc-800 mb-1.5">Choose Stylist / Specialist:</label>
+            <select id="stylistSelect" class="w-full rounded-xl border border-zinc-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-zinc-800 focus:outline-none focus:ring-2 focus:ring-zinc-900">
+              <option value="Any Specialist">Any Specialist Available (Fastest)</option>
+              <option value="Priya Sharma">Priya Sharma — Master Stylist (8 yrs exp)</option>
+              <option value="Rahul Sen">Rahul Sen — Creative Colorist & Stylist (6 yrs exp)</option>
+              <option value="Ananya Nair">Ananya Nair — Skin & Spa Therapist (5 yrs exp)</option>
+            </select>
           </div>
 
-          <div class="mt-4 space-y-2 text-xs text-zinc-600">
-            <p>✓ 100% Refundable up to 4 hours before slot</p>
-            <p>✓ WhatsApp confirmation sent instantly</p>
+          <div>
+            <label class="block text-xs font-bold text-zinc-800 mb-1.5">Select Appointment Time Today:</label>
+            <div class="grid grid-cols-3 gap-2">
+              <button type="button" onclick="chooseSlot(this, '10:30 AM')" class="slot-choice rounded-xl bg-zinc-900 text-white p-2.5 text-xs font-bold shadow-md">10:30 AM</button>
+              <button type="button" onclick="chooseSlot(this, '11:45 AM')" class="slot-choice rounded-xl bg-white border border-zinc-200 p-2.5 text-xs font-semibold hover:bg-zinc-100">11:45 AM</button>
+              <button type="button" onclick="chooseSlot(this, '01:30 PM')" class="slot-choice rounded-xl bg-white border border-zinc-200 p-2.5 text-xs font-semibold hover:bg-zinc-100">01:30 PM</button>
+              <button type="button" onclick="chooseSlot(this, '03:00 PM')" class="slot-choice rounded-xl bg-white border border-zinc-200 p-2.5 text-xs font-semibold hover:bg-zinc-100">03:00 PM</button>
+              <button type="button" onclick="chooseSlot(this, '04:30 PM')" class="slot-choice rounded-xl bg-white border border-zinc-200 p-2.5 text-xs font-semibold hover:bg-zinc-100">04:30 PM</button>
+              <button type="button" onclick="chooseSlot(this, '06:00 PM')" class="slot-choice rounded-xl bg-white border border-zinc-200 p-2.5 text-xs font-semibold hover:bg-zinc-100">06:00 PM</button>
+            </div>
           </div>
         </div>
 
-        <!-- Payment Breakdown -->
-        <div class="glass-subtle rounded-2xl p-5 space-y-3">
-          <h4 class="font-bold text-sm text-zinc-900">Marketplace Split Payout</h4>
-          <div class="flex justify-between text-xs">
-            <span class="text-zinc-500">Service Subtotal:</span>
-            <span id="subtotalVal" class="font-bold text-zinc-900">₹799</span>
-          </div>
-          <div class="flex justify-between text-xs">
-            <span class="text-zinc-500">Salon Payout (Razorpay Route 90%):</span>
-            <span id="salonShare" class="font-bold text-emerald-700">₹719</span>
-          </div>
-          <div class="flex justify-between text-xs border-b pb-2">
-            <span class="text-zinc-500">Platform Take Rate (10%):</span>
-            <span id="platformShare" class="font-bold text-zinc-700">₹80</span>
-          </div>
-          <div class="flex justify-between text-sm font-extrabold">
-            <span>Total Payable:</span>
-            <span id="totalPayable">₹799</span>
+        <!-- Step 2: Customer Details & Confirmation -->
+        <div class="glass-subtle rounded-2xl p-5 space-y-3.5 flex flex-col justify-between">
+          <div class="space-y-3">
+            <h4 class="font-bold text-xs uppercase tracking-wider text-zinc-900">Your Appointment Pass</h4>
+            <div>
+              <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Your Full Name:</label>
+              <input id="custName" type="text" placeholder="e.g. Priya M." value="Aarav Sharma" class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-zinc-600 mb-1">WhatsApp Mobile (For instant pass & OTP):</label>
+              <input id="custPhone" type="tel" placeholder="+91 98765 43210" value="+91 98765 43210" class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-mono font-semibold text-zinc-800" />
+            </div>
+            <div>
+              <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Payment Preference:</label>
+              <select id="paymentPref" class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800">
+                <option value="desk">Pay at Salon Desk (Cash / UPI after service)</option>
+                <option value="prepaid">Instant Prepaid (Zero waiting at billing desk)</option>
+              </select>
+            </div>
           </div>
 
-          <div class="pt-2 flex gap-2">
-            <button onclick="confirmBooking()" class="btn-gloss-noir flex-1 rounded-xl py-2.5 text-xs font-bold">
-              Confirm & Book Slot
-            </button>
-            <button onclick="closeDrawer()" class="rounded-xl border border-zinc-300 bg-white px-3 py-2 text-xs font-semibold">
-              Cancel
-            </button>
+          <div class="pt-2 border-t border-zinc-200 space-y-2">
+            <div class="flex justify-between items-center text-xs">
+              <span class="text-zinc-500">Total Payable:</span>
+              <span id="drawerTotal" class="text-base font-extrabold text-zinc-900">₹799</span>
+            </div>
+            <div class="flex gap-2">
+              <button onclick="confirmBooking()" class="btn-gloss-noir flex-1 rounded-xl py-2.5 text-xs font-bold">
+                Confirm & Lock Slot →
+              </button>
+              <button onclick="closeDrawer()" class="rounded-xl border border-zinc-300 bg-white px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-100">
+                Cancel
+              </button>
+            </div>
           </div>
         </div>
       </div>
     </div>
 
     <!-- Booking Confirmation Success Banner -->
-    <div id="successBanner" class="hidden glass-pearl rounded-3xl p-8 border-2 border-emerald-500 text-center space-y-3">
-      <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-emerald-100 text-emerald-800 text-xl font-bold">
+    <div id="successBanner" class="hidden glass-pearl rounded-3xl p-8 border-2 border-emerald-500 text-center space-y-4 shadow-2xl">
+      <div class="mx-auto flex h-14 w-14 items-center justify-center rounded-full bg-emerald-100 text-emerald-800 text-2xl font-bold shadow-sm">
         ✓
       </div>
-      <h3 class="text-2xl font-bold text-zinc-900">Appointment Confirmed!</h3>
-      <p id="successDesc" class="text-xs text-zinc-600 max-w-md mx-auto">
-        Your slot has been reserved. Booking ID: #SB-98421. WhatsApp confirmation dispatched.
+      <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-500/20">
+        Appointment Confirmed & Reserved
+      </span>
+      <h2 class="text-2xl sm:text-3xl font-extrabold text-zinc-900">Slot Locked Successfully!</h2>
+      <div class="max-w-md mx-auto rounded-2xl bg-white/80 p-5 border border-zinc-200/80 text-left space-y-2 text-xs shadow-sm">
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-zinc-500">Booking Reference:</span>
+          <span class="font-mono font-bold text-zinc-900">#SB-98421</span>
+        </div>
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-zinc-500">Salon:</span>
+          <span class="font-bold text-zinc-900" id="confSalon">Glow Studio Indiranagar</span>
+        </div>
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-zinc-500">Service:</span>
+          <span class="font-bold text-zinc-900" id="confService">Haircut & Styling</span>
+        </div>
+        <div class="flex justify-between border-b pb-2">
+          <span class="text-zinc-500">Stylist & Slot:</span>
+          <span class="font-bold text-emerald-700" id="confSlot">10:30 AM Today</span>
+        </div>
+        <div class="flex justify-between">
+          <span class="text-zinc-500">Total:</span>
+          <span class="font-extrabold text-zinc-900" id="confTotal">₹799</span>
+        </div>
+      </div>
+      <p class="text-xs text-zinc-600 max-w-md mx-auto">
+        WhatsApp confirmation pass has been dispatched to your mobile number. Show this screen or your WhatsApp pass at the billing desk upon arrival.
       </p>
-      <button onclick="location.reload()" class="btn-gloss-noir rounded-xl px-5 py-2 text-xs font-bold">
-        Book Another Service
-      </button>
+      <div class="flex justify-center gap-3 pt-2">
+        <button onclick="location.reload()" class="btn-gloss-noir rounded-xl px-5 py-2.5 text-xs font-bold">
+          Book Another Service
+        </button>
+      </div>
     </div>
 
   </main>
 
   <script>
-    let compareList = [];
+    // Salon Datasets
+    const SALON_DATABASE = {
+      'glow-studio': {
+        name: 'Glow Studio Indiranagar',
+        address: '100ft Road, Indiranagar, Bengaluru · Manager: Priya Sharma',
+        rating: '4.9',
+        reviews: '248',
+        services: [
+          {
+            id: 's1',
+            category: 'hair',
+            name: 'Haircut & Master Styling',
+            duration: '45 mins',
+            price: 799,
+            description: 'Consultation, scalp revitalizing wash, customized haircut, and blast-dry styling.'
+          },
+          {
+            id: 's2',
+            category: 'hair',
+            name: 'Balayage & Intense Hair Spa',
+            duration: '90 mins',
+            price: 3499,
+            description: 'Custom dimensional hand-painted highlights, bond protector, and deep steam hydration.'
+          },
+          {
+            id: 's3',
+            category: 'hair',
+            name: 'Keratin Silk Infusion Treatment',
+            duration: '120 mins',
+            price: 4200,
+            description: 'Formaldehyde-free smoothing therapy, eliminating 95% frizz with mirror-gloss shine.'
+          },
+          {
+            id: 's4',
+            category: 'skin',
+            name: 'Hydra Glow Deep Aqua Facial',
+            duration: '60 mins',
+            price: 1999,
+            description: 'Hydro-dermabrasion exfoliation, hyaluronic serum infusion, and cryo-firming cold hammer.'
+          },
+          {
+            id: 's5',
+            category: 'skin',
+            name: 'Organic Scalp & Face Detox',
+            duration: '45 mins',
+            price: 1499,
+            description: 'Tea tree herbal steam scrub, pore extraction, and botanical face mask.'
+          },
+          {
+            id: 's6',
+            category: 'grooming',
+            name: 'Executive Beard Sculpt & Royal Shave',
+            duration: '30 mins',
+            price: 399,
+            description: 'Hot towel compress, precision straight razor detailing, and sandalwood beard butter.'
+          },
+          {
+            id: 's7',
+            category: 'spa',
+            name: 'Deep Tissue Head & Shoulder Stress Relief',
+            duration: '30 mins',
+            price: 699,
+            description: 'Therapeutic warm herbal oil massage targeting tension points across neck and shoulders.'
+          }
+        ]
+      },
+      'urban-cuts': {
+        name: 'Urban Cuts Koramangala',
+        address: '5th Block, Koramangala, Bengaluru · Manager: Devraj Rao',
+        rating: '4.8',
+        reviews: '192',
+        services: [
+          {
+            id: 'u1',
+            category: 'hair',
+            name: 'Executive Precision Haircut',
+            duration: '40 mins',
+            price: 699,
+            description: 'Stylist consultation, signature wash, fade & scissor styling.'
+          },
+          {
+            id: 'u2',
+            category: 'grooming',
+            name: 'Beard Grooming & Charcoal Detox',
+            duration: '40 mins',
+            price: 1199,
+            description: 'Beard trim, charcoal pore cleansing, and essential oil steam treatment.'
+          },
+          {
+            id: 'u3',
+            category: 'spa',
+            name: 'Aromatherapy Scalp Massage',
+            duration: '30 mins',
+            price: 599,
+            description: 'Lavender oil acupressure scalp massage.'
+          }
+        ]
+      },
+      'aura-luxe': {
+        name: 'Aura Botanical Lounge',
+        address: 'Sector 2, HSR Layout, Bengaluru · Manager: Neha Verma',
+        rating: '4.95',
+        reviews: '310',
+        services: [
+          {
+            id: 'a1',
+            category: 'hair',
+            name: 'Organic Scalp Detox & Trim',
+            duration: '60 mins',
+            price: 1499,
+            description: 'Plant-based scalp cleanse, herbal rinse, and precision trim.'
+          },
+          {
+            id: 'a2',
+            category: 'hair',
+            name: 'Keratin Silk Infusion',
+            duration: '120 mins',
+            price: 4299,
+            description: 'Luxury botanical protein therapy.'
+          },
+          {
+            id: 'a3',
+            category: 'skin',
+            name: 'Gold Glow Radiance Facial',
+            duration: '60 mins',
+            price: 2499,
+            description: '24k micro-gold active exfoliation and peptide infusion.'
+          }
+        ]
+      }
+    };
 
-    function filterSalons() {
-      const loc = document.getElementById('locationSelect').value;
-      const gen = document.getElementById('genderSelect').value;
-      document.querySelectorAll('.salon-card').forEach(card => {
-        const matchesLoc = loc === 'all' || card.getAttribute('data-location') === loc;
-        const matchesGen = gen === 'all' || card.getAttribute('data-gender') === gen;
-        card.style.display = (matchesLoc && matchesGen) ? 'block' : 'none';
+    let currentSalon = null;
+    let currentCategory = 'all';
+    let selectedSlotTime = '10:30 AM';
+    let activeService = null;
+    let lockTimerInterval = null;
+
+    // Detect salon from URL query parameter (e.g. ?salon=glow-studio)
+    function initSalon() {
+      const params = new URLSearchParams(window.location.search);
+      const salonParam = params.get('salon') || 'glow-studio';
+      currentSalon = SALON_DATABASE[salonParam] || SALON_DATABASE['glow-studio'];
+
+      document.getElementById('salonName').innerText = currentSalon.name;
+      document.getElementById('salonAddress').innerText = '📍 ' + currentSalon.address;
+      document.getElementById('salonRating').innerText = currentSalon.rating;
+
+      renderServices();
+    }
+
+    function renderServices() {
+      const container = document.getElementById('servicesContainer');
+      container.innerHTML = '';
+
+      const filtered = currentCategory === 'all'
+        ? currentSalon.services
+        : currentSalon.services.filter(s => s.category === currentCategory);
+
+      filtered.forEach(service => {
+        const card = document.createElement('div');
+        card.className = 'glass-pearl rounded-2xl p-4 sm:p-5 transition-all hover:scale-[1.008] border border-white/90 flex flex-col sm:flex-row sm:items-center justify-between gap-4';
+        card.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2">
+              <h3 class="text-base font-bold text-zinc-900">${service.name}</h3>
+              <span class="rounded-full bg-zinc-100 px-2.5 py-0.5 text-[10px] font-semibold text-zinc-600">
+                ⏱ ${service.duration}
+              </span>
+            </div>
+            <p class="text-xs text-zinc-500">${service.description}</p>
+          </div>
+          <div class="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-zinc-100">
+            <div class="text-left sm:text-right">
+              <span class="text-xs text-zinc-400 block sm:inline">Price: </span>
+              <span class="text-lg font-extrabold text-zinc-900">₹${service.price}</span>
+            </div>
+            <button onclick="openBookingDrawer('${service.id}')" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold whitespace-nowrap shadow-md">
+              Book Slot →
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
       });
     }
 
-    function toggleCompare(name, btn) {
-      if (compareList.includes(name)) {
-        compareList = compareList.filter(n => n !== name);
-        btn.innerText = '+ Compare';
-        btn.className = 'compare-btn rounded-xl border border-zinc-200 bg-white/80 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-white';
-      } else {
-        compareList.push(name);
-        btn.innerText = '✓ Added';
-        btn.className = 'compare-btn rounded-xl bg-zinc-900 text-white px-3 py-2 text-xs font-semibold';
-      }
-
-      const bar = document.getElementById('compareBar');
-      if (compareList.length >= 2) {
-        bar.classList.remove('hidden');
-        document.getElementById('compareCount').innerText = `${compareList.length} Salons`;
-      } else {
-        bar.classList.add('hidden');
-      }
+    function filterCategory(cat, btn) {
+      currentCategory = cat;
+      document.querySelectorAll('.category-pill').forEach(b => {
+        b.className = 'category-pill whitespace-nowrap rounded-xl border border-zinc-200 bg-white/80 px-4 py-2 font-semibold text-zinc-700 hover:bg-white shadow-sm transition-all';
+      });
+      btn.className = 'category-pill active whitespace-nowrap rounded-xl border border-zinc-900 bg-zinc-900 px-4 py-2 font-bold text-white shadow-sm transition-all';
+      renderServices();
     }
 
-    function openCompareModal() {
-      alert(`Comparing ${compareList.join(' vs ')}: Real-time rates, verified distances, and available stylists.`);
-    }
+    function openBookingDrawer(serviceId) {
+      activeService = currentSalon.services.find(s => s.id === serviceId);
+      if (!activeService) return;
 
-    let timer = null;
-    function selectForBooking(salon, service, price) {
       document.getElementById('bookingDrawer').classList.remove('hidden');
-      document.getElementById('drawerSalonName').innerText = salon;
-      document.getElementById('drawerServiceName').innerText = `${service} · ₹${price}`;
-      document.getElementById('subtotalVal').innerText = '₹' + price;
-      document.getElementById('salonShare').innerText = '₹' + Math.round(price * 0.9);
-      document.getElementById('platformShare').innerText = '₹' + Math.round(price * 0.1);
-      document.getElementById('totalPayable').innerText = '₹' + price;
+      document.getElementById('drawerServiceName').innerText = activeService.name;
+      document.getElementById('drawerDurationPrice').innerText = `${activeService.duration} · ₹${activeService.price} (Inclusive of all taxes)`;
+      document.getElementById('drawerTotal').innerText = `₹${activeService.price}`;
+
       document.getElementById('bookingDrawer').scrollIntoView({ behavior: 'smooth' });
 
-      let sec = 420;
-      clearInterval(timer);
-      timer = setInterval(() => {
-        sec--;
-        if (sec <= 0) {
-          clearInterval(timer);
+      // Start 7-minute slot lock countdown
+      let seconds = 420;
+      clearInterval(lockTimerInterval);
+      lockTimerInterval = setInterval(() => {
+        seconds--;
+        if (seconds <= 0) {
+          clearInterval(lockTimerInterval);
           document.getElementById('drawerTimer').innerText = 'Expired';
         } else {
-          const m = String(Math.floor(sec / 60)).padStart(2, '0');
-          const s = String(sec % 60).padStart(2, '0');
+          const m = String(Math.floor(seconds / 60)).padStart(2, '0');
+          const s = String(seconds % 60).padStart(2, '0');
           document.getElementById('drawerTimer').innerText = `${m}:${s}`;
         }
       }, 1000);
     }
 
     function chooseSlot(btn, time) {
+      selectedSlotTime = time;
       document.querySelectorAll('.slot-choice').forEach(b => {
         b.className = 'slot-choice rounded-xl bg-white border border-zinc-200 p-2.5 text-xs font-semibold hover:bg-zinc-100';
       });
@@ -357,14 +509,31 @@
 
     function closeDrawer() {
       document.getElementById('bookingDrawer').classList.add('hidden');
-      clearInterval(timer);
+      clearInterval(lockTimerInterval);
     }
 
     function confirmBooking() {
+      if (!activeService) return;
+
+      const stylist = document.getElementById('stylistSelect').value;
+      const custName = document.getElementById('custName').value || 'Guest';
+
       document.getElementById('bookingDrawer').classList.add('hidden');
+      clearInterval(lockTimerInterval);
+
+      document.getElementById('confSalon').innerText = currentSalon.name;
+      document.getElementById('confService').innerText = activeService.name;
+      document.getElementById('confSlot').innerText = `${selectedSlotTime} Today (${stylist})`;
+      document.getElementById('confTotal').innerText = `₹${activeService.price}`;
+
       document.getElementById('successBanner').classList.remove('hidden');
       document.getElementById('successBanner').scrollIntoView({ behavior: 'smooth' });
     }
+
+    // Initialize on page load
+    window.addEventListener('DOMContentLoaded', () => {
+      initSalon();
+    });
   </script>
 </body>
 </html>

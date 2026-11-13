@@ -82,11 +82,6 @@ export default function SearchPage() {
             <Link href="/bookings" className="text-sm font-medium text-zinc-700 hover:text-zinc-900">
               My Bookings
             </Link>
-            {compareIds.length >= 2 && (
-              <Link href={`/compare?ids=${compareIds.join(',')}`}>
-                <Button size="sm">Compare ({compareIds.length})</Button>
-              </Link>
-            )}
           </div>
         </div>
       </header>
@@ -174,17 +169,9 @@ export default function SearchPage() {
                   )}
                 </div>
 
-                <div className="mt-4 flex items-center justify-between border-t border-zinc-100 pt-3">
-                  <label className="flex items-center gap-1.5 text-xs text-zinc-600">
-                    <input
-                      type="checkbox"
-                      checked={isComparing}
-                      onChange={() => toggleCompare(salon.id)}
-                    />
-                    Compare
-                  </label>
-                  <Link href={`/salon/${salon.slug}`}>
-                    <Button size="sm">View & Book</Button>
+                <div className="mt-4 flex items-center justify-end border-t border-zinc-100 pt-3">
+                  <Link href={`/salon/${salon.slug}`} className="w-full">
+                    <Button size="sm" className="w-full">View Services & Book</Button>
                   </Link>
                 </div>
               </div>

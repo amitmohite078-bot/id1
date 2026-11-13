@@ -446,7 +446,10 @@
       const name = document.getElementById('salonNameInput').value || 'Salon';
       document.getElementById('previewSalonName').innerText = name;
       const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-      const url = `https://salonbridge.in/salon/${slug}`;
+      const isGhPages = window.location.hostname.includes('github.io');
+      const url = isGhPages 
+        ? `${window.location.origin}/id1/customer/?salon=${slug}`
+        : `https://salonbridge.in/salon/${slug}`;
 
       const container = document.getElementById('qrcode');
       container.innerHTML = '';
@@ -463,7 +466,10 @@
     function copyShareLink() {
       const name = document.getElementById('salonNameInput').value || 'salon';
       const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-      const url = `https://salonbridge.in/salon/${slug}`;
+      const isGhPages = window.location.hostname.includes('github.io');
+      const url = isGhPages 
+        ? `${window.location.origin}/id1/customer/?salon=${slug}`
+        : `https://salonbridge.in/salon/${slug}`;
       navigator.clipboard.writeText(url);
       const btn = document.getElementById('shareBtn');
       btn.innerText = '✓ Copied Link!';

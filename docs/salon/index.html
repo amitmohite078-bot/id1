@@ -61,22 +61,21 @@
   <header class="sticky top-0 z-50 border-b border-white/80 bg-white/70 backdrop-blur-2xl print:hidden">
     <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <div class="flex items-center gap-3">
-        <a href="../" class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
+        <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
           S
-        </a>
+        </div>
         <div>
-          <span class="text-lg font-bold tracking-tight text-zinc-900">SalonBridge</span>
-          <span class="ml-2 rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold text-amber-700 border border-amber-500/20">
-            Partner Dashboard (Port 3001)
+          <span class="text-lg font-bold tracking-tight text-zinc-900">SalonBridge Partner</span>
+          <span class="ml-2 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">
+            Verified Partner
           </span>
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <a href="../customer/" class="text-xs font-semibold text-zinc-600 hover:text-zinc-900">← Customer App</a>
-        <a href="../admin/" class="text-xs font-semibold text-zinc-600 hover:text-zinc-900">Admin Panel →</a>
-        <a href="../" class="rounded-xl border border-zinc-200 bg-white/80 px-3.5 py-1.5 text-xs font-semibold text-zinc-800 hover:bg-white">
-          ← Hub
-        </a>
+        <span class="hidden sm:inline-block text-xs font-semibold text-zinc-600">Glow Studio Indiranagar</span>
+        <button onclick="document.getElementById('standeeSection').scrollIntoView({ behavior: 'smooth' })" class="btn-gloss-noir rounded-xl px-3.5 py-1.5 text-xs font-bold">
+          🖨️ Standee QR
+        </button>
       </div>
     </div>
   </header>
@@ -153,7 +152,7 @@
                 id="bookingLink"
                 type="text"
                 readonly
-                value="https://amitmohite078-bot.github.io/id1/customer/"
+                value="https://amitmohite078-bot.github.io/id1/customer/?salon=glow-studio"
                 class="flex-1 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-mono text-zinc-800"
               />
               <button onclick="copyBookingLink()" id="copyBtn" class="btn-gloss-noir rounded-xl px-3 py-2 text-xs font-bold">
@@ -259,7 +258,7 @@
 
   <script>
     function renderQr() {
-      const url = "https://amitmohite078-bot.github.io/id1/customer/";
+      const url = "https://amitmohite078-bot.github.io/id1/customer/?salon=glow-studio";
       const container = document.getElementById('partnerQr');
       container.innerHTML = '';
       new QRCode(container, {
