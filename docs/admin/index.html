@@ -1,0 +1,266 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SalonBridge — Super Admin Control Plane</title>
+  <meta name="description" content="Super Admin control plane with mandatory 2FA, salon onboarding approvals, commission overrides, and audit logs." />
+  <script src="https://cdn.tailwindcss.com"></script>
+  <style>
+    .glass-pearl {
+      background: rgba(255, 255, 255, 0.82);
+      backdrop-filter: blur(24px);
+      -webkit-backdrop-filter: blur(24px);
+      border: 1px solid rgba(255, 255, 255, 0.95);
+      box-shadow: 0 20px 45px -12px rgba(100, 116, 139, 0.12),
+                  inset 0 1px 2px 0 rgba(255, 255, 255, 0.95);
+    }
+    .glass-card-subtle {
+      background: rgba(255, 255, 255, 0.65);
+      backdrop-filter: blur(16px);
+      -webkit-backdrop-filter: blur(16px);
+      border: 1px solid rgba(255, 255, 255, 0.85);
+      box-shadow: 0 10px 25px -5px rgba(100, 116, 139, 0.08);
+    }
+    .btn-gloss-noir {
+      background: linear-gradient(180deg, #18181b 0%, #09090b 100%);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+      box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.25),
+                  inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+      color: #ffffff;
+      transition: all 0.2s ease;
+    }
+    .btn-gloss-noir:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.35);
+    }
+  </style>
+</head>
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-zinc-50 to-stone-100/50 text-zinc-900 antialiased font-sans">
+
+  <!-- Admin Navbar -->
+  <header class="sticky top-0 z-50 border-b border-white/80 bg-white/70 backdrop-blur-2xl">
+    <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
+      <div class="flex items-center gap-3">
+        <a href="../" class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
+          S
+        </a>
+        <div>
+          <span class="text-lg font-bold tracking-tight text-zinc-900">SalonBridge</span>
+          <span class="ml-2 rounded-full bg-purple-500/10 px-2.5 py-0.5 text-[10px] font-bold text-purple-700 border border-purple-500/20">
+            Super Admin (Port 3002)
+          </span>
+        </div>
+      </div>
+      <div class="flex items-center gap-3">
+        <a href="../customer/" class="text-xs font-semibold text-zinc-600 hover:text-zinc-900">← Customer App</a>
+        <a href="../salon/" class="text-xs font-semibold text-zinc-600 hover:text-zinc-900">Partner App →</a>
+        <a href="../" class="rounded-xl border border-zinc-200 bg-white/80 px-3.5 py-1.5 text-xs font-semibold text-zinc-800 hover:bg-white">
+          ← Hub
+        </a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Admin Control Plane Content -->
+  <main class="mx-auto max-w-6xl px-6 py-8 space-y-8">
+
+    <!-- 2FA & Security Status Banner -->
+    <div class="glass-pearl rounded-3xl p-6 sm:p-8">
+      <div class="flex flex-wrap items-center justify-between gap-4">
+        <div>
+          <div class="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-500/20">
+            🛡️ Mandatory TOTP 2FA Active · IP Allowlist Enforced
+          </div>
+          <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-zinc-900">
+            Super Admin Control Plane
+          </h1>
+          <p class="text-xs text-zinc-500">Platform governance, marketplace split oversight, and compliance auditing</p>
+        </div>
+
+        <div class="flex items-center gap-2 text-xs">
+          <span class="rounded-xl border border-zinc-200 bg-white/90 px-3 py-2 font-mono text-zinc-700">
+            IP: 192.168.1.1 (Allowed)
+          </span>
+          <span class="rounded-xl bg-zinc-900 text-white px-3 py-2 font-bold">
+            Role: SUPER_ADMIN
+          </span>
+        </div>
+      </div>
+
+      <!-- Quick Platform KPIs -->
+      <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-zinc-100 pt-6 text-xs">
+        <div class="glass-card-subtle rounded-2xl p-4">
+          <span class="text-zinc-400">Total Marketplace GMV:</span>
+          <p class="mt-1 text-2xl font-extrabold text-zinc-900">₹14,92,000</p>
+          <span class="text-[10px] text-emerald-600 font-bold">+28% growth</span>
+        </div>
+        <div class="glass-card-subtle rounded-2xl p-4">
+          <span class="text-zinc-400">Platform Revenue (10%):</span>
+          <p class="mt-1 text-2xl font-extrabold text-emerald-700">₹1,49,200</p>
+          <span class="text-[10px] text-zinc-500">Razorpay Route fee</span>
+        </div>
+        <div class="glass-card-subtle rounded-2xl p-4">
+          <span class="text-zinc-400">Active Salons:</span>
+          <p class="mt-1 text-2xl font-extrabold text-zinc-900">42</p>
+          <span class="text-[10px] text-amber-600 font-bold">3 pending verification</span>
+        </div>
+        <div class="glass-card-subtle rounded-2xl p-4">
+          <span class="text-zinc-400">Registered Customers:</span>
+          <p class="mt-1 text-2xl font-extrabold text-zinc-900">3,840</p>
+          <span class="text-[10px] text-zinc-500">0 blocked users</span>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 1: Salon Approval Queue -->
+    <div class="glass-pearl rounded-3xl p-8 sm:p-12 space-y-6">
+      <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
+        <div>
+          <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-700 border border-amber-500/20">
+            Action Required
+          </span>
+          <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-900">
+            Pending Salon Approvals Queue
+          </h2>
+          <p class="text-xs text-zinc-500">Review business registration, GSTIN, and assign custom commission rates</p>
+        </div>
+        <span class="text-xs font-semibold text-zinc-500">3 pending</span>
+      </div>
+
+      <div class="divide-y divide-zinc-100 text-xs">
+        <!-- Item 1 -->
+        <div id="row-salon-1" class="py-4 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-sm text-zinc-900">Bliss Wellness & Spa</span>
+              <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] text-zinc-600 font-mono">GSTIN: 29AABCU9603R1Z7</span>
+            </div>
+            <p class="text-zinc-500 mt-1">HSR Layout, Sector 4 · Owner: Suresh Nair (+91 98451 22334)</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-zinc-500">
+              Commission:
+              <select id="comm-1" class="rounded-lg border border-zinc-200 bg-white px-2 py-1 font-bold text-zinc-900">
+                <option value="10">10% (Default)</option>
+                <option value="8">8% (VIP Partner)</option>
+                <option value="15">15% (Premium)</option>
+              </select>
+            </label>
+            <button onclick="approveSalon('row-salon-1', 'Bliss Wellness')" class="btn-gloss-noir rounded-xl px-4 py-2 font-bold text-emerald-300">
+              ✓ Approve
+            </button>
+            <button onclick="rejectSalon('row-salon-1')" class="rounded-xl border border-red-200 text-red-600 px-3 py-2 font-bold hover:bg-red-50">
+              Reject
+            </button>
+          </div>
+        </div>
+
+        <!-- Item 2 -->
+        <div id="row-salon-2" class="py-4 flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <div class="flex items-center gap-2">
+              <span class="font-bold text-sm text-zinc-900">Vogue Hair Bar</span>
+              <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] text-zinc-600 font-mono">GSTIN: 29AAEFV1102K1ZS</span>
+            </div>
+            <p class="text-zinc-500 mt-1">Koramangala, 6th Block · Owner: Ananya Roy (+91 97412 55678)</p>
+          </div>
+          <div class="flex items-center gap-2">
+            <label class="text-zinc-500">
+              Commission:
+              <select id="comm-2" class="rounded-lg border border-zinc-200 bg-white px-2 py-1 font-bold text-zinc-900">
+                <option value="10">10% (Default)</option>
+                <option value="8">8% (VIP Partner)</option>
+                <option value="15">15% (Premium)</option>
+              </select>
+            </label>
+            <button onclick="approveSalon('row-salon-2', 'Vogue Hair Bar')" class="btn-gloss-noir rounded-xl px-4 py-2 font-bold text-emerald-300">
+              ✓ Approve
+            </button>
+            <button onclick="rejectSalon('row-salon-2')" class="rounded-xl border border-red-200 text-red-600 px-3 py-2 font-bold hover:bg-red-50">
+              Reject
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Section 2: Immutable Security Audit Log -->
+    <div class="glass-pearl rounded-3xl p-8 sm:p-12 space-y-4">
+      <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
+        <div>
+          <span class="rounded-full bg-zinc-900/5 px-3 py-1 text-xs font-bold text-zinc-700">
+            Compliance & Security
+          </span>
+          <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-900">
+            Immutable Audit Trail
+          </h2>
+          <p class="text-xs text-zinc-500">Append-only record of all administrative overrides, logins, and approvals</p>
+        </div>
+      </div>
+
+      <div class="glass-card-subtle rounded-2xl overflow-hidden">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-zinc-100/80 border-b border-zinc-200 text-zinc-700">
+            <tr>
+              <th class="p-3">Timestamp</th>
+              <th class="p-3">Action</th>
+              <th class="p-3">Target</th>
+              <th class="p-3">Actor</th>
+              <th class="p-3">IP Address</th>
+            </tr>
+          </thead>
+          <tbody id="auditRows" class="divide-y divide-zinc-100">
+            <tr>
+              <td class="p-3 font-mono text-zinc-500">Today, 19:20:14</td>
+              <td class="p-3 font-bold text-emerald-700">SALON_APPROVED</td>
+              <td class="p-3 font-medium">Glow Studio Indiranagar</td>
+              <td class="p-3">admin@salonbridge.in</td>
+              <td class="p-3 font-mono text-zinc-500">192.168.1.1</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-mono text-zinc-500">Today, 18:45:02</td>
+              <td class="p-3 font-bold text-indigo-700">COMMISSION_OVERRIDE</td>
+              <td class="p-3 font-medium">Urban Cuts (10% &rarr; 8%)</td>
+              <td class="p-3">admin@salonbridge.in</td>
+              <td class="p-3 font-mono text-zinc-500">192.168.1.1</td>
+            </tr>
+            <tr>
+              <td class="p-3 font-mono text-zinc-500">Today, 17:10:48</td>
+              <td class="p-3 font-bold text-zinc-900">TOTP_2FA_VERIFIED</td>
+              <td class="p-3 font-medium">Super Admin Session</td>
+              <td class="p-3">admin@salonbridge.in</td>
+              <td class="p-3 font-mono text-zinc-500">192.168.1.1</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </main>
+
+  <script>
+    function approveSalon(rowId, name) {
+      document.getElementById(rowId).remove();
+      alert(`✓ ${name} has been approved! Automatic onboarding QR code generated and dispatched.`);
+      
+      const tbody = document.getElementById('auditRows');
+      const tr = document.createElement('tr');
+      const now = new Date().toLocaleTimeString();
+      tr.innerHTML = `
+        <td class="p-3 font-mono text-zinc-500">Just now (${now})</td>
+        <td class="p-3 font-bold text-emerald-700">SALON_APPROVED</td>
+        <td class="p-3 font-medium">${name}</td>
+        <td class="p-3">admin@salonbridge.in</td>
+        <td class="p-3 font-mono text-zinc-500">192.168.1.1</td>
+      `;
+      tbody.prepend(tr);
+    }
+
+    function rejectSalon(rowId) {
+      document.getElementById(rowId).remove();
+      alert('Salon registration rejected.');
+    }
+  </script>
+</body>
+</html>
