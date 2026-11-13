@@ -20,6 +20,9 @@ npm-debug.log*
 .DS_Store
 Thumbs.db
 
+# Standalone Polyrepo Platforms
+platforms/
+
 # Coverage
 coverage/
 

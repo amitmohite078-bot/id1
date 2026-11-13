@@ -1,10 +1,12 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>SalonBridge — Multi-Tenant Salon Marketplace & Operating System</title>
-  <meta name="description" content="Connect salons with everyday customers. Real-time availability, AI menu import, dynamic QR desk standees, and marketplace split payments." />
+  <meta name="description"
+    content="Connect salons with everyday customers. Real-time availability, AI menu import, dynamic QR desk standees, and marketplace split payments." />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
@@ -15,9 +17,10 @@
       -webkit-backdrop-filter: blur(24px);
       border: 1px solid rgba(255, 255, 255, 0.9);
       box-shadow: 0 20px 45px -12px rgba(100, 116, 139, 0.12),
-                  0 4px 12px 0 rgba(148, 163, 184, 0.05),
-                  inset 0 1px 2px 0 rgba(255, 255, 255, 0.95);
+        0 4px 12px 0 rgba(148, 163, 184, 0.05),
+        inset 0 1px 2px 0 rgba(255, 255, 255, 0.95);
     }
+
     .glass-card-subtle {
       background: rgba(255, 255, 255, 0.65);
       backdrop-filter: blur(16px);
@@ -25,18 +28,21 @@
       border: 1px solid rgba(255, 255, 255, 0.8);
       box-shadow: 0 10px 25px -5px rgba(100, 116, 139, 0.08);
     }
+
     .btn-gloss-noir {
       background: linear-gradient(180deg, #18181b 0%, #09090b 100%);
       border: 1px solid rgba(255, 255, 255, 0.2);
       box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.25),
-                  inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
+        inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
       color: #ffffff;
       transition: all 0.2s ease;
     }
+
     .btn-gloss-noir:hover {
       transform: translateY(-1px);
       box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.35);
     }
+
     .btn-gloss-glass {
       background: rgba(255, 255, 255, 0.85);
       border: 1px solid rgba(255, 255, 255, 0.95);
@@ -44,19 +50,23 @@
       color: #18181b;
       transition: all 0.2s ease;
     }
+
     .btn-gloss-glass:hover {
       background: #ffffff;
       transform: translateY(-1px);
     }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-zinc-50 to-stone-100/50 text-zinc-900 antialiased font-sans">
+
+<body
+  class="min-h-screen bg-gradient-to-br from-slate-50 via-zinc-50 to-stone-100/50 text-zinc-900 antialiased font-sans">
 
   <!-- Navbar -->
   <nav class="sticky top-0 z-50 border-b border-white/80 bg-white/70 backdrop-blur-2xl">
     <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <div class="flex items-center gap-3">
-        <span class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
+        <span
+          class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
           S
         </span>
         <div>
@@ -67,20 +77,18 @@
         </div>
       </div>
       <div class="flex items-center gap-3">
-        <a href="#interactive-demo" class="hidden sm:inline-block text-xs font-semibold text-zinc-600 hover:text-zinc-900">
+        <a href="#interactive-demo"
+          class="hidden sm:inline-block text-xs font-semibold text-zinc-600 hover:text-zinc-900">
           Live Interactive Demos
         </a>
         <a href="#architecture" class="hidden sm:inline-block text-xs font-semibold text-zinc-600 hover:text-zinc-900">
           Architecture
         </a>
-        <a
-          href="https://github.com/amitmohite078-bot/id1"
-          target="_blank"
-          rel="noopener noreferrer"
-          class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-semibold flex items-center gap-2"
-        >
+        <a href="https://github.com/amitmohite078-bot/id1" target="_blank" rel="noopener noreferrer"
+          class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-semibold flex items-center gap-2">
           <svg class="h-4 w-4" fill="currentColor" viewBox="0 0 24 24">
-            <path fill-rule="evenodd" clip-rule="evenodd" d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
+            <path fill-rule="evenodd" clip-rule="evenodd"
+              d="M12 2C6.477 2 2 6.484 2 12.017c0 4.425 2.865 8.18 6.839 9.504.5.092.682-.217.682-.483 0-.237-.008-.868-.013-1.703-2.782.605-3.369-1.343-3.369-1.343-.454-1.158-1.11-1.466-1.11-1.466-.908-.62.069-.608.069-.608 1.003.07 1.53 1.032 1.53 1.032.892 1.53 2.341 1.088 2.91.832.092-.647.35-1.088.636-1.338-2.22-.253-4.555-1.113-4.555-4.951 0-1.093.39-1.988 1.029-2.688-.103-.253-.446-1.272.098-2.65 0 0 .84-.27 2.75 1.026A9.564 9.564 0 0112 6.844c.85.004 1.705.115 2.504.337 1.909-1.296 2.747-1.027 2.747-1.027.546 1.379.202 2.398.1 2.651.64.7 1.028 1.595 1.028 2.688 0 3.848-2.339 4.695-4.566 4.943.359.309.678.92.678 1.855 0 1.338-.012 2.419-.012 2.747 0 .268.18.58.688.482A10.019 10.019 0 0022 12.017C22 6.484 17.522 2 12 2z" />
           </svg>
           GitHub Repository
         </a>
@@ -91,14 +99,18 @@
   <!-- Hero Section -->
   <section class="relative overflow-hidden px-6 pt-16 pb-20 text-center">
     <div class="mx-auto max-w-4xl space-y-6">
-      <div class="inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/70 px-4 py-1.5 text-xs font-semibold text-zinc-700 shadow-sm backdrop-blur-md">
+      <div
+        class="inline-flex items-center gap-2 rounded-full border border-white/90 bg-white/70 px-4 py-1.5 text-xs font-semibold text-zinc-700 shadow-sm backdrop-blur-md">
         ✨ Complete Production Monorepo Platform
       </div>
       <h1 class="text-4xl font-extrabold tracking-tight text-zinc-950 sm:text-6xl">
-        Connecting Salons & Clients with <span class="bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-600 bg-clip-text text-transparent">Frictionless Elegance</span>
+        Connecting Salons & Clients with <span
+          class="bg-gradient-to-r from-zinc-900 via-zinc-800 to-zinc-600 bg-clip-text text-transparent">Frictionless
+          Elegance</span>
       </h1>
       <p class="mx-auto max-w-2xl text-base text-zinc-600 sm:text-lg">
-        Multi-tenant SaaS marketplace featuring real-time availability calculations, AI rate-card import, instant QR front desk standees, and marketplace split payouts.
+        Multi-tenant SaaS marketplace featuring real-time availability calculations, AI rate-card import, instant QR
+        front desk standees, and marketplace split payouts.
       </p>
 
       <div class="flex flex-wrap justify-center gap-3 pt-4">
@@ -124,7 +136,8 @@
           </div>
           <h3 class="mt-4 text-xl font-bold text-zinc-900">Customer Discovery</h3>
           <p class="mt-2 text-xs text-zinc-600">
-            Geospatial PostGIS radius search, side-by-side salon comparison, 7-min TTL slot locks, and Razorpay Route split payments.
+            Geospatial PostGIS radius search, side-by-side salon comparison, 7-min TTL slot locks, and Razorpay Route
+            split payments.
           </p>
           <div class="mt-4 pt-3 border-t border-zinc-100 flex flex-wrap gap-1.5">
             <span class="rounded-lg bg-white/80 px-2 py-0.5 text-[10px] font-medium text-zinc-600">Next.js 15</span>
@@ -146,10 +159,12 @@
           </div>
           <h3 class="mt-4 text-xl font-bold text-zinc-900">Salon Dashboard</h3>
           <p class="mt-2 text-xs text-zinc-600">
-            Instant QR standee generator, AI menu vision extractor, calendar availability scheduler, and Frosted Pearl revenue metrics.
+            Instant QR standee generator, AI menu vision extractor, calendar availability scheduler, and Frosted Pearl
+            revenue metrics.
           </p>
           <div class="mt-4 pt-3 border-t border-zinc-100 flex flex-wrap gap-1.5">
-            <span class="rounded-lg bg-white/80 px-2 py-0.5 text-[10px] font-medium text-zinc-600">Frosted Pearl UI</span>
+            <span class="rounded-lg bg-white/80 px-2 py-0.5 text-[10px] font-medium text-zinc-600">Frosted Pearl
+              UI</span>
             <span class="rounded-lg bg-white/80 px-2 py-0.5 text-[10px] font-medium text-zinc-600">AI Menu Vision</span>
             <span class="rounded-lg bg-white/80 px-2 py-0.5 text-[10px] font-medium text-zinc-600">Standee QR</span>
           </div>
@@ -168,7 +183,8 @@
           </div>
           <h3 class="mt-4 text-xl font-bold text-zinc-900">Admin Control Plane</h3>
           <p class="mt-2 text-xs text-zinc-600">
-            Mandatory TOTP 2FA + IP allowlisting, salon onboarding approval queue, commission overrides, and immutable audit logs.
+            Mandatory TOTP 2FA + IP allowlisting, salon onboarding approval queue, commission overrides, and immutable
+            audit logs.
           </p>
           <div class="mt-4 pt-3 border-t border-zinc-100 flex flex-wrap gap-1.5">
             <span class="rounded-lg bg-white/80 px-2 py-0.5 text-[10px] font-medium text-zinc-600">TOTP 2FA</span>
@@ -194,7 +210,8 @@
           Front Desk QR Code & Desk Standee
         </h2>
         <p class="mt-2 text-xs text-zinc-600">
-          Every salon receives an automatic, high-resolution QR standee upon registration. Type any salon name below to test dynamic generation live!
+          Every salon receives an automatic, high-resolution QR standee upon registration. Type any salon name below to
+          test dynamic generation live!
         </p>
       </div>
 
@@ -204,13 +221,8 @@
           <div class="glass-card-subtle rounded-2xl p-5">
             <label class="block text-xs font-bold text-zinc-800">
               Salon Name:
-              <input
-                id="salonNameInput"
-                type="text"
-                value="Glow Studio Indiranagar"
-                oninput="updateStandee()"
-                class="mt-1.5 w-full rounded-xl border border-zinc-200/90 bg-white/90 px-3.5 py-2.5 text-sm font-semibold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900"
-              />
+              <input id="salonNameInput" type="text" value="Glow Studio Indiranagar" oninput="updateStandee()"
+                class="mt-1.5 w-full rounded-xl border border-zinc-200/90 bg-white/90 px-3.5 py-2.5 text-sm font-semibold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900" />
             </label>
             <p class="mt-2 text-[11px] text-zinc-500">
               The scannable QR code updates in real time pointing to the salon's booking catalog.
@@ -220,9 +232,12 @@
           <div class="glass-card-subtle rounded-2xl p-5 space-y-2">
             <h4 class="text-xs font-bold text-zinc-800">Salon Desk Standee Highlights:</h4>
             <ul class="space-y-1.5 text-xs text-zinc-600">
-              <li class="flex items-center gap-2">✓ <strong>Error Correction 'H':</strong> 30% recovery for acrylic scratch resistance</li>
-              <li class="flex items-center gap-2">✓ <strong>Direct Deep Link:</strong> Opens specific menu without app download</li>
-              <li class="flex items-center gap-2">✓ <strong>Vector Quality:</strong> Crisp on acrylic counter cards and mirror decals</li>
+              <li class="flex items-center gap-2">✓ <strong>Error Correction 'H':</strong> 30% recovery for acrylic
+                scratch resistance</li>
+              <li class="flex items-center gap-2">✓ <strong>Direct Deep Link:</strong> Opens specific menu without app
+                download</li>
+              <li class="flex items-center gap-2">✓ <strong>Vector Quality:</strong> Crisp on acrylic counter cards and
+                mirror decals</li>
             </ul>
           </div>
 
@@ -230,7 +245,8 @@
             <button onclick="window.print()" class="btn-gloss-noir rounded-xl px-4 py-2.5 text-xs font-semibold">
               🖨️ Print Standee Card
             </button>
-            <button onclick="copyShareLink()" id="shareBtn" class="btn-gloss-glass rounded-xl px-4 py-2.5 text-xs font-semibold">
+            <button onclick="copyShareLink()" id="shareBtn"
+              class="btn-gloss-glass rounded-xl px-4 py-2.5 text-xs font-semibold">
               🔗 Copy Booking Link
             </button>
           </div>
@@ -238,8 +254,10 @@
 
         <!-- Standee Card Preview -->
         <div class="flex justify-center">
-          <div class="w-full max-w-xs rounded-3xl border border-white/90 bg-gradient-to-b from-white/95 via-zinc-50/80 to-white p-7 text-center shadow-2xl ring-1 ring-zinc-200/80">
-            <span class="rounded-full bg-zinc-900 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
+          <div
+            class="w-full max-w-xs rounded-3xl border border-white/90 bg-gradient-to-b from-white/95 via-zinc-50/80 to-white p-7 text-center shadow-2xl ring-1 ring-zinc-200/80">
+            <span
+              class="rounded-full bg-zinc-900 px-3 py-1 text-[10px] font-bold uppercase tracking-wider text-white shadow-sm">
               Scan & Book Instantly
             </span>
 
@@ -288,7 +306,8 @@
         <!-- Service 1 -->
         <div class="glass-card-subtle rounded-2xl p-6 transition-all hover:bg-white/90">
           <div class="flex items-center justify-between">
-            <span class="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-amber-500/20">
+            <span
+              class="rounded-full bg-amber-500/10 px-2 py-0.5 text-[10px] font-bold text-amber-700 border border-amber-500/20">
               Popular
             </span>
             <span class="text-xs font-bold text-zinc-800">★ 4.9 (184)</span>
@@ -300,16 +319,23 @@
             <span class="text-xs text-zinc-400 line-through">₹1,000</span>
           </div>
           <div class="mt-3 flex gap-1.5">
-            <button onclick="lockSlot(this, '10:30 AM', 799)" class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">10:30 AM</button>
-            <button onclick="lockSlot(this, '02:00 PM', 799)" class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">02:00 PM</button>
-            <button onclick="lockSlot(this, '04:30 PM', 799)" class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">04:30 PM</button>
+            <button onclick="lockSlot(this, '10:30 AM', 799)"
+              class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">10:30
+              AM</button>
+            <button onclick="lockSlot(this, '02:00 PM', 799)"
+              class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">02:00
+              PM</button>
+            <button onclick="lockSlot(this, '04:30 PM', 799)"
+              class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">04:30
+              PM</button>
           </div>
         </div>
 
         <!-- Service 2 -->
         <div class="glass-card-subtle rounded-2xl p-6 transition-all hover:bg-white/90">
           <div class="flex items-center justify-between">
-            <span class="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">
+            <span
+              class="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">
               Top Rated
             </span>
             <span class="text-xs font-bold text-zinc-800">★ 4.95 (210)</span>
@@ -321,9 +347,15 @@
             <span class="text-xs text-zinc-400 line-through">₹4,200</span>
           </div>
           <div class="mt-3 flex gap-1.5">
-            <button onclick="lockSlot(this, '11:00 AM', 3499)" class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">11:00 AM</button>
-            <button onclick="lockSlot(this, '01:30 PM', 3499)" class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">01:30 PM</button>
-            <button onclick="lockSlot(this, '05:00 PM', 3499)" class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">05:00 PM</button>
+            <button onclick="lockSlot(this, '11:00 AM', 3499)"
+              class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">11:00
+              AM</button>
+            <button onclick="lockSlot(this, '01:30 PM', 3499)"
+              class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">01:30
+              PM</button>
+            <button onclick="lockSlot(this, '05:00 PM', 3499)"
+              class="slot-btn rounded-lg bg-white/90 border border-zinc-200 px-2.5 py-1 text-xs font-semibold hover:bg-zinc-900 hover:text-white transition-all">05:00
+              PM</button>
           </div>
         </div>
 
@@ -369,11 +401,8 @@
           <h3 class="text-2xl font-bold text-zinc-900">Monorepo Specifications</h3>
           <p class="text-xs text-zinc-500">TypeScript strict-mode, modular packages, and production Docker topology</p>
         </div>
-        <a
-          href="https://github.com/amitmohite078-bot/id1/blob/main/docs/ARCHITECTURE.md"
-          target="_blank"
-          class="btn-gloss-glass rounded-xl px-4 py-2 text-xs font-semibold"
-        >
+        <a href="https://github.com/amitmohite078-bot/id1/blob/main/docs/ARCHITECTURE.md" target="_blank"
+          class="btn-gloss-glass rounded-xl px-4 py-2 text-xs font-semibold">
           Read docs/ARCHITECTURE.md →
         </a>
       </div>
@@ -381,7 +410,8 @@
       <div class="mt-6 grid gap-4 sm:grid-cols-2 lg:grid-cols-4 text-xs">
         <div class="glass-card-subtle rounded-2xl p-4">
           <span class="font-bold text-zinc-900">Frontend Layer</span>
-          <p class="mt-1 text-zinc-600">3x Next.js 15 App Router applications with Tailwind CSS and Frosted Pearl glass components.</p>
+          <p class="mt-1 text-zinc-600">3x Next.js 15 App Router applications with Tailwind CSS and Frosted Pearl glass
+            components.</p>
         </div>
         <div class="glass-card-subtle rounded-2xl p-4">
           <span class="font-bold text-zinc-900">Backend API</span>
@@ -478,4 +508,5 @@
     });
   </script>
 </body>
+
 </html>
