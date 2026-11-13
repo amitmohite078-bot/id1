@@ -9,7 +9,7 @@ export default function HomePage() {
       </span>
       <h1 className="mt-4 text-4xl font-bold tracking-tight">SalonBridge</h1>
       <p className="mt-2 max-w-xl text-zinc-600">
-        Discover nearby salons, compare services side-by-side, and book real-time slots.
+        Browse verified salon services, check live specialist availability, and book real-time appointment slots.
       </p>
       <div className="mt-6 flex gap-3">
         <Link href="/search">
