@@ -3,24 +3,25 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>SalonBridge — Salon Partner Dashboard & Desk Standee</title>
-  <meta name="description" content="Manage salon catalog, AI rate card imports, staff schedules, and printable front desk QR standees." />
+  <title>SalonBridge — Salon Partner Operating Dashboard & Standee Suite</title>
+  <meta name="description" content="Manage salon catalog, live front-desk walk-in queue, staff shift schedules, and customized printable acrylic QR standees." />
   <script src="https://cdn.tailwindcss.com"></script>
   <script src="https://cdnjs.cloudflare.com/ajax/libs/qrcodejs/1.0.0/qrcode.min.js"></script>
   <style>
+    /* Frosted Pearl & Glassmorphic Utilities - High Contrast Edition */
     .glass-pearl {
-      background: rgba(255, 255, 255, 0.82);
+      background: rgba(255, 255, 255, 0.88);
       backdrop-filter: blur(24px);
       -webkit-backdrop-filter: blur(24px);
-      border: 1px solid rgba(255, 255, 255, 0.95);
+      border: 1px solid rgba(228, 228, 231, 0.95);
       box-shadow: 0 20px 45px -12px rgba(100, 116, 139, 0.12),
                   inset 0 1px 2px 0 rgba(255, 255, 255, 0.95);
     }
     .glass-card-subtle {
-      background: rgba(255, 255, 255, 0.65);
+      background: rgba(255, 255, 255, 0.78);
       backdrop-filter: blur(16px);
       -webkit-backdrop-filter: blur(16px);
-      border: 1px solid rgba(255, 255, 255, 0.85);
+      border: 1px solid rgba(228, 228, 231, 0.85);
       box-shadow: 0 10px 25px -5px rgba(100, 116, 139, 0.08);
     }
     .btn-gloss-noir {
@@ -29,36 +30,44 @@
       box-shadow: 0 4px 14px 0 rgba(0, 0, 0, 0.25),
                   inset 0 1px 0 0 rgba(255, 255, 255, 0.3);
       color: #ffffff;
-      transition: all 0.2s ease;
+      transition: all 0.18s ease;
     }
     .btn-gloss-noir:hover {
       transform: translateY(-1px);
       box-shadow: 0 6px 20px 0 rgba(0, 0, 0, 0.35);
     }
+    .btn-gloss-noir:active {
+      transform: scale(0.98);
+    }
+
+    /* Print Formatting for Standard Acrylic Table Stands */
     @media print {
       body * {
-        visibility: hidden;
+        visibility: hidden !important;
       }
       #printableStandee, #printableStandee * {
-        visibility: visible;
+        visibility: visible !important;
       }
       #printableStandee {
-        position: absolute;
-        left: 0;
-        top: 0;
-        width: 100%;
-        margin: 0;
-        padding: 20px;
-        border: none !important;
+        position: fixed !important;
+        left: 50% !important;
+        top: 50% !important;
+        transform: translate(-50%, -50%) !important;
+        width: 100% !important;
+        max-width: 4.5in !important;
+        margin: 0 !important;
+        padding: 24px !important;
+        border: 2px solid #18181b !important;
         box-shadow: none !important;
+        background: #ffffff !important;
       }
     }
   </style>
 </head>
-<body class="min-h-screen bg-gradient-to-br from-slate-50 via-zinc-50 to-stone-100/50 text-zinc-900 antialiased font-sans">
+<body class="min-h-screen bg-gradient-to-br from-slate-50 via-zinc-50 to-stone-100/50 text-zinc-900 antialiased font-sans pb-16">
 
   <!-- Partner Navbar -->
-  <header class="sticky top-0 z-50 border-b border-white/80 bg-white/70 backdrop-blur-2xl print:hidden">
+  <header class="sticky top-0 z-50 border-b border-white/80 bg-white/80 backdrop-blur-2xl print:hidden">
     <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <div class="flex items-center gap-3">
         <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
@@ -71,9 +80,18 @@
           </span>
         </div>
       </div>
+      
+      <!-- Quick Navigation Anchors -->
+      <nav class="hidden md:flex items-center gap-4 text-xs font-semibold text-zinc-600">
+        <a href="#queueSection" class="hover:text-zinc-950 transition-colors">Today's Queue</a>
+        <a href="#standeeSection" class="hover:text-zinc-950 transition-colors">Standee QR</a>
+        <a href="#staffSection" class="hover:text-zinc-950 transition-colors">Stylists (3)</a>
+        <a href="#catalogSection" class="hover:text-zinc-950 transition-colors">Rate Card</a>
+      </nav>
+
       <div class="flex items-center gap-3">
         <span class="hidden sm:inline-block text-xs font-semibold text-zinc-600">Glow Studio Indiranagar</span>
-        <button onclick="document.getElementById('standeeSection').scrollIntoView({ behavior: 'smooth' })" class="btn-gloss-noir rounded-xl px-3.5 py-1.5 text-xs font-bold">
+        <button onclick="document.getElementById('standeeSection').scrollIntoView({ behavior: 'smooth' })" class="btn-gloss-noir rounded-xl px-3.5 py-1.5 text-xs font-bold shadow-sm">
           🖨️ Standee QR
         </button>
       </div>
@@ -81,113 +99,218 @@
   </header>
 
   <!-- Partner Dashboard Main Content -->
-  <main class="mx-auto max-w-6xl px-6 py-8 space-y-8">
+  <main class="mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-8 space-y-8">
 
-    <!-- Salon Header & Status -->
-    <div class="glass-pearl rounded-3xl p-6 sm:p-8 print:hidden">
+    <!-- Salon Header & Quick Metrics Ribbon -->
+    <div class="glass-pearl rounded-3xl p-6 sm:p-8 print:hidden space-y-6">
       <div class="flex flex-wrap items-center justify-between gap-4">
         <div>
           <div class="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-500/20">
-            ● Active Partner Verified
+            ● Active Partner Verified · Live Terminal
           </div>
-          <h1 class="mt-2 text-3xl font-extrabold tracking-tight text-zinc-900">
+          <h1 class="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
             Glow Studio Indiranagar
           </h1>
-          <p class="text-xs text-zinc-500">100ft Road, Indiranagar, Bengaluru · Manager: Priya Sharma</p>
+          <p class="text-xs text-zinc-500">100ft Road, Indiranagar, Bengaluru · Manager: Priya Sharma · Phone: +91 98765 43210</p>
         </div>
 
         <div class="flex items-center gap-2">
-          <button onclick="document.getElementById('standeeSection').scrollIntoView({ behavior: 'smooth' })" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold">
-            Print Front Desk Standee →
+          <button onclick="openWalkinModal()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold flex items-center gap-1.5">
+            <span>+</span> Log Walk-in Client
           </button>
+          <a href="../customer/?salon=glow-studio" target="_blank" class="rounded-xl border border-zinc-200 bg-white/90 px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm flex items-center gap-1.5">
+            <span>↗</span> Preview Customer Page
+          </a>
         </div>
       </div>
 
-      <!-- Quick Metrics Ribbon -->
-      <div class="mt-6 grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-zinc-100 pt-6 text-xs">
+      <!-- Quick Operational Metrics -->
+      <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-zinc-100 pt-6 text-xs">
         <div class="glass-card-subtle rounded-2xl p-4">
-          <span class="text-zinc-400">Total Monthly GMV:</span>
-          <p class="mt-1 text-2xl font-extrabold text-zinc-900">₹1,84,500</p>
-          <span class="text-[10px] text-emerald-600 font-bold">+18.2% vs last month</span>
+          <span class="text-zinc-500 font-medium">Today's Revenue:</span>
+          <p class="mt-1 text-2xl font-extrabold text-zinc-900" id="metricGmv">₹22,400</p>
+          <span class="text-[10px] text-emerald-600 font-bold">+18.2% vs yesterday</span>
         </div>
         <div class="glass-card-subtle rounded-2xl p-4">
-          <span class="text-zinc-400">Appointments Completed:</span>
-          <p class="mt-1 text-2xl font-extrabold text-zinc-900">142</p>
-          <span class="text-[10px] text-zinc-500">Avg ticket: ₹1,299</span>
+          <span class="text-zinc-500 font-medium">Clients In Queue:</span>
+          <p class="mt-1 text-2xl font-extrabold text-indigo-700" id="metricQueueCount">2 Waiting</p>
+          <span class="text-[10px] text-zinc-500">2 In-Chair, 4 Completed</span>
         </div>
         <div class="glass-card-subtle rounded-2xl p-4">
-          <span class="text-zinc-400">Cancellation Rate:</span>
-          <p class="mt-1 text-2xl font-extrabold text-amber-700">3.4%</p>
-          <span class="text-[10px] text-zinc-500">Industry avg: 9%</span>
+          <span class="text-zinc-500 font-medium">Standee QR Scans Today:</span>
+          <p class="mt-1 text-2xl font-extrabold text-zinc-900">68 Scans</p>
+          <span class="text-[10px] text-indigo-600 font-bold">12 converted to appointments</span>
         </div>
         <div class="glass-card-subtle rounded-2xl p-4">
-          <span class="text-zinc-400">Front Desk QR Scans:</span>
-          <p class="mt-1 text-2xl font-extrabold text-indigo-700">388</p>
-          <span class="text-[10px] text-indigo-600 font-bold">48 converted to booking</span>
+          <span class="text-zinc-500 font-medium">Active Stylists On Shift:</span>
+          <p class="mt-1 text-2xl font-extrabold text-emerald-700" id="metricStylistsActive">3 / 3 Active</p>
+          <span class="text-[10px] text-zinc-500">All stations operational</span>
         </div>
       </div>
     </div>
 
-    <!-- Section 1: Front Desk QR Standee Suite -->
-    <div id="standeeSection" class="glass-pearl rounded-3xl p-8 sm:p-12">
-      <div class="border-b border-zinc-100 pb-4 mb-6">
+    <!-- SECTION 1: Live Front-Desk Walk-in Queue & Today's Appointments -->
+    <div id="queueSection" class="glass-pearl rounded-3xl p-6 sm:p-8 space-y-6 print:hidden">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 pb-4">
+        <div>
+          <span class="rounded-full bg-zinc-900/5 px-3 py-1 text-xs font-bold text-zinc-700">
+            Real-Time Operations
+          </span>
+          <h2 class="mt-2 text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">
+            Live Front-Desk Queue & Today's Bookings
+          </h2>
+          <p class="text-xs text-zinc-500">
+            Clients who scanned the front desk acrylic standee or booked direct slots online today.
+          </p>
+        </div>
+
+        <!-- Filter Pills -->
+        <div class="flex items-center gap-1.5 text-xs">
+          <button onclick="filterQueue('all', this)" class="queue-tab active rounded-xl bg-zinc-900 px-3 py-1.5 font-bold text-white shadow-sm">
+            All (6)
+          </button>
+          <button onclick="filterQueue('waiting', this)" class="queue-tab rounded-xl border border-zinc-200 bg-white/80 px-3 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm">
+            Waiting (2)
+          </button>
+          <button onclick="filterQueue('in-chair', this)" class="queue-tab rounded-xl border border-zinc-200 bg-white/80 px-3 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm">
+            In Chair (2)
+          </button>
+          <button onclick="filterQueue('completed', this)" class="queue-tab rounded-xl border border-zinc-200 bg-white/80 px-3 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm">
+            Completed (2)
+          </button>
+        </div>
+      </div>
+
+      <!-- Queue Cards Container -->
+      <div id="queueContainer" class="space-y-3">
+        <!-- Rendered dynamically by script -->
+      </div>
+    </div>
+
+    <!-- SECTION 2: Front Desk QR Standee Suite & Interactive Customizer -->
+    <div id="standeeSection" class="glass-pearl rounded-3xl p-6 sm:p-8 space-y-6">
+      <div class="border-b border-zinc-100 pb-4 mb-2 print:hidden">
         <span class="rounded-full bg-zinc-900/5 px-3 py-1 text-xs font-bold text-zinc-700">
           Front Desk Feature
         </span>
-        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-900">
-          Front Desk QR Code & Printable Standee
+        <h2 class="mt-2 text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">
+          Front Desk QR Code & Printable Standee Customizer
         </h2>
         <p class="text-xs text-zinc-500">
-          Place on your reception billing counter or styling station mirrors. Visiting clients scan to view rates and book slots.
+          Customize station numbers, promotional discount badges, and print formatted cards for standard acrylic table stands.
         </p>
       </div>
 
-      <div class="grid gap-8 md:grid-cols-2 items-center">
-        <!-- Controls & Tips -->
+      <div class="grid gap-8 md:grid-cols-2 items-start">
+        
+        <!-- Interactive Controls (Hidden on Print) -->
         <div class="space-y-4 print:hidden">
+          
+          <!-- Customizer Inputs -->
+          <div class="glass-card-subtle rounded-2xl p-5 space-y-3">
+            <h4 class="text-xs font-bold text-zinc-900 uppercase tracking-wider">Standee Card Customizer</h4>
+            
+            <div>
+              <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Salon Display Name:</label>
+              <input id="standeeSalonNameInput" type="text" value="Glow Studio Indiranagar" oninput="updateStandeeCard()"
+                class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900" />
+            </div>
+
+            <div class="grid grid-cols-2 gap-2">
+              <div>
+                <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Station / Counter Label:</label>
+                <select id="standeeDeskSelect" onchange="updateStandeeCard()"
+                  class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800">
+                  <option value="Front Desk Counter">Front Desk Counter</option>
+                  <option value="Styling Chair 1">Styling Chair 1</option>
+                  <option value="Styling Chair 2">Styling Chair 2</option>
+                  <option value="Styling Chair 3">Styling Chair 3</option>
+                  <option value="Lounge & Waiting Area">Lounge & Waiting Area</option>
+                  <option value="Pedicure Bar">Pedicure Bar</option>
+                </select>
+              </div>
+
+              <div>
+                <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Promo / Offer Badge:</label>
+                <select id="standeeBadgeSelect" onchange="updateStandeeCard()"
+                  class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800">
+                  <option value="Scan & Book Instantly">Scan & Book Instantly</option>
+                  <option value="Flat 10% Off on Walk-ins">Flat 10% Off on Walk-ins</option>
+                  <option value="Digital Live Menu">Digital Live Menu</option>
+                  <option value="VIP Express Check-in">VIP Express Check-in</option>
+                </select>
+              </div>
+            </div>
+
+            <!-- Print Dimensions Preset -->
+            <div>
+              <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Target Acrylic Stand Format:</label>
+              <div class="grid grid-cols-3 gap-2">
+                <button type="button" onclick="setPrintSize('4x6', this)" class="size-pill active rounded-xl bg-zinc-900 text-white p-2 text-[11px] font-bold shadow-sm">
+                  4" × 6" Desk
+                </button>
+                <button type="button" onclick="setPrintSize('5x7', this)" class="size-pill rounded-xl bg-white border border-zinc-200 p-2 text-[11px] font-semibold text-zinc-700 hover:bg-zinc-100">
+                  5" × 7" Counter
+                </button>
+                <button type="button" onclick="setPrintSize('A5', this)" class="size-pill rounded-xl bg-white border border-zinc-200 p-2 text-[11px] font-semibold text-zinc-700 hover:bg-zinc-100">
+                  A5 Stand
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Direct URL & Copy -->
           <div class="glass-card-subtle rounded-2xl p-5 space-y-2">
-            <h4 class="text-xs font-bold text-zinc-900">Direct Customer Booking URL</h4>
+            <h4 class="text-xs font-bold text-zinc-900">Direct Customer Booking URL (Scanned Link)</h4>
             <div class="flex items-center gap-2">
               <input
                 id="bookingLink"
                 type="text"
                 readonly
-                value="https://amitmohite078-bot.github.io/id1/customer/?salon=glow-studio"
+                value="https://amitmohite078-bot.github.io/id1/customer/?salon=glow-studio&desk=Front+Desk+Counter"
                 class="flex-1 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-mono text-zinc-800"
               />
-              <button onclick="copyBookingLink()" id="copyBtn" class="btn-gloss-noir rounded-xl px-3 py-2 text-xs font-bold">
+              <button onclick="copyBookingLink()" id="copyBtn" class="btn-gloss-noir rounded-xl px-3.5 py-2 text-xs font-bold">
                 Copy
               </button>
             </div>
-            <p class="text-[11px] text-zinc-500">Paste in Instagram bio, Google Maps listing, or WhatsApp Business status.</p>
+            <p class="text-[11px] text-zinc-500">Automatically appends station parameter so you know which chair scanned.</p>
           </div>
 
+          <!-- Print & Export Buttons -->
           <div class="glass-card-subtle rounded-2xl p-5 space-y-2">
-            <h4 class="text-xs font-bold text-zinc-900">Acrylic Standee Print Options</h4>
-            <p class="text-xs text-zinc-600">Pre-formatted for standard 4x6" or A4 acrylic table stands.</p>
+            <h4 class="text-xs font-bold text-zinc-900">Print & Digital Assets</h4>
             <div class="flex flex-wrap gap-2 pt-1">
-              <button onclick="window.print()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold">
-                🖨️ Print Standee Card
+              <button onclick="window.print()" class="btn-gloss-noir rounded-xl px-4 py-2.5 text-xs font-bold flex items-center gap-1.5">
+                <span>🖨️</span> Print Standee Card
               </button>
-              <button onclick="downloadPng()" class="rounded-xl border border-zinc-200 bg-white px-4 py-2 text-xs font-semibold hover:bg-zinc-100">
-                Download PNG (High-Res)
+              <button onclick="downloadPng()" class="rounded-xl border border-zinc-200 bg-white px-4 py-2.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 shadow-sm flex items-center gap-1.5">
+                <span>⬇</span> Download High-Res PNG
               </button>
             </div>
           </div>
         </div>
 
-        <!-- Standee Preview -->
+        <!-- Standee Preview Card (What Prints on Acrylic Stand) -->
         <div class="flex justify-center">
-          <div id="printableStandee" class="w-full max-w-xs rounded-3xl border border-white/90 bg-gradient-to-b from-white/95 via-zinc-50/80 to-white p-7 text-center shadow-2xl ring-1 ring-zinc-200/80">
-            <span class="rounded-full bg-zinc-900 px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm">
-              Scan & Book Instantly
-            </span>
+          <div id="printableStandee" class="w-full max-w-xs rounded-3xl border border-white/90 bg-gradient-to-b from-white/95 via-zinc-50/80 to-white p-7 text-center shadow-2xl ring-1 ring-zinc-200/80 transition-all">
+            
+            <div class="flex justify-center">
+              <span id="previewBadge" class="rounded-full bg-zinc-900 px-3.5 py-1 text-[11px] font-bold uppercase tracking-wider text-white shadow-sm">
+                Scan & Book Instantly
+              </span>
+            </div>
 
-            <h3 class="mt-4 text-2xl font-bold tracking-tight text-zinc-900">
+            <h3 id="previewSalonName" class="mt-4 text-2xl font-bold tracking-tight text-zinc-900">
               Glow Studio Indiranagar
             </h3>
-            <p class="mt-1 text-xs text-zinc-500">
-              Browse our live menu, rates, & book slots
+            
+            <p id="previewDesk" class="mt-1 text-xs font-semibold text-emerald-700">
+              📍 Front Desk Counter
+            </p>
+
+            <p class="mt-1 text-[11px] text-zinc-500">
+              Point your phone camera to view live rates & book chair
             </p>
 
             <div class="my-5 flex justify-center">
@@ -197,7 +320,7 @@
             </div>
 
             <div class="rounded-xl bg-zinc-100/90 p-2.5 text-xs font-medium text-zinc-600 border border-zinc-200/60">
-              Point any camera or UPI app at this code
+              ⚡ Zero Waiting · Instant WhatsApp Confirmation
             </div>
 
             <p class="mt-3 text-[10px] font-medium text-zinc-400">
@@ -208,57 +331,418 @@
       </div>
     </div>
 
-    <!-- Section 2: AI Menu Import Simulator -->
-    <div class="glass-pearl rounded-3xl p-8 sm:p-12 print:hidden">
-      <div class="border-b border-zinc-100 pb-4 mb-6">
-        <span class="rounded-full bg-zinc-900/5 px-3 py-1 text-xs font-bold text-zinc-700">
-          AI Vision Catalog Pipeline
-        </span>
-        <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-900">
-          Instant Rate-Card Importer
-        </h2>
-        <p class="text-xs text-zinc-500">
-          Upload any paper menu photo, PDF, or spreadsheet. AI auto-extracts categories, prices, and durations.
-        </p>
+    <!-- SECTION 3: Stylist & Staff Shift Roster -->
+    <div id="staffSection" class="glass-pearl rounded-3xl p-6 sm:p-8 space-y-6 print:hidden">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 pb-4">
+        <div>
+          <span class="rounded-full bg-zinc-900/5 px-3 py-1 text-xs font-bold text-zinc-700">
+            Team Management
+          </span>
+          <h2 class="mt-2 text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">
+            Stylist & Specialist Shift Roster
+          </h2>
+          <p class="text-xs text-zinc-500">
+            Toggle on-duty stylists. Absent or busy stylists are automatically removed from customer walk-in booking slots.
+          </p>
+        </div>
+
+        <button onclick="alert('Staff shift roster synced with salon calendar.')" class="rounded-xl border border-zinc-200 bg-white/90 px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm">
+          Sync Google Calendar
+        </button>
       </div>
 
-      <div class="grid gap-6 md:grid-cols-2">
-        <div class="glass-card-subtle rounded-2xl p-6 text-center border-2 border-dashed border-zinc-300">
-          <div class="mx-auto flex h-12 w-12 items-center justify-center rounded-full bg-zinc-100 text-zinc-600 text-xl">
-            📷
+      <div class="grid gap-4 sm:grid-cols-3" id="staffRosterContainer">
+        <!-- Rendered dynamically -->
+      </div>
+    </div>
+
+    <!-- SECTION 4: Interactive Live Service Catalog & AI Rate-Card Importer -->
+    <div id="catalogSection" class="glass-pearl rounded-3xl p-6 sm:p-8 space-y-6 print:hidden">
+      <div class="flex flex-wrap items-center justify-between gap-4 border-b border-zinc-100 pb-4">
+        <div>
+          <span class="rounded-full bg-zinc-900/5 px-3 py-1 text-xs font-bold text-zinc-700">
+            Menu & Pricing Engine
+          </span>
+          <h2 class="mt-2 text-xl sm:text-2xl font-bold tracking-tight text-zinc-900">
+            Interactive Rate Card & Services Catalog
+          </h2>
+          <p class="text-xs text-zinc-500">
+            Edit rates, adjust service duration, toggle availability, or auto-extract items from your paper rate card photo using AI.
+          </p>
+        </div>
+
+        <div class="flex items-center gap-2">
+          <button onclick="openAddServiceModal()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold flex items-center gap-1.5">
+            <span>+</span> Add Custom Service
+          </button>
+        </div>
+      </div>
+
+      <!-- Category Filter Pills -->
+      <div class="flex items-center gap-1.5 overflow-x-auto pb-1 text-xs">
+        <button onclick="filterCatalog('all', this)" class="catalog-tab active rounded-xl bg-zinc-900 px-3.5 py-1.5 font-bold text-white shadow-sm">
+          All Services (7)
+        </button>
+        <button onclick="filterCatalog('hair', this)" class="catalog-tab rounded-xl border border-zinc-200 bg-white/80 px-3.5 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm">
+          💇 Hair Styling
+        </button>
+        <button onclick="filterCatalog('skin', this)" class="catalog-tab rounded-xl border border-zinc-200 bg-white/80 px-3.5 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm">
+          ✨ Skin & Facial
+        </button>
+        <button onclick="filterCatalog('grooming', this)" class="catalog-tab rounded-xl border border-zinc-200 bg-white/80 px-3.5 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm">
+          💈 Grooming & Beard
+        </button>
+        <button onclick="filterCatalog('spa', this)" class="catalog-tab rounded-xl border border-zinc-200 bg-white/80 px-3.5 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm">
+          💆 Spa & Massage
+        </button>
+      </div>
+
+      <!-- Services Table -->
+      <div class="overflow-x-auto rounded-2xl border border-zinc-200 bg-white">
+        <table class="w-full text-left text-xs">
+          <thead class="bg-zinc-50 border-b border-zinc-200 text-zinc-500 font-bold uppercase text-[10px]">
+            <tr>
+              <th class="p-3.5">Service Name & Description</th>
+              <th class="p-3.5">Category</th>
+              <th class="p-3.5">Duration</th>
+              <th class="p-3.5">Price (₹)</th>
+              <th class="p-3.5">Status</th>
+              <th class="p-3.5 text-right">Actions</th>
+            </tr>
+          </thead>
+          <tbody id="catalogTableBody" class="divide-y divide-zinc-100">
+            <!-- Injected by script -->
+          </tbody>
+        </table>
+      </div>
+
+      <!-- AI Rate-Card Importer Drawer / Box -->
+      <div class="rounded-2xl border-2 border-dashed border-zinc-300 p-6 bg-white/60 space-y-4">
+        <div class="flex flex-wrap items-center justify-between gap-3">
+          <div class="flex items-center gap-3">
+            <span class="flex h-10 w-10 items-center justify-center rounded-xl bg-zinc-900 text-white text-lg">📷</span>
+            <div>
+              <h4 class="font-bold text-sm text-zinc-900">AI Vision Rate-Card Importer</h4>
+              <p class="text-xs text-zinc-500">Upload paper rate card photo, menu card PDF, or CSV to auto-sync services.</p>
+            </div>
           </div>
-          <h4 class="mt-3 font-bold text-sm text-zinc-900">Upload Rate-Card Photo or PDF</h4>
-          <p class="text-xs text-zinc-500 mt-1">Accepts PNG, JPG, PDF, XLSX, CSV, or DOCX</p>
-          <button onclick="simulateAiExtraction()" id="aiExtractBtn" class="btn-gloss-noir mt-4 rounded-xl px-4 py-2 text-xs font-bold">
-            Simulate AI Vision Extraction
+          <button onclick="simulateAiExtraction()" id="aiExtractBtn" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold">
+            Simulate AI Vision Extraction →
           </button>
         </div>
 
-        <div class="glass-card-subtle rounded-2xl p-6">
-          <h4 class="font-bold text-sm text-zinc-900">Extracted Catalog Output</h4>
-          <div id="aiOutput" class="mt-3 divide-y divide-zinc-100 text-xs">
-            <div class="flex justify-between py-2">
-              <span class="font-medium">Balayage & Hair Spa</span>
-              <span class="font-bold text-zinc-900">₹3,499 (90 min)</span>
-            </div>
-            <div class="flex justify-between py-2">
-              <span class="font-medium">Keratin Silk Treatment</span>
-              <span class="font-bold text-zinc-900">₹4,200 (120 min)</span>
-            </div>
-            <div class="flex justify-between py-2">
-              <span class="font-medium">Organic Scalp Detox</span>
-              <span class="font-bold text-zinc-900">₹1,499 (45 min)</span>
-            </div>
+        <div id="aiPreviewBox" class="hidden rounded-xl border border-emerald-500/30 bg-emerald-50/60 p-4 text-xs space-y-3">
+          <div class="flex items-center justify-between">
+            <span class="font-bold text-emerald-900">✓ AI extracted 3 new premium services from menu image:</span>
+            <button onclick="applyAiServicesToCatalog()" class="rounded-xl bg-emerald-700 px-3 py-1 font-bold text-white hover:bg-emerald-800 shadow-sm">
+              Apply to Live Catalog
+            </button>
           </div>
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-2" id="aiExtractedItems"></div>
         </div>
       </div>
     </div>
 
   </main>
 
+  <!-- Walk-In Quick Booking Modal -->
+  <div id="walkinModal" class="fixed inset-0 z-50 hidden bg-black/50 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl space-y-4">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-bold text-base text-zinc-900">Log Walk-In Client at Counter</h3>
+        <button onclick="closeWalkinModal()" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold">✕</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Client Name:</label>
+          <input id="walkinName" type="text" placeholder="e.g. Rohan Roy" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900" />
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">WhatsApp Phone:</label>
+          <input id="walkinPhone" type="tel" placeholder="+91 98765 00000" class="w-full rounded-xl border p-2.5 font-mono font-semibold text-zinc-900" />
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Service Requested:</label>
+          <select id="walkinService" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900">
+            <option value="Haircut & Master Styling|799">Haircut & Master Styling (₹799)</option>
+            <option value="Executive Beard Sculpt|399">Executive Beard Sculpt (₹399)</option>
+            <option value="Hydra Glow Deep Aqua Facial|1999">Hydra Glow Deep Aqua Facial (₹1,999)</option>
+            <option value="Balayage & Intense Hair Spa|3499">Balayage & Intense Hair Spa (₹3,499)</option>
+          </select>
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Assign Stylist:</label>
+          <select id="walkinStylist" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900">
+            <option value="Priya Sharma">Priya Sharma (Master Stylist)</option>
+            <option value="Rahul Sen">Rahul Sen (Color Specialist)</option>
+            <option value="Ananya Nair">Ananya Nair (Skin & Spa)</option>
+          </select>
+        </div>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="submitWalkin()" class="btn-gloss-noir flex-1 rounded-xl py-2.5 text-xs font-bold">
+          Add to Live Queue →
+        </button>
+        <button onclick="closeWalkinModal()" class="rounded-xl border px-3 py-2 text-xs font-semibold">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
-    function renderQr() {
-      const url = "https://amitmohite078-bot.github.io/id1/customer/?salon=glow-studio";
+    // -------------------------------------------------------------
+    // DATA STORES: Queue, Stylists, and Services Catalog
+    // -------------------------------------------------------------
+    let QUEUE_DATA = [
+      {
+        id: 'q1',
+        clientName: 'Aarav Sharma',
+        phone: '+919876543210',
+        service: 'Haircut & Master Styling',
+        price: 799,
+        stylist: 'Priya Sharma',
+        desk: 'Front Desk Counter',
+        time: '10:30 AM Today',
+        status: 'waiting', // waiting, in-chair, completed
+        payment: 'Pay at Salon'
+      },
+      {
+        id: 'q2',
+        clientName: 'Meera Iyer',
+        phone: '+919876511223',
+        service: 'Hydra Glow Deep Aqua Facial',
+        price: 1999,
+        stylist: 'Ananya Nair',
+        desk: 'Styling Chair 2',
+        time: '10:45 AM Today',
+        status: 'waiting',
+        payment: 'Prepaid (UPI)'
+      },
+      {
+        id: 'q3',
+        clientName: 'Vikram Malhotra',
+        phone: '+919876533445',
+        service: 'Executive Beard Sculpt',
+        price: 399,
+        stylist: 'Rahul Sen',
+        desk: 'Styling Chair 1',
+        time: '10:00 AM Today',
+        status: 'in-chair',
+        payment: 'Pay at Salon'
+      },
+      {
+        id: 'q4',
+        clientName: 'Kavita Reddy',
+        phone: '+919876555667',
+        service: 'Balayage & Intense Hair Spa',
+        price: 3499,
+        stylist: 'Priya Sharma',
+        desk: 'VIP Lounge',
+        time: '09:30 AM Today',
+        status: 'in-chair',
+        payment: 'Prepaid (UPI)'
+      },
+      {
+        id: 'q5',
+        clientName: 'Sunil Nair',
+        phone: '+919876577889',
+        service: 'Deep Tissue Head Relief',
+        price: 699,
+        stylist: 'Ananya Nair',
+        desk: 'Pedicure Bar',
+        time: '09:00 AM Today',
+        status: 'completed',
+        payment: 'Paid (Cash)'
+      },
+      {
+        id: 'q6',
+        clientName: 'Deepa Jain',
+        phone: '+919876599001',
+        service: 'Keratin Silk Infusion',
+        price: 4200,
+        stylist: 'Rahul Sen',
+        desk: 'Styling Chair 3',
+        time: '08:30 AM Today',
+        status: 'completed',
+        payment: 'Paid (UPI)'
+      }
+    ];
+
+    let STYLISTS_DATA = [
+      { id: 'st1', name: 'Priya Sharma', role: 'Master Stylist (8 yrs exp)', status: 'available', chair: 'Station 1' },
+      { id: 'st2', name: 'Rahul Sen', role: 'Creative Colorist (6 yrs exp)', status: 'busy', chair: 'Station 2' },
+      { id: 'st3', name: 'Ananya Nair', role: 'Skin & Spa Expert (5 yrs exp)', status: 'available', chair: 'Station 3' }
+    ];
+
+    let CATALOG_SERVICES = [
+      { id: 's1', name: 'Haircut & Master Styling', category: 'hair', duration: '45 mins', price: 799, desc: 'Consultation, scalp revitalizing wash, customized haircut, and blast-dry styling.', active: true },
+      { id: 's2', name: 'Balayage & Intense Hair Spa', category: 'hair', duration: '90 mins', price: 3499, desc: 'Custom dimensional hand-painted highlights, bond protector, and deep steam hydration.', active: true },
+      { id: 's3', name: 'Keratin Silk Infusion Treatment', category: 'hair', duration: '120 mins', price: 4200, desc: 'Formaldehyde-free smoothing therapy, eliminating 95% frizz with mirror-gloss shine.', active: true },
+      { id: 's4', name: 'Hydra Glow Deep Aqua Facial', category: 'skin', duration: '60 mins', price: 1999, desc: 'Hydro-dermabrasion exfoliation, hyaluronic serum infusion, and cryo-firming cold hammer.', active: true },
+      { id: 's5', name: 'Organic Scalp & Face Detox', category: 'skin', duration: '45 mins', price: 1499, desc: 'Tea tree herbal steam scrub, pore extraction, and botanical face mask.', active: true },
+      { id: 's6', name: 'Executive Beard Sculpt & Royal Shave', category: 'grooming', duration: '30 mins', price: 399, desc: 'Hot towel compress, precision straight razor detailing, and sandalwood beard butter.', active: true },
+      { id: 's7', name: 'Deep Tissue Head & Shoulder Stress Relief', category: 'spa', duration: '30 mins', price: 699, desc: 'Therapeutic warm herbal oil massage targeting tension points across neck and shoulders.', active: true }
+    ];
+
+    // -------------------------------------------------------------
+    // SECTION 1: QUEUE MANAGEMENT
+    // -------------------------------------------------------------
+    let currentQueueFilter = 'all';
+
+    function renderQueue() {
+      const container = document.getElementById('queueContainer');
+      container.innerHTML = '';
+
+      const filtered = currentQueueFilter === 'all'
+        ? QUEUE_DATA
+        : QUEUE_DATA.filter(item => item.status === currentQueueFilter);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `<div class="p-8 text-center text-xs text-zinc-500">No clients in this queue category.</div>`;
+        return;
+      }
+
+      filtered.forEach(item => {
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl border border-zinc-200 bg-white p-4 flex flex-col sm:flex-row sm:items-center justify-between gap-4 shadow-sm';
+        
+        let statusBadge = '';
+        if (item.status === 'waiting') {
+          statusBadge = `<span class="rounded-full bg-amber-500/10 px-2.5 py-0.5 text-[10px] font-bold text-amber-700 border border-amber-500/20">⏳ Waiting in Lounge</span>`;
+        } else if (item.status === 'in-chair') {
+          statusBadge = `<span class="rounded-full bg-indigo-500/10 px-2.5 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-500/20">✂️ In Chair (Service Active)</span>`;
+        } else {
+          statusBadge = `<span class="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">✓ Completed</span>`;
+        }
+
+        const waText = encodeURIComponent(`Hi ${item.clientName}, your appointment for ${item.service} at Glow Studio Indiranagar with ${item.stylist} is ready. Please step to the chair!`);
+        const waUrl = `https://wa.me/${item.phone.replace(/[^0-9]/g, '')}?text=${waText}`;
+
+        card.innerHTML = `
+          <div class="space-y-1">
+            <div class="flex items-center gap-2 flex-wrap">
+              <h4 class="font-bold text-sm text-zinc-900">${item.clientName}</h4>
+              ${statusBadge}
+              <span class="rounded-md bg-zinc-100 px-2 py-0.5 text-[10px] font-medium text-zinc-600">
+                ${item.desk}
+              </span>
+            </div>
+            <p class="text-xs text-zinc-600">
+              <strong>${item.service}</strong> (₹${item.price}) · Stylist: <span class="font-semibold text-zinc-800">${item.stylist}</span> · ${item.time}
+            </p>
+            <p class="text-[11px] text-zinc-400 font-mono">
+              Phone: ${item.phone} · Payment: ${item.payment}
+            </p>
+          </div>
+
+          <div class="flex items-center gap-2 flex-wrap sm:flex-nowrap border-t sm:border-t-0 pt-2 sm:pt-0">
+            ${item.status === 'waiting' ? `
+              <button onclick="setQueueStatus('${item.id}', 'in-chair')" class="btn-gloss-noir rounded-xl px-3 py-1.5 text-xs font-bold whitespace-nowrap shadow-sm">
+                Call to Chair →
+              </button>
+            ` : ''}
+
+            ${item.status === 'in-chair' ? `
+              <button onclick="setQueueStatus('${item.id}', 'completed')" class="rounded-xl bg-emerald-700 text-white px-3 py-1.5 text-xs font-bold hover:bg-emerald-800 whitespace-nowrap shadow-sm">
+                ✓ Complete & Bill
+              </button>
+            ` : ''}
+
+            <a href="${waUrl}" target="_blank" class="rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-emerald-700 hover:bg-emerald-50 flex items-center gap-1 shadow-sm">
+              <span>💬</span> WhatsApp
+            </a>
+
+            ${item.status !== 'completed' ? `
+              <button onclick="removeQueueItem('${item.id}')" class="rounded-xl border border-zinc-200 bg-white/80 p-1.5 text-xs text-zinc-400 hover:text-red-600">
+                ✕
+              </button>
+            ` : ''}
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      updateQueueMetrics();
+    }
+
+    function setQueueStatus(id, newStatus) {
+      const item = QUEUE_DATA.find(q => q.id === id);
+      if (item) {
+        item.status = newStatus;
+        renderQueue();
+      }
+    }
+
+    function removeQueueItem(id) {
+      QUEUE_DATA = QUEUE_DATA.filter(q => q.id !== id);
+      renderQueue();
+    }
+
+    function filterQueue(status, btn) {
+      currentQueueFilter = status;
+      document.querySelectorAll('.queue-tab').forEach(b => {
+        b.className = 'queue-tab rounded-xl border border-zinc-200 bg-white/80 px-3 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm';
+      });
+      btn.className = 'queue-tab active rounded-xl bg-zinc-900 px-3 py-1.5 font-bold text-white shadow-sm';
+      renderQueue();
+    }
+
+    function updateQueueMetrics() {
+      const waiting = QUEUE_DATA.filter(q => q.status === 'waiting').length;
+      document.getElementById('metricQueueCount').innerText = `${waiting} Waiting`;
+    }
+
+    // Modal Walk-In
+    function openWalkinModal() {
+      document.getElementById('walkinModal').classList.remove('hidden');
+    }
+    function closeWalkinModal() {
+      document.getElementById('walkinModal').classList.add('hidden');
+    }
+    function submitWalkin() {
+      const name = document.getElementById('walkinName').value || 'Walk-in Client';
+      const phone = document.getElementById('walkinPhone').value || '+919876500000';
+      const [svc, price] = document.getElementById('walkinService').value.split('|');
+      const stylist = document.getElementById('walkinStylist').value;
+
+      QUEUE_DATA.unshift({
+        id: 'q_' + Date.now(),
+        clientName: name,
+        phone: phone,
+        service: svc,
+        price: Number(price),
+        stylist: stylist,
+        desk: 'Counter Walk-In',
+        time: 'Just Now',
+        status: 'waiting',
+        payment: 'Pay at Salon'
+      });
+
+      closeWalkinModal();
+      renderQueue();
+      alert(`Client ${name} added to live queue!`);
+    }
+
+    // -------------------------------------------------------------
+    // SECTION 2: STANDEE QR & CUSTOMIZER
+    // -------------------------------------------------------------
+    function updateStandeeCard() {
+      const salon = document.getElementById('standeeSalonNameInput').value || 'Glow Studio Indiranagar';
+      const desk = document.getElementById('standeeDeskSelect').value || 'Front Desk Counter';
+      const badge = document.getElementById('standeeBadgeSelect').value || 'Scan & Book Instantly';
+
+      document.getElementById('previewSalonName').innerText = salon;
+      document.getElementById('previewDesk').innerText = '📍 ' + desk;
+      document.getElementById('previewBadge').innerText = badge;
+
+      const slug = salon.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      const encodedDesk = encodeURIComponent(desk);
+      const url = `https://amitmohite078-bot.github.io/id1/customer/?salon=glow-studio&desk=${encodedDesk}`;
+
+      document.getElementById('bookingLink').value = url;
+
+      // Re-render QR code
       const container = document.getElementById('partnerQr');
       container.innerHTML = '';
       new QRCode(container, {
@@ -289,16 +773,204 @@
       }
     }
 
+    function setPrintSize(size, btn) {
+      document.querySelectorAll('.size-pill').forEach(b => {
+        b.className = 'size-pill rounded-xl bg-white border border-zinc-200 p-2 text-[11px] font-semibold text-zinc-700 hover:bg-zinc-100';
+      });
+      btn.className = 'size-pill active rounded-xl bg-zinc-900 text-white p-2 text-[11px] font-bold shadow-sm';
+      const standee = document.getElementById('printableStandee');
+      if (size === '4x6') {
+        standee.style.maxWidth = '20rem';
+      } else if (size === '5x7') {
+        standee.style.maxWidth = '24rem';
+      } else {
+        standee.style.maxWidth = '28rem';
+      }
+    }
+
+    // -------------------------------------------------------------
+    // SECTION 3: STYLIST ROSTER
+    // -------------------------------------------------------------
+    function renderStylists() {
+      const container = document.getElementById('staffRosterContainer');
+      container.innerHTML = '';
+
+      STYLISTS_DATA.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'glass-card-subtle rounded-2xl p-4 space-y-3';
+        
+        let statusPill = s.status === 'available'
+          ? `<span class="rounded-full bg-emerald-500/10 px-2 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">● Available</span>`
+          : s.status === 'busy'
+          ? `<span class="rounded-full bg-indigo-500/10 px-2 py-0.5 text-[10px] font-bold text-indigo-700 border border-indigo-500/20">● In Service</span>`
+          : `<span class="rounded-full bg-zinc-500/10 px-2 py-0.5 text-[10px] font-bold text-zinc-500 border border-zinc-500/20">On Leave</span>`;
+
+        card.innerHTML = `
+          <div class="flex items-center justify-between">
+            <h4 class="font-bold text-sm text-zinc-900">${s.name}</h4>
+            ${statusPill}
+          </div>
+          <p class="text-xs text-zinc-500">${s.role} · ${s.chair}</p>
+          <div class="flex items-center gap-1.5 pt-1">
+            <button onclick="toggleStylistStatus('${s.id}', 'available')" class="rounded-lg border px-2 py-1 text-[10px] font-semibold ${s.status === 'available' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-700'}">Available</button>
+            <button onclick="toggleStylistStatus('${s.id}', 'busy')" class="rounded-lg border px-2 py-1 text-[10px] font-semibold ${s.status === 'busy' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-700'}">Busy</button>
+            <button onclick="toggleStylistStatus('${s.id}', 'leave')" class="rounded-lg border px-2 py-1 text-[10px] font-semibold ${s.status === 'leave' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-700'}">Leave</button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+
+      const activeCount = STYLISTS_DATA.filter(s => s.status !== 'leave').length;
+      document.getElementById('metricStylistsActive').innerText = `${activeCount} / ${STYLISTS_DATA.length} Active`;
+    }
+
+    function toggleStylistStatus(id, newStatus) {
+      const s = STYLISTS_DATA.find(item => item.id === id);
+      if (s) {
+        s.status = newStatus;
+        renderStylists();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // SECTION 4: CATALOG SERVICES & AI IMPORT
+    // -------------------------------------------------------------
+    let currentCatalogFilter = 'all';
+
+    function renderCatalog() {
+      const tbody = document.getElementById('catalogTableBody');
+      tbody.innerHTML = '';
+
+      const filtered = currentCatalogFilter === 'all'
+        ? CATALOG_SERVICES
+        : CATALOG_SERVICES.filter(s => s.category === currentCatalogFilter);
+
+      filtered.forEach(s => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-zinc-50/80 transition-colors';
+        tr.innerHTML = `
+          <td class="p-3.5">
+            <div class="font-bold text-zinc-900">${s.name}</div>
+            <div class="text-[11px] text-zinc-500">${s.desc}</div>
+          </td>
+          <td class="p-3.5 capitalize font-medium text-zinc-600">${s.category}</td>
+          <td class="p-3.5 font-semibold text-zinc-800">${s.duration}</td>
+          <td class="p-3.5">
+            <input type="number" value="${s.price}" onchange="updateServicePrice('${s.id}', this.value)"
+              class="w-20 rounded-lg border border-zinc-200 bg-white px-2 py-1 font-bold text-zinc-900 text-xs" />
+          </td>
+          <td class="p-3.5">
+            <span class="rounded-full px-2 py-0.5 text-[10px] font-bold ${s.active ? 'bg-emerald-500/10 text-emerald-700' : 'bg-zinc-100 text-zinc-400'}">
+              ${s.active ? '● Active' : 'Inactive'}
+            </span>
+          </td>
+          <td class="p-3.5 text-right">
+            <button onclick="toggleServiceActive('${s.id}')" class="text-[11px] text-zinc-600 hover:text-zinc-950 font-semibold underline mr-2">
+              ${s.active ? 'Disable' : 'Enable'}
+            </button>
+            <button onclick="deleteService('${s.id}')" class="text-[11px] text-red-500 hover:text-red-700 font-semibold">
+              Delete
+            </button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function updateServicePrice(id, newPrice) {
+      const s = CATALOG_SERVICES.find(item => item.id === id);
+      if (s) {
+        s.price = Number(newPrice);
+      }
+    }
+
+    function toggleServiceActive(id) {
+      const s = CATALOG_SERVICES.find(item => item.id === id);
+      if (s) {
+        s.active = !s.active;
+        renderCatalog();
+      }
+    }
+
+    function deleteService(id) {
+      CATALOG_SERVICES = CATALOG_SERVICES.filter(item => item.id !== id);
+      renderCatalog();
+    }
+
+    function filterCatalog(cat, btn) {
+      currentCatalogFilter = cat;
+      document.querySelectorAll('.catalog-tab').forEach(b => {
+        b.className = 'catalog-tab rounded-xl border border-zinc-200 bg-white/80 px-3.5 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm';
+      });
+      btn.className = 'catalog-tab active rounded-xl bg-zinc-900 px-3.5 py-1.5 font-bold text-white shadow-sm';
+      renderCatalog();
+    }
+
+    function openAddServiceModal() {
+      const name = prompt('Enter Service Name:');
+      if (!name) return;
+      const price = Number(prompt('Enter Price in ₹:', '999') || '999');
+      const duration = prompt('Enter Duration (e.g. 45 mins):', '45 mins') || '45 mins';
+      
+      CATALOG_SERVICES.unshift({
+        id: 's_' + Date.now(),
+        name: name,
+        category: 'hair',
+        duration: duration,
+        price: price,
+        desc: 'Custom salon service added via partner dashboard.',
+        active: true
+      });
+      renderCatalog();
+    }
+
+    // AI Rate Card Simulator
+    const AI_EXTRACTED_SAMPLES = [
+      { name: 'Olaplex Bond Multiplier Spa', category: 'hair', duration: '60 mins', price: 2499, desc: 'Patented active chemistry to repair broken hair bonds.' },
+      { name: 'Botanical 24K Radiance Peel', category: 'skin', duration: '75 mins', price: 2999, desc: 'Micro-gold exfoliation with antioxidant herbal infusion.' },
+      { name: 'Royal Turkish Beard Steam', category: 'grooming', duration: '35 mins', price: 599, desc: 'Eucalyptus steam wrap, straight razor detailing, and balm.' }
+    ];
+
     function simulateAiExtraction() {
       const btn = document.getElementById('aiExtractBtn');
-      btn.innerText = 'Parsing with Claude Vision...';
+      btn.innerText = 'Analyzing with Claude Vision...';
       setTimeout(() => {
-        btn.innerText = '✓ 14 Services Auto-Imported';
-        alert('AI extracted 14 services across 3 categories with prices and slot durations intact!');
+        btn.innerText = '✓ 3 Services Auto-Extracted';
+        document.getElementById('aiPreviewBox').classList.remove('hidden');
+        const container = document.getElementById('aiExtractedItems');
+        container.innerHTML = AI_EXTRACTED_SAMPLES.map(s => `
+          <div class="rounded-xl border border-zinc-200 bg-white p-3 space-y-1">
+            <span class="font-bold text-zinc-900 block">${s.name}</span>
+            <span class="text-zinc-500 block text-[11px]">${s.duration} · ₹${s.price}</span>
+          </div>
+        `).join('');
       }, 1000);
     }
 
-    window.addEventListener('DOMContentLoaded', renderQr);
+    function applyAiServicesToCatalog() {
+      AI_EXTRACTED_SAMPLES.forEach(s => {
+        CATALOG_SERVICES.unshift({
+          id: 's_ai_' + Math.random().toString(36).slice(2, 7),
+          name: s.name,
+          category: s.category,
+          duration: s.duration,
+          price: s.price,
+          desc: s.desc,
+          active: true
+        });
+      });
+      renderCatalog();
+      document.getElementById('aiPreviewBox').classList.add('hidden');
+      alert('3 AI-extracted services applied to live catalog!');
+    }
+
+    // Initialize all modules on load
+    window.addEventListener('DOMContentLoaded', () => {
+      renderQueue();
+      updateStandeeCard();
+      renderStylists();
+      renderCatalog();
+    });
   </script>
 </body>
 </html>
