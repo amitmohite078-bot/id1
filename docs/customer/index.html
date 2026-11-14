@@ -463,7 +463,7 @@
         const stored = localStorage.getItem('salonbridge_salons');
         if (stored) {
           const db = JSON.parse(stored);
-          const staleKeys = ['glow-studio-indiranagar', 'curl-dye-koramangala', 'the-groom-room-hsr'];
+          const staleKeys = ['glow-studio-indiranagar', 'curl-dye-koramangala', 'the-groom-room-hsr', 'my-salon'];
           let changed = false;
           staleKeys.forEach(k => {
             if (db[k]) {
@@ -471,8 +471,21 @@
               changed = true;
             }
           });
+          for (const key of Object.keys(db)) {
+            if (key === 'my-salon' || db[key]?.name === 'My Salon' || db[key]?.slug === 'my-salon') {
+              delete db[key];
+              changed = true;
+            }
+          }
           if (changed) {
             localStorage.setItem('salonbridge_salons', JSON.stringify(db));
+          }
+        }
+        const curr = localStorage.getItem('salonbridge_current_salon');
+        if (curr) {
+          const parsed = JSON.parse(curr);
+          if (!parsed || parsed.slug === 'my-salon' || parsed.name === 'My Salon') {
+            localStorage.removeItem('salonbridge_current_salon');
           }
         }
       } catch (e) {}
@@ -491,7 +504,10 @@
     function getStoredCurrentSalon() {
       try {
         const s = localStorage.getItem('salonbridge_current_salon');
-        return s ? JSON.parse(s) : null;
+        if (!s) return null;
+        const parsed = JSON.parse(s);
+        if (!parsed || parsed.slug === 'my-salon' || parsed.name === 'My Salon') return null;
+        return parsed;
       } catch (e) {
         return null;
       }
@@ -721,6 +737,17 @@
       }
       if (logoutBtn) logoutBtn.classList.remove('hidden');
 
+      if (salonParam === 'my-salon') {
+        // Strip legacy my-salon parameter and browse real salons
+        const url = new URL(window.location.href);
+        url.searchParams.delete('salon');
+        url.searchParams.delete('qr');
+        url.searchParams.delete('desk');
+        window.history.replaceState({}, '', url.toString());
+        showNearbySalonsView();
+        return;
+      }
+
       if (isQr && salonParam) {
         // Scanned Standee QR Code -> Route directly to that specific salon
         openSalonDetail(salonParam, true);
@@ -759,15 +786,15 @@
       let salons = Object.values(db);
 
       const activePartner = getStoredCurrentSalon();
-      if (activePartner && !salons.some(s => s.id === activePartner.id || s.slug === activePartner.slug)) {
+      if (activePartner && activePartner.slug !== 'my-salon' && activePartner.name !== 'My Salon' && !salons.some(s => s.id === activePartner.id || s.slug === activePartner.slug)) {
         salons.push({
-          id: activePartner.id || activePartner.slug || 'my-salon',
-          slug: activePartner.slug || 'my-salon',
-          name: activePartner.name || 'My Salon',
+          id: activePartner.id || activePartner.slug,
+          slug: activePartner.slug,
+          name: activePartner.name,
           locationKey: activePartner.area || 'indiranagar',
           genderKey: activePartner.gender || 'unisex',
           address: activePartner.address || 'Partner Salon Location',
-          distance: '0.8 km away',
+          distance: 'Nearby',
           rating: activePartner.rating || '5.0',
           reviews: activePartner.reviews || '0',
           phone: activePartner.phone || '',

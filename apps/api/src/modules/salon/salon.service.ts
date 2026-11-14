@@ -48,28 +48,31 @@ export class SalonService {
   }
 
   async getSalonQr(salonId: string) {
+    if (!salonId) {
+      throw new AppError(404, ErrorCode.NOT_FOUND, 'Salon ID is required');
+    }
     try {
       const salon = await this.repo.findSalonById(salonId);
       if (salon) {
         return generateSalonQr({ slug: salon.slug, name: salon.name }, this.customerWebUrl);
       }
     } catch {
-      // Fallback for offline dev
-      const name = (salonId || 'my-salon')
+      // Fallback for offline dev: derive display name from salonId
+      const name = salonId
         .split('-')
         .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
         .join(' ');
       return generateSalonQr(
-        { slug: salonId || 'my-salon', name },
+        { slug: salonId, name },
         this.customerWebUrl,
       );
     }
-    const name = (salonId || 'my-salon')
+    const name = salonId
       .split('-')
       .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
       .join(' ');
     return generateSalonQr(
-      { slug: salonId || 'my-salon', name },
+      { slug: salonId, name },
       this.customerWebUrl,
     );
   }
@@ -108,9 +111,13 @@ export class SalonService {
     } catch {
       // In dev fallback
     }
+    const derivedName = salonId
+      .split('-')
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(' ');
     return {
       id: salonId,
-      name: 'My Salon',
+      name: derivedName,
       slug: salonId,
       city: 'Bengaluru',
       status: 'approved',
