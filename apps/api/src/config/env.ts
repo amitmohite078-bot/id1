@@ -33,6 +33,8 @@ const EnvSchema = z.object({
   S3_FORCE_PATH_STYLE: z.coerce.boolean().default(true),
   ANTHROPIC_API_KEY: z.string().optional(),
   CLAUDE_MODEL: z.string().default('claude-sonnet-4-20250514'),
+  OPENROUTER_API_KEY: z.string().optional(),
+  OPENROUTER_MODEL: z.string().default('nvidia/nemotron-3.5-super-vl:free'),
   RAZORPAY_KEY_ID: z.string().optional(),
   RAZORPAY_KEY_SECRET: z.string().optional(),
   RAZORPAY_WEBHOOK_SECRET: z.string().optional(),

@@ -125,6 +125,88 @@ export class ClaudeMenuExtractor implements MenuAiExtractor {
   }
 }
 
+export class OpenRouterMenuExtractor implements MenuAiExtractor {
+  constructor(
+    private readonly apiKey: string,
+    private readonly model: string = 'nvidia/nemotron-3.5-super-vl:free',
+  ) {}
+
+  async extractFromImageOrPdf(input: {
+    buffer: Buffer;
+    mimeType: string;
+  }): Promise<AiExtractionResult> {
+    const base64 = input.buffer.toString('base64');
+    const dataUrl = `data:${input.mimeType};base64,${base64}`;
+
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: this.model,
+        messages: [
+          {
+            role: 'user',
+            content: [
+              { type: 'text', text: EXTRACTION_PROMPT },
+              { type: 'image_url', image_url: { url: dataUrl } },
+            ],
+          },
+        ],
+      }),
+    });
+
+    const data = (await res.json()) as any;
+    const rawText = data.choices?.[0]?.message?.content ?? '{}';
+    return this.parseResponse(rawText, data.usage);
+  }
+
+  async extractFromText(rawText: string): Promise<AiExtractionResult> {
+    const res = await fetch('https://openrouter.ai/api/v1/chat/completions', {
+      method: 'POST',
+      headers: {
+        Authorization: `Bearer ${this.apiKey}`,
+        'Content-Type': 'application/json',
+      },
+      body: JSON.stringify({
+        model: this.model,
+        messages: [
+          {
+            role: 'user',
+            content: `${EXTRACTION_PROMPT}\n\nMENU TEXT:\n${rawText}`,
+          },
+        ],
+      }),
+    });
+
+    const data = (await res.json()) as any;
+    const text = data.choices?.[0]?.message?.content ?? '{}';
+    return this.parseResponse(text, data.usage);
+  }
+
+  private parseResponse(rawText: string, usage?: any): AiExtractionResult {
+    const cleaned = rawText.replace(/^```(?:json)?\s*/i, '').replace(/```$/i, '').trim();
+    let parsed: any;
+    try {
+      parsed = JSON.parse(cleaned);
+    } catch {
+      const match = cleaned.match(/\{\s*"items"\s*:\s*\[[\s\S]*\]\s*\}/);
+      parsed = match ? JSON.parse(match[0]) : { items: [] };
+    }
+
+    const validated = AiResponseSchema.parse(parsed);
+    return {
+      items: validated.items,
+      inputTokens: usage?.prompt_tokens ?? 0,
+      outputTokens: usage?.completion_tokens ?? 0,
+      costPaise: 0,
+      rawOutput: parsed,
+    };
+  }
+}
+
 /**
  * Deterministic fallback extractor when ANTHROPIC_API_KEY is not configured (local dev/tests).
  */

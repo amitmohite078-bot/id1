@@ -28,6 +28,7 @@ import { registerSalonRoutes } from './modules/salon/salon.routes.js';
 import { MenuImportRepository } from './modules/menu-import/menu-import.repository.js';
 import {
   ClaudeMenuExtractor,
+  OpenRouterMenuExtractor,
   MockMenuAiExtractor,
 } from './modules/menu-import/menu.ai-extractor.js';
 import { MenuImportService } from './modules/menu-import/menu-import.service.js';
@@ -137,7 +138,9 @@ export async function buildApp(deps: BuildAppDeps) {
 
   const storage = new StorageService(deps.env);
   const menuImportRepo = new MenuImportRepository(deps.db);
-  const aiExtractor = deps.env.ANTHROPIC_API_KEY
+  const aiExtractor = deps.env.OPENROUTER_API_KEY
+    ? new OpenRouterMenuExtractor(deps.env.OPENROUTER_API_KEY, deps.env.OPENROUTER_MODEL)
+    : deps.env.ANTHROPIC_API_KEY
     ? new ClaudeMenuExtractor(deps.env.ANTHROPIC_API_KEY, deps.env.CLAUDE_MODEL)
     : new MockMenuAiExtractor();
 
