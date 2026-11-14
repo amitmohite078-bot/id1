@@ -85,12 +85,12 @@
       <nav class="hidden md:flex items-center gap-4 text-xs font-semibold text-zinc-600">
         <a href="#queueSection" class="hover:text-zinc-950 transition-colors">Today's Queue</a>
         <a href="#standeeSection" class="hover:text-zinc-950 transition-colors">Standee QR</a>
-        <a href="#staffSection" class="hover:text-zinc-950 transition-colors">Stylists (3)</a>
+        <a href="#staffSection" class="hover:text-zinc-950 transition-colors" id="navStaffCount">Stylists (0)</a>
         <a href="#catalogSection" class="hover:text-zinc-950 transition-colors">Rate Card</a>
       </nav>
 
       <div class="flex items-center gap-3">
-        <span class="hidden sm:inline-block text-xs font-semibold text-zinc-600">Glow Studio Indiranagar</span>
+        <span class="hidden sm:inline-block text-xs font-semibold text-zinc-600" id="topNavSalonName">My Salon</span>
         <button onclick="document.getElementById('standeeSection').scrollIntoView({ behavior: 'smooth' })" class="btn-gloss-noir rounded-xl px-3.5 py-1.5 text-xs font-bold shadow-sm">
           🖨️ Standee QR
         </button>
@@ -108,10 +108,15 @@
           <div class="inline-flex items-center gap-2 rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-500/20">
             ● Active Partner Verified · Live Terminal
           </div>
-          <h1 class="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
-            Glow Studio Indiranagar
-          </h1>
-          <p class="text-xs text-zinc-500">100ft Road, Indiranagar, Bengaluru · Manager: Priya Sharma · Phone: +91 98765 43210</p>
+          <div class="flex items-center gap-3 mt-2 flex-wrap">
+            <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900" id="dashboardSalonName">
+              My Salon
+            </h1>
+            <button onclick="openEditSalonModal()" class="btn-gloss-glass rounded-xl px-3 py-1 text-xs font-bold text-indigo-700 shadow-sm flex items-center gap-1">
+              ✏️ Edit Salon Details
+            </button>
+          </div>
+          <p class="text-xs text-zinc-500 mt-1" id="dashboardSalonMeta">Configure salon address and manager contact.</p>
         </div>
 
         <div class="flex items-center gap-2 flex-wrap">
@@ -121,7 +126,7 @@
           <a href="../customer/" target="_blank" class="rounded-xl border border-zinc-200 bg-white/90 px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm flex items-center gap-1.5">
             <span>↗</span> View All Salons Directory
           </a>
-          <a href="../customer/?qr=1&salon=glow-studio&desk=Front+Desk+Counter" target="_blank" class="rounded-xl border border-emerald-500/30 bg-emerald-50/80 px-3.5 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 shadow-sm flex items-center gap-1.5">
+          <a id="headerTestStandeeLink" href="../customer/?qr=1&salon=my-salon&desk=Front+Desk+Counter" target="_blank" class="rounded-xl border border-emerald-500/30 bg-emerald-50/80 px-3.5 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 shadow-sm flex items-center gap-1.5">
             <span>📱</span> Test Standee QR Pass
           </a>
         </div>
@@ -136,18 +141,18 @@
         </div>
         <div class="glass-card-subtle rounded-2xl p-4">
           <span class="text-zinc-500 font-medium">Clients In Queue:</span>
-          <p class="mt-1 text-2xl font-extrabold text-indigo-700" id="metricQueueCount">2 Waiting</p>
-          <span class="text-[10px] text-zinc-500">2 In-Chair, 4 Completed</span>
+          <p class="mt-1 text-2xl font-extrabold text-indigo-700" id="metricQueueCount">0 Waiting</p>
+          <span class="text-[10px] text-zinc-500" id="metricQueueSub">0 In-Chair, 0 Completed</span>
         </div>
         <div class="glass-card-subtle rounded-2xl p-4">
-          <span class="text-zinc-500 font-medium">Standee QR Scans Today:</span>
-          <p class="mt-1 text-2xl font-extrabold text-zinc-900">68 Scans</p>
-          <span class="text-[10px] text-indigo-600 font-bold">12 converted to appointments</span>
+          <span class="text-zinc-500 font-medium">Standee QR Scans:</span>
+          <p class="mt-1 text-2xl font-extrabold text-zinc-900" id="metricScans">0 Scans</p>
+          <span class="text-[10px] text-zinc-400">Live desk terminal ready</span>
         </div>
         <div class="glass-card-subtle rounded-2xl p-4">
-          <span class="text-zinc-500 font-medium">Active Stylists On Shift:</span>
-          <p class="mt-1 text-2xl font-extrabold text-emerald-700" id="metricStylistsActive">3 / 3 Active</p>
-          <span class="text-[10px] text-zinc-500">All stations operational</span>
+          <span class="text-zinc-500 font-medium">Active Stylists:</span>
+          <p class="mt-1 text-2xl font-extrabold text-emerald-700" id="metricStylistsActive">0 / 0 Active</p>
+          <span class="text-[10px] text-zinc-500">Floor stations operational</span>
         </div>
       </div>
     </div>
@@ -215,7 +220,7 @@
             
             <div>
               <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Salon Display Name:</label>
-              <input id="standeeSalonNameInput" type="text" value="Glow Studio Indiranagar" oninput="updateStandeeCard()"
+              <input id="standeeSalonNameInput" type="text" value="My Salon" oninput="updateStandeeCard()"
                 class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900" />
             </div>
 
@@ -270,17 +275,17 @@
                 id="bookingLink"
                 type="text"
                 readonly
-                value="https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=glow-studio&desk=Front+Desk+Counter"
+                value="https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=my-salon&desk=Front+Desk+Counter"
                 class="flex-1 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-mono text-zinc-800"
               />
               <button onclick="copyBookingLink()" id="copyBtn" class="btn-gloss-noir rounded-xl px-3.5 py-2 text-xs font-bold">
                 Copy
               </button>
-              <a id="testLinkBtn" href="https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=glow-studio&desk=Front+Desk+Counter" target="_blank" class="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100">
+              <a id="testLinkBtn" href="https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=my-salon&desk=Front+Desk+Counter" target="_blank" class="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100">
                 Open ↗
               </a>
             </div>
-            <p class="text-[11px] text-zinc-500">Encodes ?qr=1 so customers scanning this QR land directly on Glow Studio.</p>
+            <p class="text-[11px] text-zinc-500">Encodes ?qr=1 so customers scanning this QR land directly on your digital booking page.</p>
           </div>
 
           <!-- Print & Export Buttons -->
@@ -308,7 +313,7 @@
             </div>
 
             <h3 id="previewSalonName" class="mt-4 text-2xl font-bold tracking-tight text-zinc-900">
-              Glow Studio Indiranagar
+              My Salon
             </h3>
             
             <p id="previewDesk" class="mt-1 text-xs font-semibold text-emerald-700">
@@ -501,28 +506,23 @@
       </div>
       <div class="space-y-3 text-xs">
         <div>
-          <label class="block font-semibold text-zinc-700 mb-1">Client Name:</label>
+          <label class="block font-semibold text-zinc-700 mb-1">Client Name *</label>
           <input id="walkinName" type="text" placeholder="e.g. Rohan Roy" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900" />
         </div>
         <div>
-          <label class="block font-semibold text-zinc-700 mb-1">WhatsApp Phone:</label>
+          <label class="block font-semibold text-zinc-700 mb-1">WhatsApp Phone *</label>
           <input id="walkinPhone" type="tel" placeholder="+91 98765 00000" class="w-full rounded-xl border p-2.5 font-mono font-semibold text-zinc-900" />
         </div>
         <div>
           <label class="block font-semibold text-zinc-700 mb-1">Service Requested:</label>
           <select id="walkinService" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900">
-            <option value="Haircut & Master Styling|799">Haircut & Master Styling (₹799)</option>
-            <option value="Executive Beard Sculpt|399">Executive Beard Sculpt (₹399)</option>
-            <option value="Hydra Glow Deep Aqua Facial|1999">Hydra Glow Deep Aqua Facial (₹1,999)</option>
-            <option value="Balayage & Intense Hair Spa|3499">Balayage & Intense Hair Spa (₹3,499)</option>
+            <!-- Dynamically populated from CATALOG_SERVICES -->
           </select>
         </div>
         <div>
           <label class="block font-semibold text-zinc-700 mb-1">Assign Stylist:</label>
           <select id="walkinStylist" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900">
-            <option value="Priya Sharma">Priya Sharma (Master Stylist)</option>
-            <option value="Rahul Sen">Rahul Sen (Color Specialist)</option>
-            <option value="Ananya Nair">Ananya Nair (Skin & Spa)</option>
+            <!-- Dynamically populated from STYLISTS_DATA -->
           </select>
         </div>
       </div>
@@ -537,27 +537,399 @@
     </div>
   </div>
 
+  <!-- Edit Salon Profile Modal -->
+  <div id="editSalonModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl space-y-4 border border-zinc-200">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-bold text-base text-zinc-900">Edit Salon Profile</h3>
+        <button onclick="closeEditSalonModal()" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold">✕</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Salon Name *</label>
+          <input id="editSalonNameInput" type="text" placeholder="e.g. My Salon" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900" />
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Address & Location *</label>
+          <input id="editSalonAddressInput" type="text" placeholder="e.g. Main Street, Indiranagar, Bengaluru" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Manager Name</label>
+            <input id="editSalonManagerInput" type="text" placeholder="Manager Name" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Salon Phone</label>
+            <input id="editSalonPhoneInput" type="tel" placeholder="+91 98765 00000" class="w-full rounded-xl border p-2.5 font-mono text-zinc-900" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Area Tag</label>
+            <select id="editSalonAreaSelect" class="w-full rounded-xl border p-2.5 text-zinc-900">
+              <option value="indiranagar">Indiranagar</option>
+              <option value="koramangala">Koramangala</option>
+              <option value="hsr">HSR Layout</option>
+              <option value="whitefield">Whitefield</option>
+              <option value="other">Other</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Audience Focus</label>
+            <select id="editSalonGenderSelect" class="w-full rounded-xl border p-2.5 text-zinc-900">
+              <option value="unisex">Unisex</option>
+              <option value="men">Men's Only</option>
+              <option value="women">Women's Only</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Tagline</label>
+          <input id="editSalonTaglineInput" type="text" placeholder="e.g. Haircut, Color, Spa & Luxury Treatments" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+        </div>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="saveSalonProfile()" class="btn-gloss-noir flex-1 rounded-xl py-2.5 text-xs font-bold">
+          Save Salon Profile →
+        </button>
+        <button onclick="closeEditSalonModal()" class="rounded-xl border px-3 py-2 text-xs font-semibold">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Stylist Modal -->
+  <div id="addStylistModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl space-y-4 border border-zinc-200">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-bold text-base text-zinc-900">Add Stylist to Roster</h3>
+        <button onclick="closeAddStylistModal()" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold">✕</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Stylist Full Name *</label>
+          <input id="newStylistName" type="text" placeholder="e.g. Master Stylist Name" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900" />
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Role / Specialization *</label>
+          <input id="newStylistRole" type="text" placeholder="e.g. Senior Stylist & Colorist" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Station / Chair</label>
+          <input id="newStylistChair" type="text" placeholder="e.g. Chair 1" value="Chair 1" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+        </div>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="submitAddStylist()" class="btn-gloss-noir flex-1 rounded-xl py-2.5 text-xs font-bold">
+          Save Stylist →
+        </button>
+        <button onclick="closeAddStylistModal()" class="rounded-xl border px-3 py-2 text-xs font-semibold">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Add Service Modal -->
+  <div id="addServiceModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl space-y-4 border border-zinc-200">
+      <div class="flex items-center justify-between border-b pb-3">
+        <h3 class="font-bold text-base text-zinc-900">Add Service to Rate Card</h3>
+        <button onclick="closeAddServiceModal()" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold">✕</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Service Name *</label>
+          <input id="manualServiceName" type="text" placeholder="e.g. Classic Haircut & Style" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Category *</label>
+            <select id="manualServiceCategory" class="w-full rounded-xl border p-2.5 text-zinc-900">
+              <option value="hair">Hair</option>
+              <option value="skin">Skin & Facial</option>
+              <option value="grooming">Grooming & Beard</option>
+              <option value="spa">Spa & Massage</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Duration</label>
+            <input id="manualServiceDuration" type="text" placeholder="e.g. 45 mins" value="45 mins" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Price in INR (₹) *</label>
+          <input id="manualServicePrice" type="number" placeholder="799" value="799" class="w-full rounded-xl border p-2.5 font-bold text-zinc-900" />
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Description</label>
+          <input id="manualServiceDesc" type="text" placeholder="e.g. Consultation, wash, haircut and blowdry styling." class="w-full rounded-xl border p-2.5 text-zinc-900" />
+        </div>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="submitAddService()" class="btn-gloss-noir flex-1 rounded-xl py-2.5 text-xs font-bold">
+          Add Service to Menu →
+        </button>
+        <button onclick="closeAddServiceModal()" class="rounded-xl border px-3 py-2 text-xs font-semibold">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
   <script>
     // -------------------------------------------------------------
-    // DATA STORES: Queue, Stylists, and Services Catalog
+    // DATA STORES: Salon Profile, Queue, Stylists, and Catalog
     // -------------------------------------------------------------
+    function getStoredSalonProfile() {
+      try {
+        const s = localStorage.getItem('salonbridge_current_salon');
+        return s ? JSON.parse(s) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function getStoredStylists() {
+      try {
+        const s = localStorage.getItem('salonbridge_stylists');
+        return s ? JSON.parse(s) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function getStoredCatalog() {
+      try {
+        const s = localStorage.getItem('salonbridge_catalog');
+        return s ? JSON.parse(s) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    let CURRENT_SALON = getStoredSalonProfile() || {
+      id: 'my-salon',
+      slug: 'my-salon',
+      name: 'My Salon',
+      address: 'Configure Address & City',
+      manager: 'Owner / Manager',
+      phone: '',
+      area: 'indiranagar',
+      gender: 'unisex',
+      tagline: 'Custom salon styling and professional grooming services.',
+      rating: '5.0',
+      reviews: '0',
+      badge: 'Verified Partner'
+    };
+
     let QUEUE_DATA = [];
+    let STYLISTS_DATA = getStoredStylists();
+    let CATALOG_SERVICES = getStoredCatalog();
 
-    let STYLISTS_DATA = [
-      { id: 'st1', name: 'Priya Sharma', role: 'Master Stylist (8 yrs exp)', status: 'available', chair: 'Station 1' },
-      { id: 'st2', name: 'Rahul Sen', role: 'Creative Colorist (6 yrs exp)', status: 'available', chair: 'Station 2' },
-      { id: 'st3', name: 'Ananya Nair', role: 'Skin & Spa Expert (5 yrs exp)', status: 'available', chair: 'Station 3' }
-    ];
+    function saveCatalogToStorage() {
+      try {
+        localStorage.setItem('salonbridge_catalog', JSON.stringify(CATALOG_SERVICES));
+        syncWithCustomerDirectory();
+      } catch (e) {}
+    }
 
-    let CATALOG_SERVICES = [
-      { id: 's1', name: 'Haircut & Master Styling', category: 'hair', duration: '45 mins', price: 799, desc: 'Consultation, scalp revitalizing wash, customized haircut, and blast-dry styling.', active: true },
-      { id: 's2', name: 'Balayage & Intense Hair Spa', category: 'hair', duration: '90 mins', price: 3499, desc: 'Custom dimensional hand-painted highlights, bond protector, and deep steam hydration.', active: true },
-      { id: 's3', name: 'Keratin Silk Infusion Treatment', category: 'hair', duration: '120 mins', price: 4200, desc: 'Formaldehyde-free smoothing therapy, eliminating 95% frizz with mirror-gloss shine.', active: true },
-      { id: 's4', name: 'Hydra Glow Deep Aqua Facial', category: 'skin', duration: '60 mins', price: 1999, desc: 'Hydro-dermabrasion exfoliation, hyaluronic serum infusion, and cryo-firming cold hammer.', active: true },
-      { id: 's5', name: 'Organic Scalp & Face Detox', category: 'skin', duration: '45 mins', price: 1499, desc: 'Tea tree herbal steam scrub, pore extraction, and botanical face mask.', active: true },
-      { id: 's6', name: 'Executive Beard Sculpt & Royal Shave', category: 'grooming', duration: '30 mins', price: 399, desc: 'Hot towel compress, precision straight razor detailing, and sandalwood beard butter.', active: true },
-      { id: 's7', name: 'Deep Tissue Head & Shoulder Stress Relief', category: 'spa', duration: '30 mins', price: 699, desc: 'Therapeutic warm herbal oil massage targeting tension points across neck and shoulders.', active: true }
-    ];
+    function saveStylistsToStorage() {
+      try {
+        localStorage.setItem('salonbridge_stylists', JSON.stringify(STYLISTS_DATA));
+        syncWithCustomerDirectory();
+      } catch (e) {}
+    }
+
+    function saveSalonProfileToStorage() {
+      try {
+        localStorage.setItem('salonbridge_current_salon', JSON.stringify(CURRENT_SALON));
+        syncWithCustomerDirectory();
+      } catch (e) {}
+    }
+
+    function syncWithCustomerDirectory() {
+      try {
+        const db = JSON.parse(localStorage.getItem('salonbridge_salons') || '{}');
+        const slug = CURRENT_SALON.slug || CURRENT_SALON.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+        db[slug] = {
+          id: slug,
+          name: CURRENT_SALON.name,
+          locationKey: CURRENT_SALON.area || 'indiranagar',
+          genderKey: CURRENT_SALON.gender || 'unisex',
+          address: CURRENT_SALON.address,
+          distance: 'Nearby',
+          rating: CURRENT_SALON.rating || '5.0',
+          reviews: CURRENT_SALON.reviews || '0',
+          phone: CURRENT_SALON.phone || '',
+          badge: CURRENT_SALON.badge || 'Verified Partner',
+          tagline: CURRENT_SALON.tagline || 'Custom salon styling and professional grooming services.',
+          startingPrice: CATALOG_SERVICES.length > 0 ? `₹${Math.min(...CATALOG_SERVICES.map(x => x.price || 0))}` : 'Live Menu',
+          stylists: STYLISTS_DATA.map(st => ({ name: st.name, role: st.role })),
+          services: CATALOG_SERVICES.map(s => ({
+            id: s.id,
+            category: s.category,
+            name: s.name,
+            duration: s.duration,
+            price: s.price,
+            desc: s.desc
+          }))
+        };
+        localStorage.setItem('salonbridge_salons', JSON.stringify(db));
+      } catch (e) {}
+    }
+
+    function initSalonProfile() {
+      const stored = getStoredSalonProfile();
+      if (stored) {
+        CURRENT_SALON = stored;
+      }
+      if (document.getElementById('dashboardSalonName')) {
+        document.getElementById('dashboardSalonName').innerText = CURRENT_SALON.name;
+      }
+      if (document.getElementById('topNavSalonName')) {
+        document.getElementById('topNavSalonName').innerText = CURRENT_SALON.name;
+      }
+      if (document.getElementById('dashboardSalonMeta')) {
+        const phoneTxt = CURRENT_SALON.phone ? ` · Phone: ${CURRENT_SALON.phone}` : '';
+        const mgrTxt = CURRENT_SALON.manager ? ` · Manager: ${CURRENT_SALON.manager}` : '';
+        document.getElementById('dashboardSalonMeta').innerText = `${CURRENT_SALON.address}${mgrTxt}${phoneTxt}`;
+      }
+      if (document.getElementById('standeeSalonNameInput')) {
+        document.getElementById('standeeSalonNameInput').value = CURRENT_SALON.name;
+      }
+      const slug = CURRENT_SALON.slug || 'my-salon';
+      if (document.getElementById('headerTestStandeeLink')) {
+        document.getElementById('headerTestStandeeLink').href = `../customer/?qr=1&salon=${encodeURIComponent(slug)}&desk=Front+Desk+Counter`;
+      }
+      syncWithCustomerDirectory();
+    }
+
+    // Edit Salon Profile Modal
+    function openEditSalonModal() {
+      document.getElementById('editSalonNameInput').value = CURRENT_SALON.name || '';
+      document.getElementById('editSalonAddressInput').value = CURRENT_SALON.address || '';
+      document.getElementById('editSalonManagerInput').value = CURRENT_SALON.manager || '';
+      document.getElementById('editSalonPhoneInput').value = CURRENT_SALON.phone || '';
+      document.getElementById('editSalonAreaSelect').value = CURRENT_SALON.area || 'indiranagar';
+      document.getElementById('editSalonGenderSelect').value = CURRENT_SALON.gender || 'unisex';
+      document.getElementById('editSalonTaglineInput').value = CURRENT_SALON.tagline || '';
+      document.getElementById('editSalonModal').classList.remove('hidden');
+    }
+
+    function closeEditSalonModal() {
+      document.getElementById('editSalonModal').classList.add('hidden');
+    }
+
+    function saveSalonProfile() {
+      const name = (document.getElementById('editSalonNameInput').value || '').trim();
+      if (!name) {
+        alert('Please enter a salon name.');
+        return;
+      }
+      const address = (document.getElementById('editSalonAddressInput').value || '').trim() || 'Partner Salon Location';
+      const manager = (document.getElementById('editSalonManagerInput').value || '').trim() || 'Owner / Manager';
+      const phone = (document.getElementById('editSalonPhoneInput').value || '').trim();
+      const area = document.getElementById('editSalonAreaSelect').value;
+      const gender = document.getElementById('editSalonGenderSelect').value;
+      const tagline = (document.getElementById('editSalonTaglineInput').value || '').trim() || 'Custom salon styling and professional grooming services.';
+
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+      CURRENT_SALON = {
+        id: slug,
+        slug: slug,
+        name: name,
+        address: address,
+        manager: manager,
+        phone: phone,
+        area: area,
+        gender: gender,
+        tagline: tagline,
+        rating: CURRENT_SALON.rating || '5.0',
+        reviews: CURRENT_SALON.reviews || '0',
+        badge: 'Verified Partner'
+      };
+
+      saveSalonProfileToStorage();
+      initSalonProfile();
+      updateStandeeCard();
+      closeEditSalonModal();
+      alert(`Salon profile for "${name}" updated successfully!`);
+    }
+
+    // Stylist Modal
+    function openAddStylistModal() {
+      document.getElementById('newStylistName').value = '';
+      document.getElementById('newStylistRole').value = '';
+      document.getElementById('newStylistChair').value = 'Chair ' + (STYLISTS_DATA.length + 1);
+      document.getElementById('addStylistModal').classList.remove('hidden');
+    }
+
+    function closeAddStylistModal() {
+      document.getElementById('addStylistModal').classList.add('hidden');
+    }
+
+    function submitAddStylist() {
+      const name = (document.getElementById('newStylistName').value || '').trim();
+      const role = (document.getElementById('newStylistRole').value || '').trim() || 'Stylist';
+      const chair = (document.getElementById('newStylistChair').value || '').trim() || 'Station 1';
+      if (!name) {
+        alert('Please enter stylist name.');
+        return;
+      }
+      STYLISTS_DATA.push({
+        id: 'st_' + Date.now(),
+        name: name,
+        role: role,
+        chair: chair,
+        status: 'available'
+      });
+      saveStylistsToStorage();
+      renderStylists();
+      closeAddStylistModal();
+      alert(`Stylist "${name}" added to roster!`);
+    }
+
+    // Manual Service Modal
+    function openAddServiceModal() {
+      document.getElementById('manualServiceName').value = '';
+      document.getElementById('manualServiceDuration').value = '45 mins';
+      document.getElementById('manualServicePrice').value = '799';
+      document.getElementById('manualServiceDesc').value = '';
+      document.getElementById('addServiceModal').classList.remove('hidden');
+    }
+
+    function closeAddServiceModal() {
+      document.getElementById('addServiceModal').classList.add('hidden');
+    }
+
+    function submitAddService() {
+      const name = (document.getElementById('manualServiceName').value || '').trim();
+      if (!name) {
+        alert('Please enter service name.');
+        return;
+      }
+      const category = document.getElementById('manualServiceCategory').value;
+      const duration = (document.getElementById('manualServiceDuration').value || '').trim() || '45 mins';
+      const price = Number(document.getElementById('manualServicePrice').value) || 500;
+      const desc = (document.getElementById('manualServiceDesc').value || '').trim() || 'Professional salon service';
+
+      CATALOG_SERVICES.unshift({
+        id: 's_' + Date.now(),
+        name: name,
+        category: category,
+        duration: duration,
+        price: price,
+        desc: desc,
+        active: true
+      });
+      saveCatalogToStorage();
+      renderCatalog();
+      closeAddServiceModal();
+      alert(`Service "${name}" added to rate card!`);
+    }
 
     // -------------------------------------------------------------
     // SECTION 1: QUEUE MANAGEMENT
@@ -591,7 +963,7 @@
           statusBadge = `<span class="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">✓ Completed</span>`;
         }
 
-        const waText = encodeURIComponent(`Hi ${item.clientName}, your appointment for ${item.service} at Glow Studio Indiranagar with ${item.stylist} is ready. Please step to the chair!`);
+        const waText = encodeURIComponent(`Hi ${item.clientName}, your appointment for ${item.service} at ${CURRENT_SALON.name} with ${item.stylist} is ready. Please step to the chair!`);
         const waUrl = `https://wa.me/${item.phone.replace(/[^0-9]/g, '')}?text=${waText}`;
 
         card.innerHTML = `
@@ -675,7 +1047,38 @@
     }
 
     // Modal Walk-In
+    function populateWalkinDropdowns() {
+      const sSelect = document.getElementById('walkinService');
+      const stSelect = document.getElementById('walkinStylist');
+      if (!sSelect || !stSelect) return;
+      sSelect.innerHTML = '';
+      stSelect.innerHTML = '';
+
+      if (CATALOG_SERVICES.length === 0) {
+        sSelect.innerHTML = '<option value="General Service|500">General Service (₹500)</option>';
+      } else {
+        CATALOG_SERVICES.forEach(s => {
+          const opt = document.createElement('option');
+          opt.value = `${s.name}|${s.price}`;
+          opt.innerText = `${s.name} (₹${s.price})`;
+          sSelect.appendChild(opt);
+        });
+      }
+
+      if (STYLISTS_DATA.length === 0) {
+        stSelect.innerHTML = '<option value="Front Desk Stylist">Front Desk Specialist</option>';
+      } else {
+        STYLISTS_DATA.forEach(st => {
+          const opt = document.createElement('option');
+          opt.value = st.name;
+          opt.innerText = `${st.name} (${st.role || 'Stylist'})`;
+          stSelect.appendChild(opt);
+        });
+      }
+    }
+
     function openWalkinModal() {
+      populateWalkinDropdowns();
       document.getElementById('walkinModal').classList.remove('hidden');
     }
     function closeWalkinModal() {
@@ -696,7 +1099,7 @@
         clientName: name,
         phone: phone,
         service: svc,
-        price: Number(price),
+        price: Number(price) || 0,
         stylist: stylist,
         desk: 'Counter Walk-In',
         time: 'Just Now',
@@ -715,17 +1118,17 @@
     // SECTION 2: STANDEE QR & CUSTOMIZER
     // -------------------------------------------------------------
     function updateStandeeCard() {
-      const salon = document.getElementById('standeeSalonNameInput').value || 'Glow Studio Indiranagar';
-      const desk = document.getElementById('standeeDeskSelect').value || 'Front Desk Counter';
-      const badge = document.getElementById('standeeBadgeSelect').value || 'Scan & Book Instantly';
+      const salon = document.getElementById('standeeSalonNameInput')?.value || CURRENT_SALON.name;
+      const desk = document.getElementById('standeeDeskSelect')?.value || 'Front Desk Counter';
+      const badge = document.getElementById('standeeBadgeSelect')?.value || 'Scan & Book Instantly';
 
       document.getElementById('previewSalonName').innerText = salon;
       document.getElementById('previewDesk').innerText = '📍 ' + desk;
       document.getElementById('previewBadge').innerText = badge;
 
-      const slug = salon.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+      const slug = CURRENT_SALON.slug || salon.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       const encodedDesk = encodeURIComponent(desk);
-      const url = `https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=glow-studio&desk=${encodedDesk}`;
+      const url = `https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=${encodeURIComponent(slug)}&desk=${encodedDesk}`;
 
       document.getElementById('bookingLink').value = url;
       if (document.getElementById('testLinkBtn')) {
@@ -758,7 +1161,8 @@
       if (img) {
         const a = document.createElement('a');
         a.href = img.src;
-        a.download = 'glow-studio-standee-qr.png';
+        const slug = CURRENT_SALON.slug || 'salon';
+        a.download = `${slug}-standee-qr.png`;
         a.click();
       }
     }
@@ -785,6 +1189,23 @@
       const container = document.getElementById('staffRosterContainer');
       container.innerHTML = '';
 
+      if (STYLISTS_DATA.length === 0) {
+        container.innerHTML = `
+          <div class="col-span-full p-8 text-center text-xs text-zinc-500 glass-card-subtle rounded-2xl space-y-3">
+            <p class="font-bold text-zinc-700">No stylists added yet</p>
+            <p class="text-zinc-400">Add stylists to manage active stations and chair assignments.</p>
+            <button onclick="openAddStylistModal()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold shadow-sm inline-flex items-center gap-1.5">
+              <span>+</span> Add Stylist
+            </button>
+          </div>
+        `;
+        document.getElementById('metricStylistsActive').innerText = '0 / 0 Active';
+        if (document.getElementById('navStaffCount')) {
+          document.getElementById('navStaffCount').innerText = 'Stylists (0)';
+        }
+        return;
+      }
+
       STYLISTS_DATA.forEach(s => {
         const card = document.createElement('div');
         card.className = 'glass-card-subtle rounded-2xl p-4 space-y-3';
@@ -805,6 +1226,7 @@
             <button onclick="toggleStylistStatus('${s.id}', 'available')" class="rounded-lg border px-2 py-1 text-[10px] font-semibold ${s.status === 'available' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-700'}">Available</button>
             <button onclick="toggleStylistStatus('${s.id}', 'busy')" class="rounded-lg border px-2 py-1 text-[10px] font-semibold ${s.status === 'busy' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-700'}">Busy</button>
             <button onclick="toggleStylistStatus('${s.id}', 'leave')" class="rounded-lg border px-2 py-1 text-[10px] font-semibold ${s.status === 'leave' ? 'bg-zinc-900 text-white' : 'bg-white text-zinc-700'}">Leave</button>
+            <button onclick="deleteStylist('${s.id}')" class="rounded-lg border px-2 py-1 text-[10px] font-semibold text-red-500 hover:text-red-700 ml-auto">Delete</button>
           </div>
         `;
         container.appendChild(card);
@@ -812,12 +1234,22 @@
 
       const activeCount = STYLISTS_DATA.filter(s => s.status !== 'leave').length;
       document.getElementById('metricStylistsActive').innerText = `${activeCount} / ${STYLISTS_DATA.length} Active`;
+      if (document.getElementById('navStaffCount')) {
+        document.getElementById('navStaffCount').innerText = `Stylists (${STYLISTS_DATA.length})`;
+      }
+    }
+
+    function deleteStylist(id) {
+      STYLISTS_DATA = STYLISTS_DATA.filter(s => s.id !== id);
+      saveStylistsToStorage();
+      renderStylists();
     }
 
     function toggleStylistStatus(id, newStatus) {
       const s = STYLISTS_DATA.find(item => item.id === id);
       if (s) {
         s.status = newStatus;
+        saveStylistsToStorage();
         renderStylists();
       }
     }
@@ -834,6 +1266,18 @@
       const filtered = currentCatalogFilter === 'all'
         ? CATALOG_SERVICES
         : CATALOG_SERVICES.filter(s => s.category === currentCatalogFilter);
+
+      if (filtered.length === 0) {
+        tbody.innerHTML = `
+          <tr>
+            <td colspan="6" class="p-8 text-center text-xs text-zinc-500">
+              <p class="font-bold text-zinc-700">No services in catalog</p>
+              <p class="mt-1 text-zinc-400">Upload a rate-card photo above or click "+ Add Manual Service" to build your live menu.</p>
+            </td>
+          </tr>
+        `;
+        return;
+      }
 
       filtered.forEach(s => {
         const tr = document.createElement('tr');
@@ -871,6 +1315,7 @@
       const s = CATALOG_SERVICES.find(item => item.id === id);
       if (s) {
         s.price = Number(newPrice);
+        saveCatalogToStorage();
       }
     }
 
@@ -878,12 +1323,14 @@
       const s = CATALOG_SERVICES.find(item => item.id === id);
       if (s) {
         s.active = !s.active;
+        saveCatalogToStorage();
         renderCatalog();
       }
     }
 
     function deleteService(id) {
       CATALOG_SERVICES = CATALOG_SERVICES.filter(item => item.id !== id);
+      saveCatalogToStorage();
       renderCatalog();
     }
 
@@ -893,24 +1340,6 @@
         b.className = 'catalog-tab rounded-xl border border-zinc-200 bg-white/80 px-3.5 py-1.5 font-semibold text-zinc-700 hover:bg-white shadow-sm';
       });
       btn.className = 'catalog-tab active rounded-xl bg-zinc-900 px-3.5 py-1.5 font-bold text-white shadow-sm';
-      renderCatalog();
-    }
-
-    function openAddServiceModal() {
-      const name = prompt('Enter Service Name:');
-      if (!name) return;
-      const price = Number(prompt('Enter Price in ₹:', '999') || '999');
-      const duration = prompt('Enter Duration (e.g. 45 mins):', '45 mins') || '45 mins';
-      
-      CATALOG_SERVICES.unshift({
-        id: 's_' + Date.now(),
-        name: name,
-        category: 'hair',
-        duration: duration,
-        price: price,
-        desc: 'Custom salon service added via partner dashboard.',
-        active: true
-      });
       renderCatalog();
     }
 
@@ -1264,70 +1693,6 @@
       }
     }
 
-    async function simulateAiExtraction() {
-      const pBar = document.getElementById('uploadProgressBar');
-      const pFill = document.getElementById('uploadProgressFill');
-      const pName = document.getElementById('uploadFileName');
-      const pStatus = document.getElementById('uploadStatusText');
-      const btn = document.getElementById('aiExtractBtn');
-
-      if (btn) btn.innerText = 'Analyzing with AI Vision...';
-      if (pBar) pBar.classList.remove('hidden');
-      if (pName) pName.innerText = 'Extracting sample rate-card...';
-      if (pStatus) pStatus.innerText = 'AI Vision scanning sample services & price points...';
-      if (pFill) pFill.style.width = '40%';
-
-      try {
-        const sampleText = `
-        GLOW STUDIO INDIRANAGAR RATE CARD 2026:
-        - Balayage Ombre Color: 120 mins | Rs. 4500
-        - Hydrafacial Elite Glow: 60 mins | Rs. 2800
-        - Charcoal Scalp Detox & Styling: 45 mins | Rs. 850
-        - Moroccan Argan Oil Hair Spa: 50 mins | Rs. 1650
-        - Beard Royal Trim & Razor Sculpt: 30 mins | Rs. 450
-        `;
-
-        const messages = [
-          {
-            role: 'system',
-            content: 'You are an expert AI salon menu scanner and rate-card OCR parser. Extract all services from the text. For each service, output: name (string), category (must be one of: "hair", "skin", "grooming", "spa"), duration (e.g. "45 mins", "60 mins"), price (integer number in INR ₹), desc (short 1-line description). Respond strictly with a JSON array: [{"name": string, "category": string, "duration": string, "price": number, "desc": string}]. Do not output markdown code blocks or explanations, output only raw JSON.'
-          },
-          {
-            role: 'user',
-            content: `Extract all salon services and prices from this rate card:\n\n${sampleText}`
-          }
-        ];
-
-        const raw = await callOpenRouterAi(messages);
-        const extracted = extractJsonArray(raw);
-        if (extracted && extracted.length > 0) {
-          currentExtractedItems = extracted;
-        } else {
-          throw new Error('Could not parse response array');
-        }
-
-        if (pFill) pFill.style.width = '100%';
-        if (pStatus) pStatus.innerText = '✓ Extracted ' + currentExtractedItems.length + ' services!';
-        if (btn) btn.innerText = '✓ Extracted ' + currentExtractedItems.length + ' Services';
-
-        renderExtractedItems('Glow Studio Sample Menu');
-
-      } catch (err) {
-        console.error('Test sample error:', err);
-        currentExtractedItems = [
-          { name: 'Balayage Ombre Color', category: 'hair', duration: '120 mins', price: 4500, desc: 'Ombre balayage hair coloring service' },
-          { name: 'Hydrafacial Elite Glow', category: 'skin', duration: '60 mins', price: 2800, desc: 'Advanced hydrafacial treatment for glowing skin' },
-          { name: 'Charcoal Scalp Detox & Styling', category: 'hair', duration: '45 mins', price: 850, desc: 'Charcoal scalp detoxification with hair styling' },
-          { name: 'Moroccan Argan Oil Hair Spa', category: 'hair', duration: '50 mins', price: 1650, desc: 'Nourishing argan oil hair spa treatment' },
-          { name: 'Beard Royal Trim & Razor Sculpt', category: 'grooming', duration: '30 mins', price: 450, desc: 'Precision beard trim with razor sculpting' }
-        ];
-        if (pFill) pFill.style.width = '100%';
-        if (pStatus) pStatus.innerText = 'Loaded sample menu items';
-        if (btn) btn.innerText = 'Test Sample Menu';
-        renderExtractedItems('Sample Rate Card');
-      }
-    }
-
     function renderExtractedItems(fileName) {
       const pBox = document.getElementById('aiPreviewBox');
       const header = document.getElementById('aiSuccessHeader');
@@ -1397,6 +1762,7 @@
         });
       });
 
+      saveCatalogToStorage();
       renderCatalog();
       const count = currentExtractedItems.length;
       currentExtractedItems = [];
@@ -1417,6 +1783,7 @@
 
     // Initialize all modules on load
     window.addEventListener('DOMContentLoaded', () => {
+      initSalonProfile();
       renderQueue();
       updateStandeeCard();
       renderStylists();

@@ -232,7 +232,7 @@ export class AuthRepository {
       totpEnabled: false,
       totpSecretEnc: null,
       roles: [input.roleName],
-      salonId: 'glow-studio-id',
+      salonId: null,
     };
     this.inMemoryUsers.set(userId, newUser);
     return {

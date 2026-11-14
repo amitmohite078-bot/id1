@@ -54,14 +54,22 @@ export class SalonService {
         return generateSalonQr({ slug: salon.slug, name: salon.name }, this.customerWebUrl);
       }
     } catch {
-      // Fallback for dev/unseeded environments
+      // Fallback for offline dev
+      const name = (salonId || 'my-salon')
+        .split('-')
+        .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+        .join(' ');
       return generateSalonQr(
-        { slug: 'glow-studio-indiranagar', name: 'Glow Studio Indiranagar' },
+        { slug: salonId || 'my-salon', name },
         this.customerWebUrl,
       );
     }
+    const name = (salonId || 'my-salon')
+      .split('-')
+      .map((s) => s.charAt(0).toUpperCase() + s.slice(1))
+      .join(' ');
     return generateSalonQr(
-      { slug: 'glow-studio-indiranagar', name: 'Glow Studio Indiranagar' },
+      { slug: salonId || 'my-salon', name },
       this.customerWebUrl,
     );
   }
@@ -89,17 +97,7 @@ export class SalonService {
 
   async getMySalon(salonId: string | null | undefined) {
     if (!salonId) {
-      return {
-        id: 'dev-salon-id',
-        name: 'Glow Studio Indiranagar',
-        slug: 'glow-studio-indiranagar',
-        city: 'Bengaluru',
-        status: 'approved',
-        slotIntervalMinutes: 30,
-        bufferMinutes: 10,
-        maxConcurrentBookings: 3,
-        hours: [],
-      };
+      return null;
     }
     try {
       const salon = await this.repo.findSalonById(salonId);
@@ -112,8 +110,8 @@ export class SalonService {
     }
     return {
       id: salonId,
-      name: 'Glow Studio Indiranagar',
-      slug: 'glow-studio-indiranagar',
+      name: 'My Salon',
+      slug: salonId,
       city: 'Bengaluru',
       status: 'approved',
       slotIntervalMinutes: 30,

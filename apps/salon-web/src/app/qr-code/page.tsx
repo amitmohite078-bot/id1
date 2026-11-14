@@ -21,11 +21,8 @@ export default function SalonQrPage() {
   useEffect(() => {
     apiFetch<SalonQrData>('/api/v1/salon/qr')
       .then(setData)
-      .catch(() => {
-        // Fallback to demo preview salon QR if not currently signed in
-        apiFetch<SalonQrData>('/api/v1/public/salons/glow-studio-indiranagar/qr')
-          .then(setData)
-          .catch((err) => setError((err as Error).message));
+      .catch((err) => {
+        setError((err as Error).message || 'Please log in to generate your salon QR standee.');
       });
   }, []);
 
