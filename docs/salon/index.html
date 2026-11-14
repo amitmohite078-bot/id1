@@ -66,8 +66,124 @@
 </head>
 <body class="min-h-screen bg-gradient-to-br from-slate-50 via-zinc-50 to-stone-100/50 text-zinc-900 antialiased font-sans pb-16">
 
-  <!-- Partner Navbar -->
-  <header class="sticky top-0 z-50 border-b border-white/80 bg-white/80 backdrop-blur-2xl print:hidden">
+  <!-- ============================================================= -->
+  <!-- AUTH GATE: SALON LOGIN & ONBOARDING REGISTRATION               -->
+  <!-- ============================================================= -->
+  <div id="authGateContainer" class="min-h-screen flex items-center justify-center px-4 py-12">
+    <div class="glass-pearl rounded-3xl p-6 sm:p-10 max-w-lg w-full space-y-6 shadow-2xl border border-white/90">
+      
+      <!-- Brand & Header -->
+      <div class="text-center space-y-2">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-900 text-white font-extrabold text-xl mx-auto shadow-md">
+          S
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
+          Salon Partner Portal
+        </h1>
+        <p class="text-xs text-zinc-500 max-w-sm mx-auto">
+          Please sign in or register with your salon name, email, location, and phone number to access your terminal and generate your counter Standee QR code.
+        </p>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="flex rounded-2xl bg-zinc-100 p-1 text-xs font-bold">
+        <button id="tabRegisterBtn" onclick="switchAuthTab('register')" class="flex-1 rounded-xl bg-white py-2.5 text-zinc-900 shadow-sm transition-all">
+          Register New Salon
+        </button>
+        <button id="tabLoginBtn" onclick="switchAuthTab('login')" class="flex-1 rounded-xl py-2.5 text-zinc-500 hover:text-zinc-900 transition-all">
+          Sign In Existing
+        </button>
+      </div>
+
+      <!-- Form 1: Registration Form (Default) -->
+      <form id="authRegisterForm" onsubmit="handleAuthRegister(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Salon Business Name *</label>
+          <input id="gateSalonName" type="text" required placeholder="e.g. Bella Unisex Hair & Spa"
+            class="w-full rounded-xl border border-zinc-200 bg-white p-3 font-semibold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+        </div>
+
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Official Email Address *</label>
+          <input id="gateEmail" type="email" required placeholder="e.g. manager@bellasalon.com"
+            class="w-full rounded-xl border border-zinc-200 bg-white p-3 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Contact Phone / WhatsApp *</label>
+            <input id="gatePhone" type="tel" required placeholder="+91 98765 43210"
+              class="w-full rounded-xl border border-zinc-200 bg-white p-3 font-mono text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Owner / Manager Name</label>
+            <input id="gateManager" type="text" placeholder="e.g. Rahul Sharma"
+              class="w-full rounded-xl border border-zinc-200 bg-white p-3 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+          </div>
+        </div>
+
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Salon Location & Complete Address *</label>
+          <input id="gateAddress" type="text" required placeholder="e.g. #42, 100ft Road, Indiranagar, Bengaluru"
+            class="w-full rounded-xl border border-zinc-200 bg-white p-3 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+        </div>
+
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Audience Focus</label>
+            <select id="gateGender" class="w-full rounded-xl border border-zinc-200 bg-white p-3 text-zinc-900 font-semibold shadow-sm">
+              <option value="unisex">Unisex Salon</option>
+              <option value="men">Men's Grooming</option>
+              <option value="women">Women's Salon & Spa</option>
+            </select>
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Specialties Tagline</label>
+            <input id="gateTagline" type="text" placeholder="e.g. Haircut, Color & Spa"
+              class="w-full rounded-xl border border-zinc-200 bg-white p-3 text-zinc-900 shadow-sm" />
+          </div>
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="btn-gloss-noir w-full rounded-xl py-3 text-xs font-bold shadow-md flex items-center justify-center gap-2">
+            <span>🚀</span>
+            <span>Register & Generate Standee QR Code →</span>
+          </button>
+        </div>
+
+        <p class="text-[11px] text-zinc-400 text-center pt-1">
+          ✓ Real-time counter QR pass, AI menu extractor, and digital bookings are created upon registration.
+        </p>
+      </form>
+
+      <!-- Form 2: Sign In Form (Hidden initially) -->
+      <form id="authLoginForm" onsubmit="handleAuthLogin(event)" class="hidden space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Registered Email ID or Phone Number *</label>
+          <input id="loginIdentifier" type="text" required placeholder="manager@bellasalon.com or +91 98765 43210"
+            class="w-full rounded-xl border border-zinc-200 bg-white p-3 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="btn-gloss-noir w-full rounded-xl py-3 text-xs font-bold shadow-md flex items-center justify-center gap-2">
+            <span>🔐</span>
+            <span>Sign In to Salon Portal →</span>
+          </button>
+        </div>
+
+        <p class="text-[11px] text-zinc-500 text-center">
+          New salon partner?
+          <button type="button" onclick="switchAuthTab('register')" class="text-zinc-900 font-bold underline ml-1">
+            Register your salon here
+          </button>
+        </p>
+      </form>
+
+    </div>
+  </div>
+
+  <!-- Partner Navbar (Hidden until authenticated) -->
+  <header id="partnerNavbar" class="hidden sticky top-0 z-50 border-b border-white/80 bg-white/80 backdrop-blur-2xl print:hidden">
     <div class="mx-auto flex max-w-6xl items-center justify-between px-6 py-4">
       <div class="flex items-center gap-3">
         <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
@@ -90,18 +206,22 @@
       </nav>
 
       <div class="flex items-center gap-2">
+        <span id="topNavSalonEmail" class="hidden sm:inline-block text-[11px] text-zinc-500 font-mono bg-zinc-100 px-2.5 py-1 rounded-lg border border-zinc-200"></span>
         <button onclick="openRegisterSalonModal()" class="rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm flex items-center gap-1">
           <span>➕</span> <span class="hidden sm:inline">Register New Salon</span>
         </button>
         <button onclick="document.getElementById('standeeSection').scrollIntoView({ behavior: 'smooth' })" class="btn-gloss-noir rounded-xl px-3.5 py-1.5 text-xs font-bold shadow-sm">
           🖨️ Standee QR
         </button>
+        <button onclick="logoutSalon()" class="rounded-xl border border-rose-200 bg-rose-50 px-3 py-1.5 text-xs font-semibold text-rose-700 hover:bg-rose-100 shadow-sm flex items-center gap-1" title="Sign out of salon account">
+          <span>🚪</span> <span class="hidden sm:inline">Logout</span>
+        </button>
       </div>
     </div>
   </header>
 
-  <!-- Partner Dashboard Main Content -->
-  <main class="mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-8 space-y-8">
+  <!-- Partner Dashboard Main Content (Hidden until authenticated) -->
+  <main id="partnerDashboard" class="hidden mx-auto max-w-6xl px-4 sm:px-6 py-6 sm:py-8 space-y-8">
 
     <!-- Salon Header & Quick Metrics Ribbon -->
     <div class="glass-pearl rounded-3xl p-6 sm:p-8 print:hidden space-y-6">
@@ -561,6 +681,10 @@
           <label class="block font-semibold text-zinc-700 mb-1">Full Address & City *</label>
           <input id="regSalonAddress" type="text" placeholder="e.g. #42, 12th Main, Indiranagar, Bengaluru" class="w-full rounded-xl border p-2.5 text-zinc-900" />
         </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Official Email Address *</label>
+          <input id="regSalonEmail" type="email" placeholder="e.g. manager@bellahair.com" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+        </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
             <label class="block font-semibold text-zinc-700 mb-1">Owner / Manager Name</label>
@@ -616,6 +740,10 @@
         <div>
           <label class="block font-semibold text-zinc-700 mb-1">Address & Location *</label>
           <input id="editSalonAddressInput" type="text" placeholder="e.g. Main Street, Indiranagar, Bengaluru" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Official Email Address *</label>
+          <input id="editSalonEmailInput" type="email" placeholder="manager@salon.com" class="w-full rounded-xl border p-2.5 text-zinc-900" />
         </div>
         <div class="grid grid-cols-2 gap-2">
           <div>
@@ -865,6 +993,217 @@
       } catch (e) {}
     }
 
+    // -------------------------------------------------------------
+    // SALON AUTHENTICATION & LOGIN GATE
+    // -------------------------------------------------------------
+    function getStoredAuthSession() {
+      try {
+        const s = localStorage.getItem('salonbridge_auth_session');
+        return s ? JSON.parse(s) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function checkAuthAndRender() {
+      const session = getStoredAuthSession();
+      const authGate = document.getElementById('authGateContainer');
+      const navbar = document.getElementById('partnerNavbar');
+      const dashboard = document.getElementById('partnerDashboard');
+
+      if (!session) {
+        // Unauthenticated -> Show Auth Gate, Hide Partner Dashboard & Standee QR
+        if (authGate) authGate.classList.remove('hidden');
+        if (navbar) navbar.classList.add('hidden');
+        if (dashboard) dashboard.classList.add('hidden');
+      } else {
+        // Authenticated -> Unlock Dashboard, QR Standee, Staff & Catalog
+        if (authGate) authGate.classList.add('hidden');
+        if (navbar) navbar.classList.remove('hidden');
+        if (dashboard) dashboard.classList.remove('hidden');
+
+        initSalonProfile();
+        renderQueue();
+        updateStandeeCard();
+        renderStylists();
+        renderCatalog();
+      }
+    }
+
+    function switchAuthTab(tab) {
+      const regForm = document.getElementById('authRegisterForm');
+      const loginForm = document.getElementById('authLoginForm');
+      const regBtn = document.getElementById('tabRegisterBtn');
+      const loginBtn = document.getElementById('tabLoginBtn');
+
+      if (tab === 'login') {
+        regForm.classList.add('hidden');
+        loginForm.classList.remove('hidden');
+        loginBtn.className = 'flex-1 rounded-xl bg-white py-2.5 text-zinc-900 shadow-sm transition-all';
+        regBtn.className = 'flex-1 rounded-xl py-2.5 text-zinc-500 hover:text-zinc-900 transition-all';
+      } else {
+        loginForm.classList.add('hidden');
+        regForm.classList.remove('hidden');
+        regBtn.className = 'flex-1 rounded-xl bg-white py-2.5 text-zinc-900 shadow-sm transition-all';
+        loginBtn.className = 'flex-1 rounded-xl py-2.5 text-zinc-500 hover:text-zinc-900 transition-all';
+      }
+    }
+
+    function handleAuthRegister(event) {
+      if (event) event.preventDefault();
+
+      const name = (document.getElementById('gateSalonName').value || '').trim();
+      const email = (document.getElementById('gateEmail').value || '').trim().toLowerCase();
+      const phone = (document.getElementById('gatePhone').value || '').trim();
+      const address = (document.getElementById('gateAddress').value || '').trim();
+      const manager = (document.getElementById('gateManager').value || '').trim() || 'Salon Manager';
+      const gender = document.getElementById('gateGender').value || 'unisex';
+      const tagline = (document.getElementById('gateTagline').value || '').trim() || 'Premium salon styling & grooming services';
+
+      if (!name) {
+        alert('Please enter your salon business name.');
+        document.getElementById('gateSalonName').focus();
+        return;
+      }
+
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        alert('Please enter a valid official email address (e.g. manager@yourbrand.com).');
+        document.getElementById('gateEmail').focus();
+        return;
+      }
+
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      if (cleanPhone.length < 10) {
+        alert('Please enter a valid 10-digit phone or WhatsApp number.');
+        document.getElementById('gatePhone').focus();
+        return;
+      }
+
+      if (!address) {
+        alert('Please enter your salon address and city.');
+        document.getElementById('gateAddress').focus();
+        return;
+      }
+
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+      CURRENT_SALON = {
+        id: slug,
+        slug: slug,
+        name: name,
+        email: email,
+        phone: phone,
+        address: address,
+        manager: manager,
+        gender: gender,
+        area: address.split(',')[1]?.trim() || 'Central',
+        tagline: tagline,
+        rating: '5.0',
+        reviews: '0',
+        badge: 'Verified Partner',
+        registeredAt: new Date().toISOString()
+      };
+
+      // Reset floor queue, stylists roster, and catalog for this newly registered salon
+      QUEUE_DATA = [];
+      STYLISTS_DATA = [];
+      CATALOG_SERVICES = [];
+
+      saveSalonProfileToStorage();
+      saveStylistsToStorage();
+      saveCatalogToStorage();
+
+      // Save authenticated partner session
+      localStorage.setItem('salonbridge_auth_session', JSON.stringify({
+        email: email,
+        phone: phone,
+        salonId: slug,
+        salonName: name,
+        timestamp: Date.now()
+      }));
+
+      // Unlock dashboard & standee QR
+      checkAuthAndRender();
+
+      alert(`🎉 Registration successful!\n\nWelcome to SalonBridge, ${name}.\nYour Counter Standee QR code and dedicated client booking portal have been generated!`);
+
+      // Scroll smoothly to Standee QR section
+      setTimeout(() => {
+        const standeeEl = document.getElementById('standeeSection');
+        if (standeeEl) standeeEl.scrollIntoView({ behavior: 'smooth' });
+      }, 350);
+    }
+
+    function handleAuthLogin(event) {
+      if (event) event.preventDefault();
+
+      const input = (document.getElementById('loginIdentifier').value || '').trim().toLowerCase();
+      if (!input) {
+        alert('Please enter your registered email address or phone number.');
+        document.getElementById('loginIdentifier').focus();
+        return;
+      }
+
+      const storedCurrent = getStoredSalonProfile();
+      let matchedSalon = null;
+
+      if (storedCurrent) {
+        const matchesEmail = storedCurrent.email && storedCurrent.email.toLowerCase() === input;
+        const matchesPhone = storedCurrent.phone && storedCurrent.phone.replace(/[^0-9]/g, '').includes(input.replace(/[^0-9]/g, ''));
+        if (matchesEmail || matchesPhone) {
+          matchedSalon = storedCurrent;
+        }
+      }
+
+      if (!matchedSalon) {
+        try {
+          const db = JSON.parse(localStorage.getItem('salonbridge_salons') || '{}');
+          for (const s of Object.values(db)) {
+            const matchesEmail = s.email && s.email.toLowerCase() === input;
+            const matchesPhone = s.phone && s.phone.replace(/[^0-9]/g, '').includes(input.replace(/[^0-9]/g, ''));
+            if (matchesEmail || matchesPhone) {
+              matchedSalon = s;
+              break;
+            }
+          }
+        } catch (e) {}
+      }
+
+      if (matchedSalon) {
+        CURRENT_SALON = matchedSalon;
+        saveSalonProfileToStorage();
+        localStorage.setItem('salonbridge_auth_session', JSON.stringify({
+          email: matchedSalon.email || input,
+          phone: matchedSalon.phone || '',
+          salonId: matchedSalon.id || matchedSalon.slug,
+          salonName: matchedSalon.name,
+          timestamp: Date.now()
+        }));
+
+        checkAuthAndRender();
+        alert(`✓ Welcome back, ${matchedSalon.name}! Dashboard & QR code unlocked.`);
+      } else {
+        const createNow = confirm(`No registered salon found under "${input}".\n\nWould you like to register this salon now?`);
+        if (createNow) {
+          switchAuthTab('register');
+          if (input.includes('@')) {
+            document.getElementById('gateEmail').value = input;
+          } else {
+            document.getElementById('gatePhone').value = input;
+          }
+          document.getElementById('gateSalonName').focus();
+        }
+      }
+    }
+
+    function logoutSalon() {
+      if (confirm('Log out of this salon partner session?')) {
+        localStorage.removeItem('salonbridge_auth_session');
+        checkAuthAndRender();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
     function initSalonProfile() {
       const stored = getStoredSalonProfile();
       if (stored) {
@@ -876,10 +1215,14 @@
       if (document.getElementById('topNavSalonName')) {
         document.getElementById('topNavSalonName').innerText = CURRENT_SALON.name;
       }
+      if (document.getElementById('topNavSalonEmail')) {
+        document.getElementById('topNavSalonEmail').innerText = CURRENT_SALON.email ? `✉️ ${CURRENT_SALON.email}` : '';
+      }
       if (document.getElementById('dashboardSalonMeta')) {
         const phoneTxt = CURRENT_SALON.phone ? ` · Phone: ${CURRENT_SALON.phone}` : '';
+        const emailTxt = CURRENT_SALON.email ? ` · Email: ${CURRENT_SALON.email}` : '';
         const mgrTxt = CURRENT_SALON.manager ? ` · Manager: ${CURRENT_SALON.manager}` : '';
-        document.getElementById('dashboardSalonMeta').innerText = `${CURRENT_SALON.address}${mgrTxt}${phoneTxt}`;
+        document.getElementById('dashboardSalonMeta').innerText = `${CURRENT_SALON.address}${mgrTxt}${phoneTxt}${emailTxt}`;
       }
       if (document.getElementById('standeeSalonNameInput')) {
         document.getElementById('standeeSalonNameInput').value = CURRENT_SALON.name;
@@ -898,6 +1241,7 @@
     function openRegisterSalonModal() {
       document.getElementById('regSalonName').value = '';
       document.getElementById('regSalonAddress').value = '';
+      document.getElementById('regSalonEmail').value = '';
       document.getElementById('regSalonManager').value = '';
       document.getElementById('regSalonPhone').value = '';
       document.getElementById('regSalonArea').value = '';
@@ -911,6 +1255,7 @@
 
     function submitRegisterSalon() {
       const name = (document.getElementById('regSalonName').value || '').trim();
+      const email = (document.getElementById('regSalonEmail').value || '').trim();
       const address = (document.getElementById('regSalonAddress').value || '').trim();
       const manager = (document.getElementById('regSalonManager').value || '').trim() || 'Salon Manager';
       const phone = (document.getElementById('regSalonPhone').value || '').trim();
@@ -923,8 +1268,18 @@
         document.getElementById('regSalonName').focus();
         return;
       }
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        alert('Please enter a valid official email address.');
+        document.getElementById('regSalonEmail').focus();
+        return;
+      }
+      if (!phone || phone.replace(/[^0-9]/g, '').length < 10) {
+        alert('Please enter a valid 10-digit phone or WhatsApp number.');
+        document.getElementById('regSalonPhone').focus();
+        return;
+      }
       if (!address) {
-        alert('Please enter your salon address.');
+        alert('Please enter your salon address and city.');
         document.getElementById('regSalonAddress').focus();
         return;
       }
@@ -935,6 +1290,7 @@
         id: slug,
         slug: slug,
         name: name,
+        email: email,
         address: address,
         manager: manager,
         phone: phone,
@@ -943,7 +1299,8 @@
         tagline: tagline,
         rating: '5.0',
         reviews: '0',
-        badge: 'Verified Partner'
+        badge: 'Verified Partner',
+        registeredAt: new Date().toISOString()
       };
 
       // Reset stylists, catalog and queue for a fresh salon account
@@ -955,12 +1312,16 @@
       saveStylistsToStorage();
       saveCatalogToStorage();
 
-      initSalonProfile();
-      renderQueueTable();
-      renderStylistsList();
-      renderCatalogTable();
-      updateStandee();
+      // Save authenticated session
+      localStorage.setItem('salonbridge_auth_session', JSON.stringify({
+        email: email,
+        phone: phone,
+        salonId: slug,
+        salonName: name,
+        timestamp: Date.now()
+      }));
 
+      checkAuthAndRender();
       closeRegisterSalonModal();
 
       alert(`✓ Salon "${name}" registered successfully!\n\nYour instant QR Standee and client booking portal have been generated.`);
@@ -973,6 +1334,7 @@
     function openEditSalonModal() {
       document.getElementById('editSalonNameInput').value = CURRENT_SALON.name || '';
       document.getElementById('editSalonAddressInput').value = CURRENT_SALON.address || '';
+      document.getElementById('editSalonEmailInput').value = CURRENT_SALON.email || '';
       document.getElementById('editSalonManagerInput').value = CURRENT_SALON.manager || '';
       document.getElementById('editSalonPhoneInput').value = CURRENT_SALON.phone || '';
       document.getElementById('editSalonAreaSelect').value = CURRENT_SALON.area || 'indiranagar';
@@ -992,6 +1354,7 @@
         return;
       }
       const address = (document.getElementById('editSalonAddressInput').value || '').trim() || 'Partner Salon Location';
+      const email = (document.getElementById('editSalonEmailInput').value || '').trim();
       const manager = (document.getElementById('editSalonManagerInput').value || '').trim() || 'Owner / Manager';
       const phone = (document.getElementById('editSalonPhoneInput').value || '').trim();
       const area = document.getElementById('editSalonAreaSelect').value;
@@ -1004,6 +1367,7 @@
         id: slug,
         slug: slug,
         name: name,
+        email: email,
         address: address,
         manager: manager,
         phone: phone,
@@ -1944,13 +2308,9 @@
       alert(`✓ Successfully added ${count} new services to your live SalonBridge catalog!`);
     }
 
-    // Initialize all modules on load
+    // Initialize authentication gate on load
     window.addEventListener('DOMContentLoaded', () => {
-      initSalonProfile();
-      renderQueue();
-      updateStandeeCard();
-      renderStylists();
-      renderCatalog();
+      checkAuthAndRender();
     });
   </script>
 </body>
