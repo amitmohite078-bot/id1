@@ -436,18 +436,9 @@
               📷
             </div>
             <div>
-              <div class="flex items-center gap-2 flex-wrap">
-                <h4 class="font-bold text-sm text-zinc-900">AI Vision Rate-Card & Menu Importer</h4>
-                <span class="inline-flex items-center gap-1 rounded-full bg-emerald-500/15 border border-emerald-500/30 px-2.5 py-0.5 text-[10px] font-bold text-emerald-800">
-                  <span class="h-1.5 w-1.5 rounded-full bg-emerald-600 animate-pulse"></span>
-                  OpenRouter AI Active
-                </span>
-                <button type="button" onclick="configureOpenRouterKey(event)" class="text-[10px] text-zinc-500 hover:text-zinc-900 underline font-semibold">
-                  API Key Config
-                </button>
-              </div>
+              <h4 class="font-bold text-sm text-zinc-900">AI Vision Rate-Card & Menu Importer</h4>
               <p class="text-xs text-zinc-500 mt-0.5">Click or drag & drop a photo (PNG, JPG), PDF menu, or CSV rate sheet.</p>
-              <span class="text-[11px] text-emerald-700 font-semibold inline-block mt-1">✓ Powered by OpenRouter NVIDIA Nemotron 3.5 Super VL for real-time menu extraction</span>
+              <span class="text-[11px] text-emerald-700 font-semibold inline-block mt-1">✓ Supports auto OCR price extraction, durations, and categories</span>
             </div>
           </div>
 
@@ -456,7 +447,7 @@
               <span>📁</span> Choose File to Upload
             </button>
             <button type="button" onclick="simulateAiExtraction()" id="aiExtractBtn" class="rounded-xl border border-zinc-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-100 shadow-sm whitespace-nowrap">
-              Test OpenRouter API
+              Test Sample Menu
             </button>
           </div>
         </div>
@@ -489,7 +480,7 @@
             <img id="menuThumbImg" class="h-16 w-16 object-cover rounded-md border" />
             <div class="text-[11px] text-zinc-600 space-y-0.5">
               <span id="thumbFileName" class="font-bold text-zinc-900 block"></span>
-              <span class="text-emerald-700 font-medium">✓ Scanned via OpenRouter AI Vision (NVIDIA Nemotron 3.5 Super VL)</span>
+              <span class="text-emerald-700 font-medium">✓ Auto-scanned & parsed by AI Vision</span>
             </div>
           </div>
 
@@ -1179,7 +1170,7 @@
 
       const fileSizeKb = (file.size / 1024).toFixed(1);
       if (pName) pName.innerText = `Processing "${file.name}" (${fileSizeKb} KB)...`;
-      if (pStatus) pStatus.innerText = 'Connecting to OpenRouter AI...';
+      if (pStatus) pStatus.innerText = 'Analyzing rate-card document...';
       if (pFill) pFill.style.width = '20%';
 
       const isImage = file.type && file.type.startsWith('image/');
@@ -1200,7 +1191,7 @@
           if (thumbBox) thumbBox.classList.remove('hidden');
 
           if (pFill) pFill.style.width = '45%';
-          if (pStatus) pStatus.innerText = 'OpenRouter AI (NVIDIA Nemotron 3.5 Super VL) analyzing rate-card image & extracting prices...';
+          if (pStatus) pStatus.innerText = 'AI Vision analyzing rate-card image & extracting prices...';
 
           const messages = [
             {
@@ -1229,7 +1220,7 @@
             rawResponse = await callOpenRouterAi(messages, OPENROUTER_CONFIG.primaryModel);
           } catch (modelErr) {
             console.warn('Primary model error, trying fallback:', modelErr);
-            if (pStatus) pStatus.innerText = 'Retrying with backup OpenRouter model...';
+            if (pStatus) pStatus.innerText = 'Refining extraction...';
             rawResponse = await callOpenRouterAi(messages, OPENROUTER_CONFIG.fallbackModel);
           }
 
@@ -1243,7 +1234,7 @@
               category: ['hair', 'skin', 'grooming', 'spa'].includes(String(item.category).toLowerCase()) ? String(item.category).toLowerCase() : 'hair',
               duration: item.duration || '45 mins',
               price: Math.abs(parseInt(item.price, 10)) || 799,
-              desc: item.desc || 'Extracted via OpenRouter AI Vision.'
+              desc: item.desc || 'AI extracted salon service.'
             }));
           } else {
             throw new Error('No structured services could be parsed from model response.');
@@ -1266,7 +1257,7 @@
 
           if (currentExtractedItems.length === 0) {
             if (pFill) pFill.style.width = '50%';
-            if (pStatus) pStatus.innerText = 'Calling OpenRouter AI to parse structured rate items...';
+            if (pStatus) pStatus.innerText = 'AI Vision parsing structured rate items...';
 
             const messages = [
               {
@@ -1287,13 +1278,13 @@
                 category: ['hair', 'skin', 'grooming', 'spa'].includes(String(item.category).toLowerCase()) ? String(item.category).toLowerCase() : 'hair',
                 duration: item.duration || '45 mins',
                 price: Math.abs(parseInt(item.price, 10)) || 599,
-                desc: item.desc || 'Extracted from file text via OpenRouter AI.'
+                desc: item.desc || 'Extracted from rate card.'
               }));
             }
           }
         } else {
           if (pFill) pFill.style.width = '50%';
-          if (pStatus) pStatus.innerText = 'OpenRouter AI inferring rate card services from document...';
+          if (pStatus) pStatus.innerText = 'AI Vision extracting services from document...';
 
           const messages = [
             {
@@ -1313,13 +1304,13 @@
         }
 
         if (pFill) pFill.style.width = '100%';
-        if (pStatus) pStatus.innerText = '✓ OpenRouter AI Extraction Complete!';
+        if (pStatus) pStatus.innerText = '✓ Extraction Complete!';
 
         renderExtractedItems(file.name);
 
       } catch (err) {
-        console.error('OpenRouter processing error:', err);
-        if (pStatus) pStatus.innerText = 'Notice: ' + (err.message.slice(0, 80)) + '. Falling back to smart offline parser...';
+        console.error('Processing error:', err);
+        if (pStatus) pStatus.innerText = 'Note: ' + (err.message.slice(0, 50)) + '. Using smart offline parser...';
         
         const cleanName = file.name.replace(/\.[^/.]+$/, '').replace(/[-_]/g, ' ');
         currentExtractedItems = [
@@ -1340,10 +1331,10 @@
       const pStatus = document.getElementById('uploadStatusText');
       const btn = document.getElementById('aiExtractBtn');
 
-      if (btn) btn.innerText = 'Calling OpenRouter API...';
+      if (btn) btn.innerText = 'Analyzing with AI Vision...';
       if (pBar) pBar.classList.remove('hidden');
-      if (pName) pName.innerText = 'Testing OpenRouter AI on sample menu...';
-      if (pStatus) pStatus.innerText = 'Sending sample rate-card to OpenRouter (NVIDIA Nemotron 3.5 Super VL)...';
+      if (pName) pName.innerText = 'Extracting sample rate-card...';
+      if (pStatus) pStatus.innerText = 'AI Vision scanning sample services & price points...';
       if (pFill) pFill.style.width = '40%';
 
       try {
@@ -1376,8 +1367,8 @@
         }
 
         if (pFill) pFill.style.width = '100%';
-        if (pStatus) pStatus.innerText = '✓ OpenRouter AI Extracted ' + currentExtractedItems.length + ' services!';
-        if (btn) btn.innerText = '✓ Extracted via OpenRouter';
+        if (pStatus) pStatus.innerText = '✓ Extracted ' + currentExtractedItems.length + ' services!';
+        if (btn) btn.innerText = '✓ Extracted ' + currentExtractedItems.length + ' Services';
 
         renderExtractedItems('Glow Studio Sample Menu');
 
@@ -1392,7 +1383,7 @@
         ];
         if (pFill) pFill.style.width = '100%';
         if (pStatus) pStatus.innerText = 'Loaded sample menu items';
-        if (btn) btn.innerText = 'Test OpenRouter API';
+        if (btn) btn.innerText = 'Test Sample Menu';
         renderExtractedItems('Sample Rate Card');
       }
     }
