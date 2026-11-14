@@ -131,8 +131,8 @@
       <div class="grid grid-cols-2 sm:grid-cols-4 gap-4 border-t border-zinc-100 pt-6 text-xs">
         <div class="glass-card-subtle rounded-2xl p-4">
           <span class="text-zinc-500 font-medium">Today's Revenue:</span>
-          <p class="mt-1 text-2xl font-extrabold text-zinc-900" id="metricGmv">₹22,400</p>
-          <span class="text-[10px] text-emerald-600 font-bold">+18.2% vs yesterday</span>
+          <p class="mt-1 text-2xl font-extrabold text-zinc-900" id="metricGmv">₹0</p>
+          <span class="text-[10px] text-zinc-400">Live booking total</span>
         </div>
         <div class="glass-card-subtle rounded-2xl p-4">
           <span class="text-zinc-500 font-medium">Clients In Queue:</span>
@@ -541,84 +541,11 @@
     // -------------------------------------------------------------
     // DATA STORES: Queue, Stylists, and Services Catalog
     // -------------------------------------------------------------
-    let QUEUE_DATA = [
-      {
-        id: 'q1',
-        clientName: 'Aarav Sharma',
-        phone: '+919876543210',
-        service: 'Haircut & Master Styling',
-        price: 799,
-        stylist: 'Priya Sharma',
-        desk: 'Front Desk Counter',
-        time: '10:30 AM Today',
-        status: 'waiting', // waiting, in-chair, completed
-        payment: 'Pay at Salon'
-      },
-      {
-        id: 'q2',
-        clientName: 'Meera Iyer',
-        phone: '+919876511223',
-        service: 'Hydra Glow Deep Aqua Facial',
-        price: 1999,
-        stylist: 'Ananya Nair',
-        desk: 'Styling Chair 2',
-        time: '10:45 AM Today',
-        status: 'waiting',
-        payment: 'Prepaid (UPI)'
-      },
-      {
-        id: 'q3',
-        clientName: 'Vikram Malhotra',
-        phone: '+919876533445',
-        service: 'Executive Beard Sculpt',
-        price: 399,
-        stylist: 'Rahul Sen',
-        desk: 'Styling Chair 1',
-        time: '10:00 AM Today',
-        status: 'in-chair',
-        payment: 'Pay at Salon'
-      },
-      {
-        id: 'q4',
-        clientName: 'Kavita Reddy',
-        phone: '+919876555667',
-        service: 'Balayage & Intense Hair Spa',
-        price: 3499,
-        stylist: 'Priya Sharma',
-        desk: 'VIP Lounge',
-        time: '09:30 AM Today',
-        status: 'in-chair',
-        payment: 'Prepaid (UPI)'
-      },
-      {
-        id: 'q5',
-        clientName: 'Sunil Nair',
-        phone: '+919876577889',
-        service: 'Deep Tissue Head Relief',
-        price: 699,
-        stylist: 'Ananya Nair',
-        desk: 'Pedicure Bar',
-        time: '09:00 AM Today',
-        status: 'completed',
-        payment: 'Paid (Cash)'
-      },
-      {
-        id: 'q6',
-        clientName: 'Deepa Jain',
-        phone: '+919876599001',
-        service: 'Keratin Silk Infusion',
-        price: 4200,
-        stylist: 'Rahul Sen',
-        desk: 'Styling Chair 3',
-        time: '08:30 AM Today',
-        status: 'completed',
-        payment: 'Paid (UPI)'
-      }
-    ];
+    let QUEUE_DATA = [];
 
     let STYLISTS_DATA = [
       { id: 'st1', name: 'Priya Sharma', role: 'Master Stylist (8 yrs exp)', status: 'available', chair: 'Station 1' },
-      { id: 'st2', name: 'Rahul Sen', role: 'Creative Colorist (6 yrs exp)', status: 'busy', chair: 'Station 2' },
+      { id: 'st2', name: 'Rahul Sen', role: 'Creative Colorist (6 yrs exp)', status: 'available', chair: 'Station 2' },
       { id: 'st3', name: 'Ananya Nair', role: 'Skin & Spa Expert (5 yrs exp)', status: 'available', chair: 'Station 3' }
     ];
 
@@ -646,7 +573,8 @@
         : QUEUE_DATA.filter(item => item.status === currentQueueFilter);
 
       if (filtered.length === 0) {
-        container.innerHTML = `<div class="p-8 text-center text-xs text-zinc-500">No clients in this queue category.</div>`;
+        container.innerHTML = `<div class="p-8 text-center text-xs text-zinc-500">No active clients in queue. Ready for counter walk-ins or table QR bookings!</div>`;
+        updateQueueMetrics();
         return;
       }
 
@@ -737,7 +665,13 @@
 
     function updateQueueMetrics() {
       const waiting = QUEUE_DATA.filter(q => q.status === 'waiting').length;
-      document.getElementById('metricQueueCount').innerText = `${waiting} Waiting`;
+      const totalGmv = QUEUE_DATA.reduce((sum, item) => sum + (item.price || 0), 0);
+      if (document.getElementById('metricQueueCount')) {
+        document.getElementById('metricQueueCount').innerText = `${waiting} Waiting`;
+      }
+      if (document.getElementById('metricGmv')) {
+        document.getElementById('metricGmv').innerText = `₹${totalGmv.toLocaleString('en-IN')}`;
+      }
     }
 
     // Modal Walk-In
@@ -748,8 +682,12 @@
       document.getElementById('walkinModal').classList.add('hidden');
     }
     function submitWalkin() {
-      const name = document.getElementById('walkinName').value || 'Walk-in Client';
-      const phone = document.getElementById('walkinPhone').value || '+919876500000';
+      const name = (document.getElementById('walkinName')?.value || '').trim();
+      const phone = (document.getElementById('walkinPhone')?.value || '').trim();
+      if (!name || !phone) {
+        alert('Please enter client name and contact phone number.');
+        return;
+      }
       const [svc, price] = document.getElementById('walkinService').value.split('|');
       const stylist = document.getElementById('walkinStylist').value;
 
@@ -766,6 +704,8 @@
         payment: 'Pay at Salon'
       });
 
+      document.getElementById('walkinName').value = '';
+      document.getElementById('walkinPhone').value = '';
       closeWalkinModal();
       renderQueue();
       alert(`Client ${name} added to live queue!`);

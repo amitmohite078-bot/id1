@@ -117,71 +117,19 @@
     <div class="glass-pearl rounded-3xl p-8 sm:p-12 space-y-6">
       <div class="flex items-center justify-between border-b border-zinc-100 pb-4">
         <div>
-          <span class="rounded-full bg-amber-500/10 px-3 py-1 text-xs font-bold text-amber-700 border border-amber-500/20">
-            Action Required
+          <span class="rounded-full bg-zinc-900/5 px-3 py-1 text-xs font-bold text-zinc-700">
+            Partner Onboarding
           </span>
           <h2 class="mt-2 text-2xl font-bold tracking-tight text-zinc-900">
             Pending Salon Approvals Queue
           </h2>
           <p class="text-xs text-zinc-500">Review business registration, GSTIN, and assign custom commission rates</p>
         </div>
-        <span class="text-xs font-semibold text-zinc-500">3 pending</span>
+        <span id="pendingCount" class="text-xs font-semibold text-zinc-500">0 pending</span>
       </div>
 
-      <div class="divide-y divide-zinc-100 text-xs">
-        <!-- Item 1 -->
-        <div id="row-salon-1" class="py-4 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-bold text-sm text-zinc-900">Bliss Wellness & Spa</span>
-              <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] text-zinc-600 font-mono">GSTIN: 29AABCU9603R1Z7</span>
-            </div>
-            <p class="text-zinc-500 mt-1">HSR Layout, Sector 4 · Owner: Suresh Nair (+91 98451 22334)</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <label class="text-zinc-500">
-              Commission:
-              <select id="comm-1" class="rounded-lg border border-zinc-200 bg-white px-2 py-1 font-bold text-zinc-900">
-                <option value="10">10% (Default)</option>
-                <option value="8">8% (VIP Partner)</option>
-                <option value="15">15% (Premium)</option>
-              </select>
-            </label>
-            <button onclick="approveSalon('row-salon-1', 'Bliss Wellness')" class="btn-gloss-noir rounded-xl px-4 py-2 font-bold text-emerald-300">
-              ✓ Approve
-            </button>
-            <button onclick="rejectSalon('row-salon-1')" class="rounded-xl border border-red-200 text-red-600 px-3 py-2 font-bold hover:bg-red-50">
-              Reject
-            </button>
-          </div>
-        </div>
-
-        <!-- Item 2 -->
-        <div id="row-salon-2" class="py-4 flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <div class="flex items-center gap-2">
-              <span class="font-bold text-sm text-zinc-900">Vogue Hair Bar</span>
-              <span class="rounded-full bg-zinc-100 px-2 py-0.5 text-[10px] text-zinc-600 font-mono">GSTIN: 29AAEFV1102K1ZS</span>
-            </div>
-            <p class="text-zinc-500 mt-1">Koramangala, 6th Block · Owner: Ananya Roy (+91 97412 55678)</p>
-          </div>
-          <div class="flex items-center gap-2">
-            <label class="text-zinc-500">
-              Commission:
-              <select id="comm-2" class="rounded-lg border border-zinc-200 bg-white px-2 py-1 font-bold text-zinc-900">
-                <option value="10">10% (Default)</option>
-                <option value="8">8% (VIP Partner)</option>
-                <option value="15">15% (Premium)</option>
-              </select>
-            </label>
-            <button onclick="approveSalon('row-salon-2', 'Vogue Hair Bar')" class="btn-gloss-noir rounded-xl px-4 py-2 font-bold text-emerald-300">
-              ✓ Approve
-            </button>
-            <button onclick="rejectSalon('row-salon-2')" class="rounded-xl border border-red-200 text-red-600 px-3 py-2 font-bold hover:bg-red-50">
-              Reject
-            </button>
-          </div>
-        </div>
+      <div id="pendingList" class="p-8 text-center text-xs text-zinc-500 bg-white/50 rounded-2xl border border-zinc-100">
+        No pending salon registrations. All partner applications have been processed.
       </div>
     </div>
 
@@ -212,25 +160,11 @@
           </thead>
           <tbody id="auditRows" class="divide-y divide-zinc-100">
             <tr>
-              <td class="p-3 font-mono text-zinc-500">Today, 19:20:14</td>
-              <td class="p-3 font-bold text-emerald-700">SALON_APPROVED</td>
-              <td class="p-3 font-medium">Glow Studio Indiranagar</td>
-              <td class="p-3">admin@salonbridge.in</td>
-              <td class="p-3 font-mono text-zinc-500">192.168.1.1</td>
-            </tr>
-            <tr>
-              <td class="p-3 font-mono text-zinc-500">Today, 18:45:02</td>
-              <td class="p-3 font-bold text-indigo-700">COMMISSION_OVERRIDE</td>
-              <td class="p-3 font-medium">Urban Cuts (10% &rarr; 8%)</td>
-              <td class="p-3">admin@salonbridge.in</td>
-              <td class="p-3 font-mono text-zinc-500">192.168.1.1</td>
-            </tr>
-            <tr>
-              <td class="p-3 font-mono text-zinc-500">Today, 17:10:48</td>
-              <td class="p-3 font-bold text-zinc-900">TOTP_2FA_VERIFIED</td>
-              <td class="p-3 font-medium">Super Admin Session</td>
-              <td class="p-3">admin@salonbridge.in</td>
-              <td class="p-3 font-mono text-zinc-500">192.168.1.1</td>
+              <td class="p-3 font-mono text-zinc-500">System Ready</td>
+              <td class="p-3 font-bold text-zinc-900">SECURITY_INITIALIZED</td>
+              <td class="p-3 font-medium">Control Plane Active</td>
+              <td class="p-3">Super Admin System</td>
+              <td class="p-3 font-mono text-zinc-500">127.0.0.1</td>
             </tr>
           </tbody>
         </table>

@@ -20,7 +20,7 @@ export default function OnboardingPage() {
     name: '',
     description: '',
     genderFocus: 'unisex',
-    phone: '+919876543210',
+    phone: '',
     email: '',
     addressLine1: '',
     city: 'Bengaluru',

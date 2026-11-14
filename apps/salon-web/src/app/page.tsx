@@ -17,7 +17,7 @@ interface SalonSummary {
 }
 
 export default function SalonOverviewPage() {
-  const [phone, setPhone] = useState('+919876543210');
+  const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [otpSent, setOtpSent] = useState(false);
   const [devOtp, setDevOtp] = useState<string | null>(null);

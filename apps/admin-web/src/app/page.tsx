@@ -29,7 +29,7 @@ interface PlatformMetrics {
 
 export default function AdminOverviewPage() {
   const [metrics, setMetrics] = useState<PlatformMetrics | null>(null);
-  const [phone, setPhone] = useState('+919999999999');
+  const [phone, setPhone] = useState('');
   const [otp, setOtp] = useState('');
   const [totpCode, setTotpCode] = useState('');
   const [step, setStep] = useState<'phone' | 'otp' | 'totp' | 'authed'>('phone');

@@ -29,6 +29,12 @@ export async function seedDemoSalons() {
 
   console.log('Seeding SalonBridge demo salons, catalog, and bookings...');
 
+  if (process.env.SEED_DEMO_ACCOUNTS !== 'true') {
+    console.log('Demo accounts disabled. Skipping demo user and salon insertion.');
+    await pool.end();
+    return;
+  }
+
   // 1. Roles & Plans (Base Seed)
   const roleDefinitions = [
     { name: RoleName.CUSTOMER, description: 'End-user booking salon services' },

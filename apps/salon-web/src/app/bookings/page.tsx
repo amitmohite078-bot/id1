@@ -21,7 +21,7 @@ export default function SalonBookingsPage() {
   const [bookings, setBookings] = useState<SalonBooking[]>([]);
   const [filterStatus, setFilterStatus] = useState<string>('');
   const [walkInName, setWalkInName] = useState('');
-  const [walkInPhone, setWalkInPhone] = useState('+919876543210');
+  const [walkInPhone, setWalkInPhone] = useState('');
   const [services, setServices] = useState<Array<{ id: string; name: string }>>([]);
   const [selectedServiceId, setSelectedServiceId] = useState('');
   const [walkInTime, setWalkInTime] = useState(() => new Date().toISOString().slice(0, 16));
