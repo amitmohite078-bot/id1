@@ -232,7 +232,7 @@
           </div>
           <div class="flex items-center gap-3 mt-2 flex-wrap">
             <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900" id="dashboardSalonName">
-              My Salon
+              Salon Name
             </h1>
             <button onclick="openEditSalonModal()" class="btn-gloss-glass rounded-xl px-3 py-1 text-xs font-bold text-indigo-700 shadow-sm flex items-center gap-1">
               ✏️ Edit Salon Details
@@ -248,10 +248,10 @@
           <button onclick="openWalkinModal()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold flex items-center gap-1.5">
             <span>+</span> Log Walk-in Client
           </button>
-          <a id="headerPreviewClientLink" href="../customer/?salon=my-salon" target="_blank" class="rounded-xl border border-zinc-200 bg-white/90 px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm flex items-center gap-1.5">
+          <a id="headerPreviewClientLink" href="#" target="_blank" class="rounded-xl border border-zinc-200 bg-white/90 px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm flex items-center gap-1.5">
             <span>📱</span> Preview Client Portal
           </a>
-          <a id="headerTestStandeeLink" href="../customer/?qr=1&salon=my-salon&desk=Front+Desk+Counter" target="_blank" class="rounded-xl border border-emerald-500/30 bg-emerald-50/80 px-3.5 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 shadow-sm flex items-center gap-1.5">
+          <a id="headerTestStandeeLink" href="#" target="_blank" class="rounded-xl border border-emerald-500/30 bg-emerald-50/80 px-3.5 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 shadow-sm flex items-center gap-1.5">
             <span>📱</span> Test Standee QR Pass
           </a>
         </div>
@@ -345,7 +345,7 @@
             
             <div>
               <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Salon Display Name:</label>
-              <input id="standeeSalonNameInput" type="text" value="My Salon" oninput="updateStandeeCard()"
+              <input id="standeeSalonNameInput" type="text" placeholder="Salon Display Name" value="" oninput="updateStandeeCard()"
                 class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900" />
             </div>
 
@@ -400,13 +400,14 @@
                 id="bookingLink"
                 type="text"
                 readonly
-                value="https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=my-salon&desk=Front+Desk+Counter"
+                value=""
+                placeholder="Register salon to generate customer booking link"
                 class="flex-1 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-mono text-zinc-800"
               />
               <button onclick="copyBookingLink()" id="copyBtn" class="btn-gloss-noir rounded-xl px-3.5 py-2 text-xs font-bold">
                 Copy
               </button>
-              <a id="testLinkBtn" href="https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=my-salon&desk=Front+Desk+Counter" target="_blank" class="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100">
+              <a id="testLinkBtn" href="#" target="_blank" class="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100">
                 Open ↗
               </a>
             </div>
@@ -438,7 +439,7 @@
             </div>
 
             <h3 id="previewSalonName" class="mt-4 text-2xl font-bold tracking-tight text-zinc-900">
-              My Salon
+              Salon Name
             </h3>
             
             <p id="previewDesk" class="mt-1 text-xs font-semibold text-emerald-700">
@@ -735,7 +736,7 @@
       <div class="space-y-3 text-xs">
         <div>
           <label class="block font-semibold text-zinc-700 mb-1">Salon Name *</label>
-          <input id="editSalonNameInput" type="text" placeholder="e.g. My Salon" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900" />
+          <input id="editSalonNameInput" type="text" placeholder="e.g. Signature Cuts & Spa" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900" />
         </div>
         <div>
           <label class="block font-semibold text-zinc-700 mb-1">Address & Location *</label>
@@ -879,7 +880,7 @@
         const stored = localStorage.getItem('salonbridge_salons');
         if (stored) {
           const db = JSON.parse(stored);
-          const staleKeys = ['glow-studio-indiranagar', 'curl-dye-koramangala', 'the-groom-room-hsr'];
+          const staleKeys = ['glow-studio-indiranagar', 'curl-dye-koramangala', 'the-groom-room-hsr', 'my-salon'];
           let changed = false;
           staleKeys.forEach(k => {
             if (db[k]) {
@@ -887,8 +888,28 @@
               changed = true;
             }
           });
+          for (const key of Object.keys(db)) {
+            if (key === 'my-salon' || db[key]?.name === 'My Salon' || db[key]?.slug === 'my-salon') {
+              delete db[key];
+              changed = true;
+            }
+          }
           if (changed) {
             localStorage.setItem('salonbridge_salons', JSON.stringify(db));
+          }
+        }
+        const curr = localStorage.getItem('salonbridge_current_salon');
+        if (curr) {
+          const parsed = JSON.parse(curr);
+          if (!parsed || parsed.slug === 'my-salon' || parsed.name === 'My Salon') {
+            localStorage.removeItem('salonbridge_current_salon');
+          }
+        }
+        const sess = localStorage.getItem('salonbridge_auth_session');
+        if (sess) {
+          const parsedSess = JSON.parse(sess);
+          if (!parsedSess || parsedSess.salonId === 'my-salon' || parsedSess.salonName === 'My Salon') {
+            localStorage.removeItem('salonbridge_auth_session');
           }
         }
       } catch (e) {}
@@ -898,7 +919,12 @@
     function getStoredSalonProfile() {
       try {
         const s = localStorage.getItem('salonbridge_current_salon');
-        return s ? JSON.parse(s) : null;
+        if (!s) return null;
+        const profile = JSON.parse(s);
+        if (!profile || profile.slug === 'my-salon' || profile.name === 'My Salon' || !profile.email) {
+          return null;
+        }
+        return profile;
       } catch (e) {
         return null;
       }
@@ -922,20 +948,7 @@
       }
     }
 
-    let CURRENT_SALON = getStoredSalonProfile() || {
-      id: 'my-salon',
-      slug: 'my-salon',
-      name: 'My Salon',
-      address: 'Configure Address & City',
-      manager: 'Owner / Manager',
-      phone: '',
-      area: 'indiranagar',
-      gender: 'unisex',
-      tagline: 'Custom salon styling and professional grooming services.',
-      rating: '5.0',
-      reviews: '0',
-      badge: 'Verified Partner'
-    };
+    let CURRENT_SALON = getStoredSalonProfile() || null;
 
     let QUEUE_DATA = [];
     let STYLISTS_DATA = getStoredStylists();
@@ -956,6 +969,7 @@
     }
 
     function saveSalonProfileToStorage() {
+      if (!CURRENT_SALON || CURRENT_SALON.slug === 'my-salon') return;
       try {
         localStorage.setItem('salonbridge_current_salon', JSON.stringify(CURRENT_SALON));
         syncWithCustomerDirectory();
@@ -963,19 +977,21 @@
     }
 
     function syncWithCustomerDirectory() {
+      if (!CURRENT_SALON || !CURRENT_SALON.slug || CURRENT_SALON.slug === 'my-salon') return;
       try {
         const db = JSON.parse(localStorage.getItem('salonbridge_salons') || '{}');
         const slug = CURRENT_SALON.slug || CURRENT_SALON.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
         db[slug] = {
           id: slug,
           name: CURRENT_SALON.name,
+          email: CURRENT_SALON.email,
+          phone: CURRENT_SALON.phone || '',
           locationKey: CURRENT_SALON.area || 'indiranagar',
           genderKey: CURRENT_SALON.gender || 'unisex',
           address: CURRENT_SALON.address,
           distance: 'Nearby',
           rating: CURRENT_SALON.rating || '5.0',
           reviews: CURRENT_SALON.reviews || '0',
-          phone: CURRENT_SALON.phone || '',
           badge: CURRENT_SALON.badge || 'Verified Partner',
           tagline: CURRENT_SALON.tagline || 'Custom salon styling and professional grooming services.',
           startingPrice: CATALOG_SERVICES.length > 0 ? `₹${Math.min(...CATALOG_SERVICES.map(x => x.price || 0))}` : 'Live Menu',
@@ -1209,6 +1225,7 @@
       if (stored) {
         CURRENT_SALON = stored;
       }
+      if (!CURRENT_SALON) return;
       if (document.getElementById('dashboardSalonName')) {
         document.getElementById('dashboardSalonName').innerText = CURRENT_SALON.name;
       }
@@ -1222,17 +1239,17 @@
         const phoneTxt = CURRENT_SALON.phone ? ` · Phone: ${CURRENT_SALON.phone}` : '';
         const emailTxt = CURRENT_SALON.email ? ` · Email: ${CURRENT_SALON.email}` : '';
         const mgrTxt = CURRENT_SALON.manager ? ` · Manager: ${CURRENT_SALON.manager}` : '';
-        document.getElementById('dashboardSalonMeta').innerText = `${CURRENT_SALON.address}${mgrTxt}${phoneTxt}${emailTxt}`;
+        document.getElementById('dashboardSalonMeta').innerText = `${CURRENT_SALON.address || ''}${mgrTxt}${phoneTxt}${emailTxt}`;
       }
       if (document.getElementById('standeeSalonNameInput')) {
         document.getElementById('standeeSalonNameInput').value = CURRENT_SALON.name;
       }
-      const slug = CURRENT_SALON.slug || 'my-salon';
+      const slug = CURRENT_SALON.slug || CURRENT_SALON.name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       if (document.getElementById('headerPreviewClientLink')) {
-        document.getElementById('headerPreviewClientLink').href = `../customer/?salon=${encodeURIComponent(slug)}`;
+        document.getElementById('headerPreviewClientLink').href = slug ? `../customer/?salon=${encodeURIComponent(slug)}` : '#';
       }
       if (document.getElementById('headerTestStandeeLink')) {
-        document.getElementById('headerTestStandeeLink').href = `../customer/?qr=1&salon=${encodeURIComponent(slug)}&desk=Front+Desk+Counter`;
+        document.getElementById('headerTestStandeeLink').href = slug ? `../customer/?qr=1&salon=${encodeURIComponent(slug)}&desk=Front+Desk+Counter` : '#';
       }
       syncWithCustomerDirectory();
     }
@@ -1645,6 +1662,19 @@
     // SECTION 2: STANDEE QR & CUSTOMIZER
     // -------------------------------------------------------------
     function updateStandeeCard() {
+      if (!CURRENT_SALON) {
+        document.getElementById('previewSalonName').innerText = 'Salon Name';
+        document.getElementById('previewDesk').innerText = '📍 Front Desk Counter';
+        document.getElementById('previewBadge').innerText = 'Scan & Book Instantly';
+        document.getElementById('bookingLink').value = '';
+        if (document.getElementById('testLinkBtn')) {
+          document.getElementById('testLinkBtn').href = '#';
+        }
+        const container = document.getElementById('partnerQr');
+        if (container) container.innerHTML = '<div class="text-[10px] text-zinc-400 p-4">Register salon to generate QR</div>';
+        return;
+      }
+
       const salon = document.getElementById('standeeSalonNameInput')?.value || CURRENT_SALON.name;
       const desk = document.getElementById('standeeDeskSelect')?.value || 'Front Desk Counter';
       const badge = document.getElementById('standeeBadgeSelect')?.value || 'Scan & Book Instantly';
