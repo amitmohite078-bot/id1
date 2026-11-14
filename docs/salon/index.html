@@ -114,12 +114,15 @@
           <p class="text-xs text-zinc-500">100ft Road, Indiranagar, Bengaluru · Manager: Priya Sharma · Phone: +91 98765 43210</p>
         </div>
 
-        <div class="flex items-center gap-2">
+        <div class="flex items-center gap-2 flex-wrap">
           <button onclick="openWalkinModal()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold flex items-center gap-1.5">
             <span>+</span> Log Walk-in Client
           </button>
-          <a href="../customer/?salon=glow-studio" target="_blank" class="rounded-xl border border-zinc-200 bg-white/90 px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm flex items-center gap-1.5">
-            <span>↗</span> Preview Customer Page
+          <a href="../customer/" target="_blank" class="rounded-xl border border-zinc-200 bg-white/90 px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm flex items-center gap-1.5">
+            <span>↗</span> View All Salons Directory
+          </a>
+          <a href="../customer/?qr=1&salon=glow-studio&desk=Front+Desk+Counter" target="_blank" class="rounded-xl border border-emerald-500/30 bg-emerald-50/80 px-3.5 py-2 text-xs font-semibold text-emerald-800 hover:bg-emerald-100 shadow-sm flex items-center gap-1.5">
+            <span>📱</span> Test Standee QR Pass
           </a>
         </div>
       </div>
@@ -267,14 +270,17 @@
                 id="bookingLink"
                 type="text"
                 readonly
-                value="https://amitmohite078-bot.github.io/id1/customer/?salon=glow-studio&desk=Front+Desk+Counter"
+                value="https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=glow-studio&desk=Front+Desk+Counter"
                 class="flex-1 rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-mono text-zinc-800"
               />
               <button onclick="copyBookingLink()" id="copyBtn" class="btn-gloss-noir rounded-xl px-3.5 py-2 text-xs font-bold">
                 Copy
               </button>
+              <a id="testLinkBtn" href="https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=glow-studio&desk=Front+Desk+Counter" target="_blank" class="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 text-xs font-semibold text-zinc-800 hover:bg-zinc-100">
+                Open ↗
+              </a>
             </div>
-            <p class="text-[11px] text-zinc-500">Automatically appends station parameter so you know which chair scanned.</p>
+            <p class="text-[11px] text-zinc-500">Encodes ?qr=1 so customers scanning this QR land directly on Glow Studio.</p>
           </div>
 
           <!-- Print & Export Buttons -->
@@ -738,9 +744,12 @@
 
       const slug = salon.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
       const encodedDesk = encodeURIComponent(desk);
-      const url = `https://amitmohite078-bot.github.io/id1/customer/?salon=glow-studio&desk=${encodedDesk}`;
+      const url = `https://amitmohite078-bot.github.io/id1/customer/?qr=1&salon=glow-studio&desk=${encodedDesk}`;
 
       document.getElementById('bookingLink').value = url;
+      if (document.getElementById('testLinkBtn')) {
+        document.getElementById('testLinkBtn').href = url;
+      }
 
       // Re-render QR code
       const container = document.getElementById('partnerQr');
