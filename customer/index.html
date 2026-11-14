@@ -169,18 +169,18 @@
               </span>
             </div>
             <h1 id="salonName" class="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
-              Glow Studio Indiranagar
+              Salon Services
             </h1>
             <p id="salonAddress" class="text-xs text-zinc-500 mt-1">
-              📍 100ft Road, Indiranagar, Bengaluru
+              📍 Registered Partner Salon
             </p>
           </div>
 
           <div class="flex flex-col items-end">
             <div class="flex items-center gap-1 rounded-2xl bg-zinc-900 px-3 py-1.5 text-white shadow-sm">
               <span class="text-amber-400 font-bold text-sm">★</span>
-              <span id="salonRating" class="text-xs font-bold">4.9</span>
-              <span class="text-[10px] text-zinc-400" id="salonReviewsCount">(248 reviews)</span>
+              <span id="salonRating" class="text-xs font-bold">5.0</span>
+              <span class="text-[10px] text-zinc-400" id="salonReviewsCount">(Verified)</span>
             </div>
             <span class="mt-1 text-[11px] font-semibold text-emerald-600">✓ 100% Verified Services</span>
           </div>
@@ -190,10 +190,10 @@
         <div class="rounded-2xl border border-zinc-200/90 bg-white/70 p-3.5 text-xs text-zinc-700 flex flex-wrap items-center justify-between gap-3">
           <div class="flex items-center gap-2">
             <span class="flex h-2.5 w-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-            <span><strong>Live Queue:</strong> 2 clients ahead in chair · Estimated wait: <strong>~12 mins</strong></span>
+            <span id="liveQueueNotice"><strong>Live Queue:</strong> Real-time desk queue active</span>
           </div>
           <div class="flex items-center gap-2 font-medium text-emerald-700" id="salonStylistCount">
-            <span>3 Stylists Active on Floor</span>
+            <span>Stylists Active on Floor</span>
           </div>
         </div>
 
@@ -353,19 +353,19 @@
           </div>
           <div class="flex justify-between border-b pb-2">
             <span class="text-zinc-500">Salon:</span>
-            <span class="font-bold text-zinc-900" id="confSalon">Glow Studio Indiranagar</span>
+            <span class="font-bold text-zinc-900" id="confSalon">-</span>
           </div>
           <div class="flex justify-between border-b pb-2">
             <span class="text-zinc-500">Service:</span>
-            <span class="font-bold text-zinc-900" id="confService">Haircut & Styling</span>
+            <span class="font-bold text-zinc-900" id="confService">-</span>
           </div>
           <div class="flex justify-between border-b pb-2">
             <span class="text-zinc-500">Stylist & Slot:</span>
-            <span class="font-bold text-emerald-700" id="confSlot">Immediate Walk-in Queue</span>
+            <span class="font-bold text-emerald-700" id="confSlot">-</span>
           </div>
           <div class="flex justify-between">
             <span class="text-zinc-500">Total:</span>
-            <span class="font-extrabold text-zinc-900" id="confTotal">₹799</span>
+            <span class="font-extrabold text-zinc-900" id="confTotal">₹0</span>
           </div>
         </div>
 
@@ -381,90 +381,82 @@
 
     </div>
 
+    <!-- Quick Register Salon Modal -->
+    <div id="quickRegisterModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+      <div class="glass-pearl rounded-3xl p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl border border-white/90">
+        <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
+          <h3 class="text-base font-bold text-zinc-900">Register Salon</h3>
+          <button onclick="closeQuickRegisterModal()" class="text-zinc-400 hover:text-zinc-700 text-lg">✕</button>
+        </div>
+        <div class="space-y-3 text-xs">
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Salon Name *</label>
+            <input id="newSalonName" type="text" placeholder="e.g. Signature Cuts & Spa" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900 font-semibold" />
+          </div>
+          <div class="grid grid-cols-2 gap-2">
+            <div>
+              <label class="block font-semibold text-zinc-700 mb-1">Location Area *</label>
+              <select id="newSalonArea" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900">
+                <option value="indiranagar">Indiranagar</option>
+                <option value="koramangala">Koramangala</option>
+                <option value="hsr">HSR Layout</option>
+                <option value="whitefield">Whitefield</option>
+                <option value="other">Other</option>
+              </select>
+            </div>
+            <div>
+              <label class="block font-semibold text-zinc-700 mb-1">Audience Focus</label>
+              <select id="newSalonGender" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900">
+                <option value="unisex">Unisex</option>
+                <option value="men">Men's Grooming</option>
+                <option value="women">Women's Salon</option>
+              </select>
+            </div>
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Address & Contact Phone</label>
+            <input id="newSalonAddress" type="text" placeholder="e.g. Main Street, Bengaluru · Phone: +91 98765 00000" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900" />
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Tagline / Specialties</label>
+            <input id="newSalonTagline" type="text" placeholder="e.g. Haircut, Color, Spa & Luxury Treatments" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900" />
+          </div>
+        </div>
+        <div class="flex gap-2 pt-2">
+          <button onclick="submitQuickRegister()" class="btn-gloss-noir flex-1 rounded-xl py-2.5 text-xs font-bold">
+            Register & Publish Salon →
+          </button>
+          <button onclick="closeQuickRegisterModal()" class="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700">
+            Cancel
+          </button>
+        </div>
+      </div>
+    </div>
+
   </main>
 
   <script>
     // -------------------------------------------------------------
-    // SALON DATABASE (Multi-Tenant with Stylists & Services)
+    // SALON DATABASE (Dynamic Multi-Tenant Storage from localStorage)
     // -------------------------------------------------------------
-    const SALON_DATABASE = {
-      'glow-studio': {
-        id: 'glow-studio',
-        name: 'Glow Studio Indiranagar',
-        locationKey: 'indiranagar',
-        genderKey: 'unisex',
-        address: '100ft Road, Indiranagar, Bengaluru · Manager: Priya Sharma',
-        distance: '1.2 km away',
-        rating: '4.9',
-        reviews: '248',
-        phone: '+919876543210',
-        badge: 'Top Rated Luxury Lounge',
-        tagline: 'Specialized in customized Balayage, L\'Oréal bond repair, and scalp revitalization.',
-        startingPrice: '₹799',
-        stylists: [
-          { name: 'Priya Sharma', role: 'Master Stylist (8 yrs exp)' },
-          { name: 'Rahul Sen', role: 'Creative Colorist (6 yrs exp)' },
-          { name: 'Ananya Nair', role: 'Skin & Spa Therapist (5 yrs exp)' }
-        ],
-        services: [
-          { id: 's1', category: 'hair', name: 'Haircut & Master Styling', duration: '45 mins', price: 799, description: 'Consultation, scalp revitalizing wash, customized haircut, and blast-dry styling.' },
-          { id: 's2', category: 'hair', name: 'Balayage & Intense Hair Spa', duration: '90 mins', price: 3499, description: 'Custom dimensional hand-painted highlights, bond protector, and deep steam hydration.' },
-          { id: 's3', category: 'hair', name: 'Keratin Silk Infusion Treatment', duration: '120 mins', price: 4200, description: 'Formaldehyde-free smoothing therapy, eliminating 95% frizz with mirror-gloss shine.' },
-          { id: 's4', category: 'skin', name: 'Hydra Glow Deep Aqua Facial', duration: '60 mins', price: 1999, description: 'Hydro-dermabrasion exfoliation, hyaluronic serum infusion, and cryo-firming cold hammer.' },
-          { id: 's5', category: 'skin', name: 'Organic Scalp & Face Detox', duration: '45 mins', price: 1499, description: 'Tea tree herbal steam scrub, pore extraction, and botanical face mask.' },
-          { id: 's6', category: 'grooming', name: 'Executive Beard Sculpt & Royal Shave', duration: '30 mins', price: 399, description: 'Hot towel compress, precision straight razor detailing, and sandalwood beard butter.' },
-          { id: 's7', category: 'spa', name: 'Deep Tissue Head & Shoulder Stress Relief', duration: '30 mins', price: 699, description: 'Therapeutic warm herbal oil massage targeting tension points across neck and shoulders.' }
-        ]
-      },
-      'urban-cuts': {
-        id: 'urban-cuts',
-        name: 'Urban Cuts Koramangala',
-        locationKey: 'koramangala',
-        genderKey: 'men',
-        address: '5th Block, Koramangala, Bengaluru · Manager: Devraj Rao',
-        distance: '3.4 km away',
-        rating: '4.8',
-        reviews: '192',
-        phone: '+919876511223',
-        badge: 'Executive Men\'s Grooming',
-        tagline: 'Precision scissor fades, straight-razor beard styling, and charcoal pore detox.',
-        startingPrice: '₹699',
-        stylists: [
-          { name: 'Devraj Rao', role: 'Master Barber (10 yrs exp)' },
-          { name: 'Sameer Khan', role: 'Fade & Beard Specialist (7 yrs exp)' },
-          { name: 'Karan Verma', role: 'Scalp & Grooming Expert (5 yrs exp)' }
-        ],
-        services: [
-          { id: 'u1', category: 'hair', name: 'Executive Precision Haircut', duration: '40 mins', price: 699, description: 'Stylist consultation, signature wash, fade & scissor styling.' },
-          { id: 'u2', category: 'grooming', name: 'Beard Grooming & Charcoal Detox', duration: '40 mins', price: 1199, description: 'Beard trim, charcoal pore cleansing, and essential oil steam treatment.' },
-          { id: 'u3', category: 'spa', name: 'Aromatherapy Scalp Massage', duration: '30 mins', price: 599, description: 'Lavender oil acupressure scalp massage.' }
-        ]
-      },
-      'aura-luxe': {
-        id: 'aura-luxe',
-        name: 'Aura Botanical Lounge',
-        locationKey: 'hsr',
-        genderKey: 'women',
-        address: 'Sector 2, HSR Layout, Bengaluru · Manager: Neha Verma',
-        distance: '4.8 km away',
-        rating: '4.95',
-        reviews: '310',
-        phone: '+919876533445',
-        badge: 'Luxury Organic Spa',
-        tagline: '100% plant-based scalp therapies, 24K gold active facials, and organic keratin.',
-        startingPrice: '₹1,499',
-        stylists: [
-          { name: 'Neha Verma', role: 'Botanical Hair Director (9 yrs exp)' },
-          { name: 'Pooja Hegde', role: 'Organic Color Specialist (6 yrs exp)' },
-          { name: 'Ritu Sen', role: 'Holistic Skin & Spa Expert (8 yrs exp)' }
-        ],
-        services: [
-          { id: 'a1', category: 'hair', name: 'Organic Scalp Detox & Trim', duration: '60 mins', price: 1499, description: 'Plant-based scalp cleanse, herbal rinse, and precision trim.' },
-          { id: 'a2', category: 'hair', name: 'Keratin Silk Infusion', duration: '120 mins', price: 4299, description: 'Luxury botanical protein therapy.' },
-          { id: 'a3', category: 'skin', name: 'Gold Glow Radiance Facial', duration: '60 mins', price: 2499, description: '24k micro-gold active exfoliation and peptide infusion.' }
-        ]
+    function getSalonDatabase() {
+      try {
+        const stored = localStorage.getItem('salonbridge_salons');
+        return stored ? JSON.parse(stored) : {};
+      } catch (e) {
+        return {};
       }
-    };
+    }
+
+    function saveSalonDatabase(db) {
+      try {
+        localStorage.setItem('salonbridge_salons', JSON.stringify(db));
+      } catch (e) {
+        console.error('Failed saving salon db to localStorage:', e);
+      }
+    }
+
+    let SALON_DATABASE = getSalonDatabase();
 
     let currentSalon = null;
     let currentCategory = 'all';
@@ -478,13 +470,39 @@
     // ROUTER: Checks if user entered via QR Standee or Normal Browse
     // -------------------------------------------------------------
     function initApp() {
+      SALON_DATABASE = getSalonDatabase();
+
       const params = new URLSearchParams(window.location.search);
       const isQr = params.get('qr') === '1' || params.get('qr') === 'true' || params.has('desk');
       const salonParam = params.get('salon');
       currentDesk = params.get('desk') || 'Front Desk Counter';
 
-      if (isQr && salonParam && SALON_DATABASE[salonParam]) {
+      if (isQr && salonParam) {
         // ENTERED THROUGH QR CODE -> Open that specific salon directly
+        if (!SALON_DATABASE[salonParam]) {
+          // Scanned from a desk QR standee; synthesize salon dynamically so it opens cleanly
+          const formattedName = salonParam
+            .split('-')
+            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+            .join(' ');
+          SALON_DATABASE[salonParam] = {
+            id: salonParam,
+            name: formattedName,
+            locationKey: 'all',
+            genderKey: 'unisex',
+            address: 'Partner Salon Location',
+            distance: 'Nearby',
+            rating: '5.0',
+            reviews: '0',
+            phone: '',
+            badge: 'Verified Salon Partner',
+            tagline: 'Direct Desk Booking and Live Digital Menu',
+            startingPrice: '₹0',
+            stylists: [],
+            services: []
+          };
+          saveSalonDatabase(SALON_DATABASE);
+        }
         openSalonDetail(salonParam, true);
       } else {
         // NORMAL ENTRY -> Display list of salons so user can choose!
@@ -496,6 +514,7 @@
     // VIEW A: SALON DISCOVERY LIST
     // -------------------------------------------------------------
     function showSalonList() {
+      SALON_DATABASE = getSalonDatabase();
       document.getElementById('salonDiscoveryView').classList.remove('hidden');
       document.getElementById('salonDetailView').classList.add('hidden');
       document.getElementById('navHeaderSubtitle').innerText = 'Choose Salon';
@@ -518,29 +537,59 @@
       const loc = document.getElementById('locationSelect')?.value || 'all';
       const gen = document.getElementById('genderSelect')?.value || 'all';
 
-      const salons = Object.values(SALON_DATABASE).filter(s => {
+      const allSalons = Object.values(SALON_DATABASE);
+
+      const salons = allSalons.filter(s => {
         const matchesQuery = !query ||
-                             s.name.toLowerCase().includes(query) ||
-                             s.tagline.toLowerCase().includes(query) ||
-                             s.services.some(svc => svc.name.toLowerCase().includes(query));
+                             (s.name && s.name.toLowerCase().includes(query)) ||
+                             (s.tagline && s.tagline.toLowerCase().includes(query)) ||
+                             ((s.services || []).some(svc => svc.name && svc.name.toLowerCase().includes(query)));
         const matchesLoc = loc === 'all' || s.locationKey === loc;
         const matchesGen = gen === 'all' || s.genderKey === gen;
         return matchesQuery && matchesLoc && matchesGen;
       });
 
       if (salons.length === 0) {
-        container.innerHTML = `
-          <div class="glass-pearl rounded-3xl p-8 text-center text-xs text-zinc-500 space-y-2">
-            <p class="font-bold text-zinc-700">No salons found matching your search.</p>
-            <button onclick="resetFilters()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold">Reset Filters</button>
-          </div>
-        `;
+        if (allSalons.length === 0) {
+          // Entirely empty database (clean state)
+          container.innerHTML = `
+            <div class="glass-pearl rounded-3xl p-8 sm:p-12 text-center text-xs text-zinc-500 space-y-4 max-w-xl mx-auto shadow-md">
+              <div class="h-14 w-14 rounded-3xl bg-zinc-900/5 text-zinc-500 flex items-center justify-center text-2xl mx-auto shadow-inner">
+                🏬
+              </div>
+              <div>
+                <h3 class="font-extrabold text-zinc-900 text-base">No Salons Listed Yet</h3>
+                <p class="text-zinc-500 mt-1">Configure your salon in the Partner Portal to publish your rate-card and live desk standees.</p>
+              </div>
+              <div class="flex items-center justify-center gap-3 pt-2 flex-wrap">
+                <a href="../salon/" class="btn-gloss-noir rounded-xl px-4 py-2.5 text-xs font-bold inline-flex items-center gap-1.5 shadow-sm">
+                  <span>⚡</span> Open Partner Portal →
+                </a>
+                <button onclick="openQuickRegisterModal()" class="rounded-xl border border-zinc-200 bg-white/90 px-4 py-2.5 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm">
+                  + Quick Register Salon
+                </button>
+              </div>
+            </div>
+          `;
+        } else {
+          // Filters matched nothing
+          container.innerHTML = `
+            <div class="glass-pearl rounded-3xl p-8 text-center text-xs text-zinc-500 space-y-3 max-w-md mx-auto">
+              <p class="font-bold text-zinc-700">No salons found matching your current filters.</p>
+              <button onclick="resetFilters()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold">Reset Filters</button>
+            </div>
+          `;
+        }
         return;
       }
 
       salons.forEach(s => {
         const card = document.createElement('div');
         card.className = 'glass-pearl rounded-3xl p-6 sm:p-7 transition-all hover:scale-[1.008] border border-white/90 space-y-4 shadow-md';
+        const serviceCount = (s.services || []).length;
+        const stylistCount = (s.stylists || []).length;
+        const startingPrice = s.startingPrice || (serviceCount > 0 ? `₹${Math.min(...s.services.map(x => x.price || 0))}` : 'Live Menu');
+
         card.innerHTML = `
           <div class="flex flex-wrap items-start justify-between gap-3">
             <div>
@@ -549,35 +598,36 @@
                   ● Open Now
                 </span>
                 <span class="rounded-full bg-zinc-900/5 px-2.5 py-0.5 text-[10px] font-semibold text-zinc-700">
-                  ${s.badge}
+                  ${s.badge || 'Verified Partner'}
                 </span>
-                <span class="text-xs font-semibold text-zinc-400">· ${s.distance}</span>
+                <span class="text-xs font-semibold text-zinc-400">· ${s.distance || 'Local'}</span>
               </div>
               <h3 class="mt-2 text-xl font-bold text-zinc-900">${s.name}</h3>
-              <p class="text-xs text-zinc-500 mt-0.5">${s.address}</p>
+              <p class="text-xs text-zinc-500 mt-0.5">${s.address || 'Registered Salon'}</p>
             </div>
 
             <div class="text-right">
               <div class="flex items-center gap-1 rounded-2xl bg-zinc-900 px-3 py-1 text-white shadow-sm">
                 <span class="text-amber-400 font-bold text-xs">★</span>
-                <span class="text-xs font-bold">${s.rating}</span>
-                <span class="text-[10px] text-zinc-400">(${s.reviews})</span>
+                <span class="text-xs font-bold">${s.rating || '5.0'}</span>
+                <span class="text-[10px] text-zinc-400">(${s.reviews || '0'})</span>
               </div>
-              <span class="text-[11px] text-zinc-500 font-medium block mt-1">Starting from <strong class="text-zinc-900">${s.startingPrice}</strong></span>
+              <span class="text-[11px] text-zinc-500 font-medium block mt-1">Starting from <strong class="text-zinc-900">${startingPrice}</strong></span>
             </div>
           </div>
 
           <p class="text-xs text-zinc-600 border-t border-zinc-100 pt-3">
-            ${s.tagline}
+            ${s.tagline || 'Book hair, styling, and grooming services directly.'}
           </p>
 
           <!-- Featured Services Preview Pills -->
           <div class="flex flex-wrap gap-1.5 text-[11px]">
-            ${s.services.slice(0, 3).map(svc => `
+            ${(s.services || []).slice(0, 3).map(svc => `
               <span class="rounded-lg bg-white/80 px-2.5 py-1 text-zinc-700 border border-zinc-200/80 font-medium">
                 ${svc.name} · <strong>₹${svc.price}</strong>
               </span>
             `).join('')}
+            ${serviceCount === 0 ? '<span class="text-zinc-400 italic text-[11px]">Rate-card pending upload</span>' : ''}
           </div>
 
           <!-- Select Salon Button -->
@@ -603,11 +653,95 @@
       renderSalonsList();
     }
 
+    // Modal helpers for Customer Quick Registration
+    function openQuickRegisterModal() {
+      document.getElementById('quickRegisterModal').classList.remove('hidden');
+    }
+    function closeQuickRegisterModal() {
+      document.getElementById('quickRegisterModal').classList.add('hidden');
+    }
+    function submitQuickRegister() {
+      const name = (document.getElementById('newSalonName').value || '').trim();
+      if (!name) {
+        alert('Please enter a salon name.');
+        return;
+      }
+      const area = document.getElementById('newSalonArea').value;
+      const gender = document.getElementById('newSalonGender').value;
+      const address = (document.getElementById('newSalonAddress').value || '').trim() || `${name}, Bengaluru`;
+      const tagline = (document.getElementById('newSalonTagline').value || '').trim() || 'Custom salon styling and professional grooming.';
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+      const newSalon = {
+        id: slug,
+        name: name,
+        locationKey: area,
+        genderKey: gender,
+        address: address,
+        distance: 'Nearby',
+        rating: '5.0',
+        reviews: '0',
+        phone: '',
+        badge: 'Verified Salon Partner',
+        tagline: tagline,
+        startingPrice: '₹0',
+        stylists: [],
+        services: []
+      };
+
+      SALON_DATABASE[slug] = newSalon;
+      saveSalonDatabase(SALON_DATABASE);
+
+      // Also set as current salon in partner storage
+      try {
+        localStorage.setItem('salonbridge_current_salon', JSON.stringify({
+          id: slug,
+          slug: slug,
+          name: name,
+          address: address,
+          manager: 'Salon Manager',
+          phone: '',
+          rating: '5.0',
+          reviews: '0',
+          badge: 'Verified Partner'
+        }));
+      } catch (e) {}
+
+      closeQuickRegisterModal();
+      renderSalonsList();
+      alert(`Salon "${name}" registered successfully!`);
+    }
+
     // -------------------------------------------------------------
     // VIEW B: PARTICULAR SALON DETAIL & BOOKING
     // -------------------------------------------------------------
     function openSalonDetail(salonKey, fromQr = false) {
-      currentSalon = SALON_DATABASE[salonKey] || SALON_DATABASE['glow-studio'];
+      SALON_DATABASE = getSalonDatabase();
+      currentSalon = SALON_DATABASE[salonKey];
+
+      if (!currentSalon) {
+        // Fallback for direct links
+        const formattedName = (salonKey || 'Partner Salon')
+          .split('-')
+          .map(w => w.charAt(0).toUpperCase() + w.slice(1))
+          .join(' ');
+        currentSalon = {
+          id: salonKey || 'partner-salon',
+          name: formattedName,
+          locationKey: 'all',
+          genderKey: 'unisex',
+          address: 'Partner Salon Location',
+          distance: 'Nearby',
+          rating: '5.0',
+          reviews: '0',
+          phone: '',
+          badge: 'Verified Partner',
+          tagline: 'Direct Salon Booking',
+          startingPrice: '₹0',
+          stylists: [],
+          services: []
+        };
+      }
       currentCategory = 'all';
 
       document.getElementById('salonDiscoveryView').classList.add('hidden');
@@ -624,17 +758,29 @@
       }
 
       document.getElementById('salonName').innerText = currentSalon.name;
-      document.getElementById('salonAddress').innerText = '📍 ' + currentSalon.address;
-      document.getElementById('salonRating').innerText = currentSalon.rating;
-      document.getElementById('salonReviewsCount').innerText = `(${currentSalon.reviews} reviews)`;
-      document.getElementById('salonBadge').innerText = currentSalon.badge;
-      document.getElementById('salonStylistCount').innerText = `${currentSalon.stylists.length} Stylists Active on Floor`;
-      document.getElementById('callSalonHeaderBtn').href = `tel:${currentSalon.phone.replace(/[^0-9]/g, '')}`;
+      document.getElementById('salonAddress').innerText = currentSalon.address ? ('📍 ' + currentSalon.address) : '📍 Registered Partner Salon';
+      document.getElementById('salonRating').innerText = currentSalon.rating || '5.0';
+      document.getElementById('salonReviewsCount').innerText = currentSalon.reviews ? `(${currentSalon.reviews} reviews)` : '(Verified)';
+      document.getElementById('salonBadge').innerText = currentSalon.badge || 'Verified Partner';
+      
+      const stylistCount = (currentSalon.stylists || []).length;
+      document.getElementById('salonStylistCount').innerText = stylistCount > 0
+        ? `${stylistCount} Stylists Active on Floor`
+        : `Walk-in / Direct Desk Counter`;
+
+      const phoneClean = (currentSalon.phone || '').replace(/[^0-9]/g, '');
+      const callBtn = document.getElementById('callSalonHeaderBtn');
+      if (phoneClean) {
+        callBtn.href = `tel:${phoneClean}`;
+        callBtn.classList.remove('hidden');
+      } else {
+        callBtn.classList.add('hidden');
+      }
 
       // Populate stylists dropdown dynamically for this salon
       const stylistSelect = document.getElementById('stylistSelect');
-      stylistSelect.innerHTML = `<option value="Any Available Stylist">Any Specialist Available (Fastest ~12 min wait)</option>`;
-      currentSalon.stylists.forEach(st => {
+      stylistSelect.innerHTML = `<option value="Any Available Stylist">Any Specialist Available (Fastest)</option>`;
+      (currentSalon.stylists || []).forEach(st => {
         const opt = document.createElement('option');
         opt.value = st.name;
         opt.innerText = `${st.name} — ${st.role}`;
@@ -649,9 +795,20 @@
       const container = document.getElementById('servicesContainer');
       container.innerHTML = '';
 
+      const services = currentSalon.services || [];
       const filtered = currentCategory === 'all'
-        ? currentSalon.services
-        : currentSalon.services.filter(s => s.category === currentCategory);
+        ? services
+        : services.filter(s => s.category === currentCategory);
+
+      if (filtered.length === 0) {
+        container.innerHTML = `
+          <div class="glass-pearl rounded-2xl p-8 text-center text-xs text-zinc-500 space-y-2">
+            <p class="font-bold text-zinc-700">No services listed yet for this category.</p>
+            <p class="text-zinc-400">Services and rates will appear as soon as the salon partner configures their menu.</p>
+          </div>
+        `;
+        return;
+      }
 
       filtered.forEach(service => {
         const card = document.createElement('div');
@@ -661,10 +818,10 @@
             <div class="flex items-center gap-2">
               <h3 class="text-base font-bold text-zinc-900">${service.name}</h3>
               <span class="rounded-full bg-zinc-100 px-2.5 py-0.5 text-[10px] font-semibold text-zinc-600">
-                ⏱ ${service.duration}
+                ⏱ ${service.duration || '30 mins'}
               </span>
             </div>
-            <p class="text-xs text-zinc-500">${service.description}</p>
+            <p class="text-xs text-zinc-500">${service.description || service.desc || 'Professional salon service'}</p>
           </div>
           <div class="flex items-center justify-between sm:justify-end gap-4 border-t sm:border-t-0 pt-3 sm:pt-0 border-zinc-100">
             <div class="text-left sm:text-right">

@@ -95,10 +95,6 @@ NEXT_PUBLIC_MAPBOX_TOKEN=pk.eyJ1I...
    ```bash
    pnpm --filter @salonbridge/db db:seed
    ```
-4. *(Optional)* Seed demo salons in Bengaluru:
-   ```bash
-   pnpm --filter @salonbridge/db exec tsx src/seed-demo.ts
-   ```
 
 ---
 
