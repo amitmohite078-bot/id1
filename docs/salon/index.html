@@ -89,8 +89,10 @@
         <a href="#catalogSection" class="hover:text-zinc-950 transition-colors">Rate Card</a>
       </nav>
 
-      <div class="flex items-center gap-3">
-        <span class="hidden sm:inline-block text-xs font-semibold text-zinc-600" id="topNavSalonName">My Salon</span>
+      <div class="flex items-center gap-2">
+        <button onclick="openRegisterSalonModal()" class="rounded-xl border border-zinc-200 bg-white/90 px-3 py-1.5 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm flex items-center gap-1">
+          <span>➕</span> <span class="hidden sm:inline">Register New Salon</span>
+        </button>
         <button onclick="document.getElementById('standeeSection').scrollIntoView({ behavior: 'smooth' })" class="btn-gloss-noir rounded-xl px-3.5 py-1.5 text-xs font-bold shadow-sm">
           🖨️ Standee QR
         </button>
@@ -114,6 +116,9 @@
             </h1>
             <button onclick="openEditSalonModal()" class="btn-gloss-glass rounded-xl px-3 py-1 text-xs font-bold text-indigo-700 shadow-sm flex items-center gap-1">
               ✏️ Edit Salon Details
+            </button>
+            <button onclick="openRegisterSalonModal()" class="rounded-xl border border-zinc-900/10 bg-zinc-900 text-white hover:bg-zinc-800 px-3 py-1 text-xs font-bold shadow-sm flex items-center gap-1 transition-all">
+              ➕ Register New Salon
             </button>
           </div>
           <p class="text-xs text-zinc-500 mt-1" id="dashboardSalonMeta">Configure salon address and manager contact.</p>
@@ -537,6 +542,65 @@
     </div>
   </div>
 
+  <!-- Register New Salon Modal -->
+  <div id="registerSalonModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
+    <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl space-y-4 border border-zinc-200">
+      <div class="flex items-center justify-between border-b pb-3">
+        <div>
+          <h3 class="font-bold text-base text-zinc-900">Register New Salon</h3>
+          <p class="text-xs text-zinc-500 mt-0.5">Create your salon account, counter QR standee & rate card.</p>
+        </div>
+        <button onclick="closeRegisterSalonModal()" class="text-zinc-400 hover:text-zinc-700 text-lg font-bold">✕</button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Salon Name *</label>
+          <input id="regSalonName" type="text" placeholder="e.g. Envi Salon & Spa" class="w-full rounded-xl border p-2.5 font-semibold text-zinc-900" />
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Full Address & City *</label>
+          <input id="regSalonAddress" type="text" placeholder="e.g. #42, 12th Main, Indiranagar, Bengaluru" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Owner / Manager Name</label>
+            <input id="regSalonManager" type="text" placeholder="Manager Name" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Phone / WhatsApp *</label>
+            <input id="regSalonPhone" type="tel" placeholder="+91 98765 00000" class="w-full rounded-xl border p-2.5 font-mono text-zinc-900" />
+          </div>
+        </div>
+        <div class="grid grid-cols-2 gap-2">
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Area Tag</label>
+            <input id="regSalonArea" type="text" placeholder="e.g. Indiranagar" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+          </div>
+          <div>
+            <label class="block font-semibold text-zinc-700 mb-1">Audience Focus</label>
+            <select id="regSalonGender" class="w-full rounded-xl border p-2.5 text-zinc-900">
+              <option value="unisex">Unisex Salon</option>
+              <option value="men">Men's Grooming</option>
+              <option value="women">Women's Salon & Spa</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Tagline / Specialties</label>
+          <input id="regSalonTagline" type="text" placeholder="e.g. Haircut, Color, Spa & Luxury Treatments" class="w-full rounded-xl border p-2.5 text-zinc-900" />
+        </div>
+      </div>
+      <div class="flex gap-2 pt-2">
+        <button onclick="submitRegisterSalon()" class="btn-gloss-noir flex-1 rounded-xl py-2.5 text-xs font-bold shadow-md">
+          Create & Launch Salon →
+        </button>
+        <button onclick="closeRegisterSalonModal()" class="rounded-xl border border-zinc-200 px-3 py-2 text-xs font-semibold text-zinc-700 hover:bg-zinc-50">
+          Cancel
+        </button>
+      </div>
+    </div>
+  </div>
+
   <!-- Edit Salon Profile Modal -->
   <div id="editSalonModal" class="fixed inset-0 z-50 hidden bg-black/60 backdrop-blur-sm flex items-center justify-center p-4">
     <div class="w-full max-w-md rounded-3xl bg-white p-6 shadow-2xl space-y-4 border border-zinc-200">
@@ -828,6 +892,81 @@
         document.getElementById('headerTestStandeeLink').href = `../customer/?qr=1&salon=${encodeURIComponent(slug)}&desk=Front+Desk+Counter`;
       }
       syncWithCustomerDirectory();
+    }
+
+    // Register New Salon Modal
+    function openRegisterSalonModal() {
+      document.getElementById('regSalonName').value = '';
+      document.getElementById('regSalonAddress').value = '';
+      document.getElementById('regSalonManager').value = '';
+      document.getElementById('regSalonPhone').value = '';
+      document.getElementById('regSalonArea').value = '';
+      document.getElementById('regSalonTagline').value = '';
+      document.getElementById('registerSalonModal').classList.remove('hidden');
+    }
+
+    function closeRegisterSalonModal() {
+      document.getElementById('registerSalonModal').classList.add('hidden');
+    }
+
+    function submitRegisterSalon() {
+      const name = (document.getElementById('regSalonName').value || '').trim();
+      const address = (document.getElementById('regSalonAddress').value || '').trim();
+      const manager = (document.getElementById('regSalonManager').value || '').trim() || 'Salon Manager';
+      const phone = (document.getElementById('regSalonPhone').value || '').trim();
+      const area = (document.getElementById('regSalonArea').value || '').trim() || 'Central';
+      const gender = document.getElementById('regSalonGender').value;
+      const tagline = (document.getElementById('regSalonTagline').value || '').trim() || 'Professional salon and styling services.';
+
+      if (!name) {
+        alert('Please enter a salon business name.');
+        document.getElementById('regSalonName').focus();
+        return;
+      }
+      if (!address) {
+        alert('Please enter your salon address.');
+        document.getElementById('regSalonAddress').focus();
+        return;
+      }
+
+      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
+
+      CURRENT_SALON = {
+        id: slug,
+        slug: slug,
+        name: name,
+        address: address,
+        manager: manager,
+        phone: phone,
+        area: area,
+        gender: gender,
+        tagline: tagline,
+        rating: '5.0',
+        reviews: '0',
+        badge: 'Verified Partner'
+      };
+
+      // Reset stylists, catalog and queue for a fresh salon account
+      STYLISTS_DATA = [];
+      CATALOG_SERVICES = [];
+      QUEUE_DATA = [];
+
+      saveSalonProfileToStorage();
+      saveStylistsToStorage();
+      saveCatalogToStorage();
+
+      initSalonProfile();
+      renderQueueTable();
+      renderStylistsList();
+      renderCatalogTable();
+      updateStandee();
+
+      closeRegisterSalonModal();
+
+      alert(`✓ Salon "${name}" registered successfully!\n\nYour instant QR Standee and client booking portal have been generated.`);
+      
+      const catSection = document.getElementById('catalogSection');
+      if (catSection) catSection.scrollIntoView({ behavior: 'smooth' });
     }
 
     // Edit Salon Profile Modal
