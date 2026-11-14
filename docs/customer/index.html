@@ -62,18 +62,157 @@
       </div>
       
       <div class="flex items-center gap-2 text-xs">
+        <span id="custUserBadge" class="hidden rounded-xl border border-zinc-200 bg-zinc-50 px-3 py-1.5 font-medium text-zinc-700 text-[11px] truncate max-w-[190px]">
+          👤 <span id="custBadgeName">User</span>
+        </span>
+        <button id="nearbyNavBtn" onclick="showNearbySalonsView()" class="hidden rounded-xl border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:bg-zinc-50 shadow-sm flex items-center gap-1.5 transition-colors">
+          <span>📍</span>
+          <span class="hidden sm:inline">Nearby Salons</span>
+        </button>
         <a id="callSalonHeaderBtn" href="tel:+919876543210" class="rounded-xl border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:bg-zinc-50 shadow-sm flex items-center gap-1.5 transition-colors">
           <span>📞</span>
           <span class="hidden sm:inline">Call Salon</span>
         </a>
+        <button id="custLogoutBtn" onclick="logoutCustomer()" class="hidden rounded-xl border border-rose-200 bg-rose-50 px-2.5 py-1.5 font-semibold text-rose-700 hover:bg-rose-100 shadow-sm flex items-center gap-1 text-[11px]" title="Sign out of customer account">
+          <span>🚪</span>
+          <span class="hidden sm:inline">Logout</span>
+        </button>
       </div>
     </div>
   </header>
 
   <main class="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-8 space-y-6">
 
+    <!-- AUTH GATE: CUSTOMER EMAIL REGISTRATION & LOGIN SCREEN -->
+    <div id="customerAuthGate" class="glass-pearl rounded-3xl p-6 sm:p-10 max-w-lg mx-auto space-y-6 shadow-2xl border border-white/90">
+      <div class="text-center space-y-2">
+        <div class="flex h-12 w-12 items-center justify-center rounded-2xl bg-zinc-900 text-white font-extrabold text-xl mx-auto shadow-md">
+          S
+        </div>
+        <h1 class="text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
+          Customer Portal
+        </h1>
+        <p class="text-xs text-zinc-500 max-w-sm mx-auto" id="gateNoticeSubtitle">
+          Register with your email address and location to discover and book appointments at verified salons near you.
+        </p>
+      </div>
+
+      <!-- Scanned QR Standee Alert if present in URL -->
+      <div id="gateQrNotice" class="hidden rounded-2xl border border-emerald-500/30 bg-emerald-50/80 p-3 text-emerald-900 text-xs flex items-center gap-2">
+        <span class="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-emerald-600 text-white text-[10px] font-bold">✓</span>
+        <span>Standee QR scanned for <strong id="gateQrSalonName">Salon</strong>. Enter your email to confirm your chair reservation.</span>
+      </div>
+
+      <!-- Tab Switcher -->
+      <div class="flex rounded-2xl bg-zinc-100 p-1 text-xs font-bold">
+        <button id="custTabRegisterBtn" onclick="switchCustAuthTab('register')" class="flex-1 rounded-xl bg-white py-2.5 text-zinc-900 shadow-sm transition-all">
+          Register with Email
+        </button>
+        <button id="custTabLoginBtn" onclick="switchCustAuthTab('login')" class="flex-1 rounded-xl py-2.5 text-zinc-500 hover:text-zinc-900 transition-all">
+          Sign In
+        </button>
+      </div>
+
+      <!-- Form 1: Registration Form (Default) -->
+      <form id="custRegisterForm" onsubmit="handleCustomerRegister(event)" class="space-y-3.5 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Your Full Name *</label>
+          <input id="regCustName" type="text" required placeholder="e.g. Priya Sharma"
+            class="w-full rounded-xl border border-zinc-200 bg-white p-3 font-semibold text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+        </div>
+
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Actual Email Address *</label>
+          <input id="regCustEmail" type="email" required placeholder="e.g. priya.sharma@gmail.com"
+            class="w-full rounded-xl border border-zinc-200 bg-white p-3 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+        </div>
+
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Phone / WhatsApp Number *</label>
+          <input id="regCustPhone" type="tel" required placeholder="+91 98765 12345"
+            class="w-full rounded-xl border border-zinc-200 bg-white p-3 font-mono text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+        </div>
+
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Your Location / City Area *</label>
+          <input id="regCustLocation" type="text" required placeholder="e.g. Indiranagar, Bengaluru"
+            class="w-full rounded-xl border border-zinc-200 bg-white p-3 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="btn-gloss-noir w-full rounded-xl py-3 text-xs font-bold shadow-md flex items-center justify-center gap-2">
+            <span>🚀</span>
+            <span>Register & Unlock Salons Near Me →</span>
+          </button>
+        </div>
+
+        <p class="text-[11px] text-zinc-400 text-center pt-1">
+          ✓ Booking confirmations, chair reservations, and OTP passes are sent to your verified email.
+        </p>
+      </form>
+
+      <!-- Form 2: Sign In Form -->
+      <form id="custLoginForm" onsubmit="handleCustomerLogin(event)" class="hidden space-y-4 text-xs">
+        <div>
+          <label class="block font-semibold text-zinc-700 mb-1">Registered Email Address or Phone *</label>
+          <input id="loginCustIdentifier" type="text" required placeholder="priya.sharma@gmail.com or +91 98765 12345"
+            class="w-full rounded-xl border border-zinc-200 bg-white p-3 text-zinc-900 focus:outline-none focus:ring-2 focus:ring-zinc-900 shadow-sm" />
+        </div>
+
+        <div class="pt-2">
+          <button type="submit" class="btn-gloss-noir w-full rounded-xl py-3 text-xs font-bold shadow-md flex items-center justify-center gap-2">
+            <span>🔐</span>
+            <span>Sign In & Continue →</span>
+          </button>
+        </div>
+
+        <p class="text-[11px] text-zinc-500 text-center">
+          First time on SalonBridge?
+          <button type="button" onclick="switchCustAuthTab('register')" class="text-zinc-900 font-bold underline ml-1">
+            Register with your email
+          </button>
+        </p>
+      </form>
+    </div>
+
+    <!-- VIEW: NEARBY SALONS (Available after Registration) -->
+    <div id="nearbySalonsView" class="hidden space-y-6">
+      <div class="glass-pearl rounded-3xl p-6 sm:p-8 space-y-3">
+        <div class="flex flex-wrap items-center justify-between gap-4">
+          <div>
+            <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-[11px] font-bold text-emerald-700 border border-emerald-500/20">
+              📍 Salons Near Your Location
+            </span>
+            <h1 class="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
+              Salons Near You
+            </h1>
+            <p class="text-xs text-zinc-500 mt-1">
+              Showing verified partner salons near <span id="userLocationBadge" class="font-bold text-zinc-800">Your Location</span>. Select a salon to explore their menu and book a chair.
+            </p>
+          </div>
+          <button onclick="editCustomerLocation()" class="rounded-xl border border-zinc-200 bg-white px-3 py-1.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-50 shadow-sm flex items-center gap-1">
+            ✏️ Change Location
+          </button>
+        </div>
+      </div>
+
+      <!-- Dynamic Cards Container -->
+      <div id="nearbySalonsContainer" class="space-y-4">
+        <!-- Injected dynamically -->
+      </div>
+    </div>
+
     <!-- SINGLE SALON DETAIL & DIRECT BOOKING VIEW -->
-    <div id="salonDetailView" class="space-y-6">
+    <div id="salonDetailView" class="hidden space-y-6">
+
+      <!-- Navigation Row -->
+      <div id="backToNearbyNav" class="hidden flex items-center justify-between text-xs">
+        <button onclick="showNearbySalonsView()" class="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 font-semibold text-zinc-700 hover:bg-zinc-100 shadow-sm flex items-center gap-1.5 transition-colors">
+          <span>←</span>
+          <span>View Salons Near Me</span>
+        </button>
+        <span class="text-zinc-500">Select any service below to lock your chair</span>
+      </div>
 
       <!-- Standee QR Scanned Notice Banner (Shown when scanned from Standee QR) -->
       <div id="qrBanner" class="hidden rounded-2xl border border-emerald-500/20 bg-emerald-50/80 p-3.5 sm:p-4 text-emerald-900 text-xs flex items-center justify-between gap-3 shadow-sm">
@@ -86,12 +225,6 @@
         <span class="text-[11px] font-bold text-emerald-800 bg-white/80 px-2.5 py-1 rounded-lg border border-emerald-200">
           ⚡ Priority Pass Active
         </span>
-      </div>
-
-      <!-- Service Selection Prompt -->
-      <div class="flex items-center justify-between text-xs text-zinc-500">
-        <span class="font-medium">Direct Chair Booking & Live Digital Menu</span>
-        <span>Select any service below to lock your chair</span>
       </div>
 
       <!-- Salon Profile Showcase -->
@@ -392,86 +525,337 @@
     let lockTimerInterval = null;
 
     // -------------------------------------------------------------
-    // ROUTER: Loads Dedicated Single Salon View
+    // CUSTOMER AUTHENTICATION & LOGIN GATE
     // -------------------------------------------------------------
-    function initApp() {
+    function getStoredCustomer() {
+      try {
+        const s = localStorage.getItem('salonbridge_customer_user');
+        return s ? JSON.parse(s) : null;
+      } catch (e) {
+        return null;
+      }
+    }
+
+    function switchCustAuthTab(tab) {
+      const regForm = document.getElementById('custRegisterForm');
+      const loginForm = document.getElementById('custLoginForm');
+      const regBtn = document.getElementById('custTabRegisterBtn');
+      const loginBtn = document.getElementById('custTabLoginBtn');
+
+      if (tab === 'login') {
+        regForm.classList.add('hidden');
+        loginForm.classList.remove('hidden');
+        loginBtn.className = 'flex-1 rounded-xl bg-white py-2.5 text-zinc-900 shadow-sm transition-all';
+        regBtn.className = 'flex-1 rounded-xl py-2.5 text-zinc-500 hover:text-zinc-900 transition-all';
+      } else {
+        loginForm.classList.add('hidden');
+        regForm.classList.remove('hidden');
+        regBtn.className = 'flex-1 rounded-xl bg-white py-2.5 text-zinc-900 shadow-sm transition-all';
+        loginBtn.className = 'flex-1 rounded-xl py-2.5 text-zinc-500 hover:text-zinc-900 transition-all';
+      }
+    }
+
+    function handleCustomerRegister(event) {
+      if (event) event.preventDefault();
+
+      const name = (document.getElementById('regCustName').value || '').trim();
+      const email = (document.getElementById('regCustEmail').value || '').trim().toLowerCase();
+      const phone = (document.getElementById('regCustPhone').value || '').trim();
+      const location = (document.getElementById('regCustLocation').value || '').trim();
+
+      if (!name) {
+        alert('Please enter your full name.');
+        document.getElementById('regCustName').focus();
+        return;
+      }
+
+      if (!email || !email.includes('@') || !email.includes('.')) {
+        alert('Please enter your actual email address (e.g. name@domain.com).');
+        document.getElementById('regCustEmail').focus();
+        return;
+      }
+
+      const cleanPhone = phone.replace(/[^0-9]/g, '');
+      if (cleanPhone.length < 10) {
+        alert('Please enter a valid 10-digit mobile number.');
+        document.getElementById('regCustPhone').focus();
+        return;
+      }
+
+      if (!location) {
+        alert('Please enter your neighborhood / city location.');
+        document.getElementById('regCustLocation').focus();
+        return;
+      }
+
+      const customerUser = {
+        name: name,
+        email: email,
+        phone: phone,
+        location: location,
+        registeredAt: new Date().toISOString()
+      };
+
+      // Save customer session
+      localStorage.setItem('salonbridge_customer_user', JSON.stringify(customerUser));
+
+      // Append to registry
+      try {
+        const reg = JSON.parse(localStorage.getItem('salonbridge_registered_customers') || '[]');
+        reg.push(customerUser);
+        localStorage.setItem('salonbridge_registered_customers', JSON.stringify(reg));
+      } catch (e) {}
+
+      alert(`✓ Welcome, ${name}!\n\nYour account has been registered with ${email}. You can now see and book salons near you.`);
+
+      checkCustomerAuthAndRoute();
+    }
+
+    function handleCustomerLogin(event) {
+      if (event) event.preventDefault();
+
+      const input = (document.getElementById('loginCustIdentifier').value || '').trim().toLowerCase();
+      if (!input) {
+        alert('Please enter your registered email address or phone number.');
+        document.getElementById('loginCustIdentifier').focus();
+        return;
+      }
+
+      const current = getStoredCustomer();
+      if (current && (current.email.toLowerCase() === input || current.phone.replace(/[^0-9]/g, '').includes(input.replace(/[^0-9]/g, '')))) {
+        alert(`✓ Welcome back, ${current.name}!`);
+        checkCustomerAuthAndRoute();
+        return;
+      }
+
+      let found = null;
+      try {
+        const reg = JSON.parse(localStorage.getItem('salonbridge_registered_customers') || '[]');
+        found = reg.find(c => c.email.toLowerCase() === input || c.phone.replace(/[^0-9]/g, '').includes(input.replace(/[^0-9]/g, '')));
+      } catch (e) {}
+
+      if (found) {
+        localStorage.setItem('salonbridge_customer_user', JSON.stringify(found));
+        alert(`✓ Welcome back, ${found.name}!`);
+        checkCustomerAuthAndRoute();
+      } else {
+        const registerNow = confirm(`No registered customer found for "${input}".\n\nWould you like to register with your email now?`);
+        if (registerNow) {
+          switchCustAuthTab('register');
+          if (input.includes('@')) {
+            document.getElementById('regCustEmail').value = input;
+          } else {
+            document.getElementById('regCustPhone').value = input;
+          }
+          document.getElementById('regCustName').focus();
+        }
+      }
+    }
+
+    function logoutCustomer() {
+      if (confirm('Are you sure you want to log out of your customer account?')) {
+        localStorage.removeItem('salonbridge_customer_user');
+        checkCustomerAuthAndRoute();
+        window.scrollTo({ top: 0, behavior: 'smooth' });
+      }
+    }
+
+    function editCustomerLocation() {
+      const cust = getStoredCustomer();
+      const current = cust?.location || 'Indiranagar, Bengaluru';
+      const updated = prompt('Enter your current neighborhood or city:', current);
+      if (updated && updated.trim()) {
+        cust.location = updated.trim();
+        localStorage.setItem('salonbridge_customer_user', JSON.stringify(cust));
+        renderNearbySalons();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // ROUTER & AUTH GATE CONTROLLER
+    // -------------------------------------------------------------
+    function checkCustomerAuthAndRoute() {
       cleanStaleDemoSalons();
       SALON_DATABASE = getSalonDatabase();
+
+      const user = getStoredCustomer();
+      const authGate = document.getElementById('customerAuthGate');
+      const nearbyView = document.getElementById('nearbySalonsView');
+      const detailView = document.getElementById('salonDetailView');
+      const userBadge = document.getElementById('custUserBadge');
+      const badgeName = document.getElementById('custBadgeName');
+      const nearbyNavBtn = document.getElementById('nearbyNavBtn');
+      const logoutBtn = document.getElementById('custLogoutBtn');
 
       const params = new URLSearchParams(window.location.search);
       const isQr = params.get('qr') === '1' || params.get('qr') === 'true' || params.has('desk');
       const salonParam = params.get('salon');
       currentDesk = params.get('desk') || 'Front Desk Counter';
 
-      const storedActive = getStoredCurrentSalon();
-      const storedCatalog = getStoredCatalog();
-      const storedStylists = getStoredStylists();
+      if (!user) {
+        // Customer is not registered -> SHOW GATE, HIDE ALL SALONS & BOOKINGS
+        if (authGate) authGate.classList.remove('hidden');
+        if (nearbyView) nearbyView.classList.add('hidden');
+        if (detailView) detailView.classList.add('hidden');
+        if (userBadge) userBadge.classList.add('hidden');
+        if (nearbyNavBtn) nearbyNavBtn.classList.add('hidden');
+        if (logoutBtn) logoutBtn.classList.add('hidden');
+        document.getElementById('navHeaderSubtitle').innerText = 'Registration Required';
 
-      if (salonParam && SALON_DATABASE[salonParam]) {
-        currentSalon = SALON_DATABASE[salonParam];
-      } else if (storedActive && (!salonParam || storedActive.slug === salonParam || storedActive.id === salonParam)) {
-        currentSalon = {
-          id: storedActive.id || storedActive.slug || 'my-salon',
-          name: storedActive.name || 'My Salon',
-          locationKey: storedActive.area || 'all',
-          genderKey: storedActive.gender || 'unisex',
-          address: storedActive.address || 'Partner Salon Location',
-          distance: 'Nearby',
-          rating: storedActive.rating || '5.0',
-          reviews: storedActive.reviews || '0',
-          phone: storedActive.phone || '',
-          badge: storedActive.badge || 'Verified Partner',
-          tagline: storedActive.tagline || 'Direct Salon Booking and Live Digital Menu',
-          startingPrice: storedCatalog.length > 0 ? `₹${Math.min(...storedCatalog.map(x => x.price || 0))}` : 'Live Menu',
-          stylists: storedStylists,
-          services: storedCatalog
-        };
-      } else if (salonParam) {
-        const formattedName = salonParam
-          .split('-')
-          .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-          .join(' ');
-        currentSalon = {
-          id: salonParam,
-          name: formattedName,
-          locationKey: 'all',
-          genderKey: 'unisex',
-          address: 'Partner Salon Location',
-          distance: 'Nearby',
-          rating: '5.0',
-          reviews: '0',
-          phone: '',
-          badge: 'Verified Salon Partner',
-          tagline: 'Direct Desk Booking and Live Digital Menu',
-          startingPrice: '₹0',
-          stylists: storedStylists,
-          services: storedCatalog
-        };
-      } else {
-        const dbSalons = Object.values(SALON_DATABASE);
-        if (dbSalons.length > 0) {
-          currentSalon = dbSalons[0];
-        } else {
-          currentSalon = {
-            id: 'my-salon',
-            name: storedActive ? storedActive.name : 'Salon Services',
-            locationKey: 'all',
-            genderKey: 'unisex',
-            address: storedActive ? storedActive.address : 'Partner Salon Location',
-            distance: 'Nearby',
-            rating: '5.0',
-            reviews: '0',
-            phone: storedActive ? storedActive.phone : '',
-            badge: 'Verified Partner',
-            tagline: 'Direct Chair Booking and Live Digital Menu',
-            startingPrice: storedCatalog.length > 0 ? `₹${Math.min(...storedCatalog.map(x => x.price || 0))}` : 'Live Menu',
-            stylists: storedStylists,
-            services: storedCatalog
-          };
+        const qrNotice = document.getElementById('gateQrNotice');
+        if (isQr && salonParam && qrNotice) {
+          qrNotice.classList.remove('hidden');
+          const prettySalon = salonParam.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+          document.getElementById('gateQrSalonName').innerText = prettySalon;
+        } else if (qrNotice) {
+          qrNotice.classList.add('hidden');
         }
+        return;
       }
 
-      openSalonDetail(currentSalon, isQr);
+      // Customer IS registered
+      if (authGate) authGate.classList.add('hidden');
+      if (userBadge) {
+        userBadge.classList.remove('hidden');
+        if (badgeName) badgeName.innerText = user.name.split(' ')[0] || user.name;
+      }
+      if (logoutBtn) logoutBtn.classList.remove('hidden');
+
+      if (isQr && salonParam) {
+        // Scanned Standee QR Code -> Route directly to that specific salon
+        openSalonDetail(salonParam, true);
+      } else if (salonParam) {
+        // Direct salon link
+        openSalonDetail(salonParam, false);
+      } else {
+        // Browse nearby salons
+        showNearbySalonsView();
+      }
+    }
+
+    // -------------------------------------------------------------
+    // VIEW: NEARBY SALONS
+    // -------------------------------------------------------------
+    function showNearbySalonsView() {
+      document.getElementById('nearbySalonsView').classList.remove('hidden');
+      document.getElementById('salonDetailView').classList.add('hidden');
+      document.getElementById('nearbyNavBtn').classList.add('hidden');
+      document.getElementById('navHeaderSubtitle').innerText = 'Salons Near You';
+      renderNearbySalons();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function renderNearbySalons() {
+      const container = document.getElementById('nearbySalonsContainer');
+      container.innerHTML = '';
+
+      const custUser = getStoredCustomer();
+      const userLoc = (custUser?.location || 'Your Area').trim();
+      if (document.getElementById('userLocationBadge')) {
+        document.getElementById('userLocationBadge').innerText = userLoc;
+      }
+
+      const db = getSalonDatabase();
+      let salons = Object.values(db);
+
+      const activePartner = getStoredCurrentSalon();
+      if (activePartner && !salons.some(s => s.id === activePartner.id || s.slug === activePartner.slug)) {
+        salons.push({
+          id: activePartner.id || activePartner.slug || 'my-salon',
+          slug: activePartner.slug || 'my-salon',
+          name: activePartner.name || 'My Salon',
+          locationKey: activePartner.area || 'indiranagar',
+          genderKey: activePartner.gender || 'unisex',
+          address: activePartner.address || 'Partner Salon Location',
+          distance: '0.8 km away',
+          rating: activePartner.rating || '5.0',
+          reviews: activePartner.reviews || '0',
+          phone: activePartner.phone || '',
+          badge: 'Verified Partner',
+          tagline: activePartner.tagline || 'Custom salon styling and professional grooming services.',
+          startingPrice: 'Live Rates',
+          stylists: getStoredStylists(),
+          services: getStoredCatalog()
+        });
+      }
+
+      if (salons.length === 0) {
+        container.innerHTML = `
+          <div class="glass-pearl rounded-3xl p-8 sm:p-12 text-center text-xs text-zinc-500 space-y-3 max-w-md mx-auto">
+            <div class="h-12 w-12 rounded-2xl bg-zinc-900/5 text-zinc-500 flex items-center justify-center text-2xl mx-auto shadow-inner">
+              📍
+            </div>
+            <h3 class="font-extrabold text-zinc-900 text-sm">No Salons Listed Near ${userLoc} Yet</h3>
+            <p class="text-zinc-400">Salons registered in the Partner Portal will appear here automatically.</p>
+          </div>
+        `;
+        return;
+      }
+
+      salons.forEach(s => {
+        const card = document.createElement('div');
+        card.className = 'glass-pearl rounded-3xl p-6 sm:p-7 transition-all hover:scale-[1.008] border border-white/90 space-y-4 shadow-md';
+        const serviceCount = (s.services || []).length;
+        const startingPrice = s.startingPrice || (serviceCount > 0 ? `₹${Math.min(...s.services.map(x => x.price || 0))}` : 'Live Rates');
+
+        card.innerHTML = `
+          <div class="flex flex-wrap items-start justify-between gap-3">
+            <div>
+              <div class="flex items-center gap-2 flex-wrap">
+                <span class="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">
+                  ● Open Now
+                </span>
+                <span class="rounded-full bg-zinc-900/5 px-2.5 py-0.5 text-[10px] font-semibold text-zinc-700">
+                  ${s.badge || 'Verified Partner'}
+                </span>
+                <span class="text-xs font-semibold text-zinc-400">· Nearby (${userLoc})</span>
+              </div>
+              <h3 class="mt-2 text-xl font-bold text-zinc-900">${s.name}</h3>
+              <p class="text-xs text-zinc-500 mt-0.5">📍 ${s.address || 'Registered Partner Salon'}</p>
+            </div>
+
+            <div class="text-right">
+              <div class="flex items-center gap-1 rounded-2xl bg-zinc-900 px-3 py-1 text-white shadow-sm">
+                <span class="text-amber-400 font-bold text-xs">★</span>
+                <span class="text-xs font-bold">${s.rating || '5.0'}</span>
+                <span class="text-[10px] text-zinc-400">(${s.reviews || '0'})</span>
+              </div>
+              <span class="text-[11px] text-zinc-500 font-medium block mt-1">Starting from <strong class="text-zinc-900">${startingPrice}</strong></span>
+            </div>
+          </div>
+
+          <p class="text-xs text-zinc-600 border-t border-zinc-100 pt-3">
+            ${s.tagline || 'Book hair, styling, and grooming services directly.'}
+          </p>
+
+          <div class="flex flex-wrap gap-1.5 text-[11px]">
+            ${(s.services || []).slice(0, 4).map(svc => `
+              <span class="rounded-lg bg-white/80 px-2.5 py-1 text-zinc-700 border border-zinc-200/80 font-medium">
+                ${svc.name} · <strong>₹${svc.price}</strong>
+              </span>
+            `).join('')}
+            ${serviceCount === 0 ? '<span class="text-zinc-400 italic text-[11px]">Rate-card live at front desk</span>' : ''}
+          </div>
+
+          <div class="flex justify-end pt-2 border-t border-zinc-100">
+            <button onclick="selectNearbySalon('${s.id || s.slug}')" class="btn-gloss-noir rounded-xl px-5 py-2.5 text-xs font-bold flex items-center gap-2 shadow-sm">
+              <span>View Services & Book Chair</span>
+              <span>→</span>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function selectNearbySalon(salonId) {
+      const db = getSalonDatabase();
+      const target = db[salonId] || (getStoredCurrentSalon()?.slug === salonId ? getStoredCurrentSalon() : null);
+      if (target) {
+        openSalonDetail(target, false);
+      } else {
+        openSalonDetail(salonId, false);
+      }
     }
 
     // -------------------------------------------------------------
@@ -479,20 +863,45 @@
     // -------------------------------------------------------------
     function openSalonDetail(salonObj, fromQr = false) {
       if (typeof salonObj === 'string') {
-        currentSalon = SALON_DATABASE[salonObj] || currentSalon;
+        const db = getSalonDatabase();
+        currentSalon = db[salonObj] || (getStoredCurrentSalon()?.slug === salonObj ? getStoredCurrentSalon() : null);
+        if (!currentSalon) {
+          const formattedName = salonObj.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+          currentSalon = {
+            id: salonObj,
+            name: formattedName,
+            address: 'Partner Salon Location',
+            phone: '',
+            badge: 'Verified Partner',
+            rating: '5.0',
+            reviews: '0',
+            stylists: getStoredStylists(),
+            services: getStoredCatalog()
+          };
+        }
       } else if (salonObj) {
         currentSalon = salonObj;
       }
 
       currentCategory = 'all';
 
+      document.getElementById('nearbySalonsView').classList.add('hidden');
+      document.getElementById('salonDetailView').classList.remove('hidden');
+
+      const backNav = document.getElementById('backToNearbyNav');
+      const nearbyNavBtn = document.getElementById('nearbyNavBtn');
+
       if (fromQr) {
         document.getElementById('qrBanner').classList.remove('hidden');
         document.getElementById('deskNameBadge').innerText = currentDesk;
         document.getElementById('navHeaderSubtitle').innerText = 'Standee Pass';
+        if (backNav) backNav.classList.add('hidden');
+        if (nearbyNavBtn) nearbyNavBtn.classList.remove('hidden');
       } else {
         document.getElementById('qrBanner').classList.add('hidden');
         document.getElementById('navHeaderSubtitle').innerText = currentSalon.name;
+        if (backNav) backNav.classList.remove('hidden');
+        if (nearbyNavBtn) nearbyNavBtn.classList.add('hidden');
       }
 
       document.getElementById('salonName').innerText = currentSalon.name;
@@ -524,6 +933,15 @@
         opt.innerText = `${st.name} — ${st.role}`;
         stylistSelect.appendChild(opt);
       });
+
+      // Auto-prefill customer credentials from registered email profile
+      const custUser = getStoredCustomer();
+      if (custUser) {
+        const nameInput = document.getElementById('custName');
+        const phoneInput = document.getElementById('custPhone');
+        if (nameInput) nameInput.value = custUser.name || '';
+        if (phoneInput) phoneInput.value = custUser.phone || '';
+      }
 
       renderServices();
       window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -687,9 +1105,9 @@
       document.getElementById('successBanner').scrollIntoView({ behavior: 'smooth' });
     }
 
-    // Initialize router on page load
+    // Initialize customer authentication & routing on page load
     window.addEventListener('DOMContentLoaded', () => {
-      initApp();
+      checkCustomerAuthAndRoute();
     });
   </script>
 </body>
