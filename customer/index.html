@@ -304,11 +304,11 @@
               <h4 class="font-bold text-xs uppercase tracking-wider text-zinc-900">Your Booking Details</h4>
               <div>
                 <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Your Full Name:</label>
-                <input id="custName" type="text" placeholder="e.g. Aarav Sharma" value="Aarav Sharma" class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800" />
+                <input id="custName" type="text" placeholder="Enter your full name" class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-800" />
               </div>
               <div>
                 <label class="block text-[11px] font-semibold text-zinc-600 mb-1">WhatsApp Mobile (For instant pass & OTP):</label>
-                <input id="custPhone" type="tel" placeholder="+91 98765 43210" value="+91 98765 43210" class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-mono font-semibold text-zinc-800" />
+                <input id="custPhone" type="tel" placeholder="+91 98765 00000" class="w-full rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-mono font-semibold text-zinc-800" />
               </div>
               <div>
                 <label class="block text-[11px] font-semibold text-zinc-600 mb-1">Payment Preference:</label>
@@ -755,6 +755,16 @@
     function confirmBooking() {
       if (!activeService) return;
 
+      const custName = (document.getElementById('custName')?.value || '').trim();
+      const custPhone = (document.getElementById('custPhone')?.value || '').trim();
+
+      if (!custName || !custPhone) {
+        alert('Please enter your full name and mobile number to complete your booking.');
+        const nameInput = document.getElementById('custName');
+        if (nameInput) nameInput.focus();
+        return;
+      }
+
       const stylist = document.getElementById('stylistSelect').value;
 
       document.getElementById('bookingDrawer').classList.add('hidden');
@@ -765,9 +775,9 @@
       document.getElementById('confSlot').innerText = `${selectedSlotTime} (${stylist})`;
       document.getElementById('confTotal').innerText = `₹${activeService.price}`;
 
-      // WhatsApp prefilled message
+      // WhatsApp prefilled message with customer details
       const waMsg = encodeURIComponent(
-        `Hi ${currentSalon.name}! I just confirmed *${activeService.name}* with *${stylist}* for *${selectedSlotTime}* (Ref: #SB-98421, Total: ₹${activeService.price}). Please reserve my chair!`
+        `Hi ${currentSalon.name}! My name is ${custName} (${custPhone}). I just confirmed *${activeService.name}* with *${stylist}* for *${selectedSlotTime}* (Ref: #SB-98421, Total: ₹${activeService.price}). Please reserve my chair!`
       );
       document.getElementById('waDirectBtn').href = `https://wa.me/${currentSalon.phone.replace(/[^0-9]/g, '')}?text=${waMsg}`;
 
