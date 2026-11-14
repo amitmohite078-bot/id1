@@ -50,23 +50,18 @@
   <header class="sticky top-0 z-50 border-b border-white/80 bg-white/85 backdrop-blur-2xl">
     <div class="mx-auto flex max-w-4xl items-center justify-between px-4 sm:px-6 py-4">
       <div class="flex items-center gap-3">
-        <div onclick="showSalonList()" class="flex h-8 w-8 cursor-pointer items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md hover:bg-zinc-800 transition-colors">
+        <div class="flex h-8 w-8 items-center justify-center rounded-xl bg-zinc-900 text-sm font-bold text-white shadow-md">
           S
         </div>
         <div>
-          <span onclick="showSalonList()" class="cursor-pointer text-lg font-bold tracking-tight text-zinc-900">SalonBridge</span>
+          <span class="text-lg font-bold tracking-tight text-zinc-900">SalonBridge</span>
           <span id="navHeaderSubtitle" class="ml-2 rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">
-            Choose Salon
+            Digital Rate Card & Booking
           </span>
         </div>
       </div>
       
       <div class="flex items-center gap-2 text-xs">
-        <!-- Always-accessible button to view all salons -->
-        <button id="allSalonsNavBtn" onclick="showSalonList()" class="rounded-xl border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:bg-zinc-50 shadow-sm flex items-center gap-1.5 transition-colors">
-          <span>🏪</span>
-          <span>All Salons</span>
-        </button>
         <a id="callSalonHeaderBtn" href="tel:+919876543210" class="rounded-xl border border-zinc-200 bg-white px-3 py-1.5 font-semibold text-zinc-700 hover:bg-zinc-50 shadow-sm flex items-center gap-1.5 transition-colors">
           <span>📞</span>
           <span class="hidden sm:inline">Call Salon</span>
@@ -77,83 +72,26 @@
 
   <main class="mx-auto max-w-4xl px-4 sm:px-6 py-6 sm:py-8 space-y-6">
 
-    <!-- ============================================================= -->
-    <!-- VIEW A: SALON DISCOVERY LIST (When user visits normally)      -->
-    <!-- ============================================================= -->
-    <div id="salonDiscoveryView" class="space-y-6">
-      
-      <!-- Discovery Hero Banner -->
-      <div class="glass-pearl rounded-3xl p-6 sm:p-8 space-y-4">
-        <div class="flex flex-wrap items-center justify-between gap-4">
-          <div>
-            <span class="rounded-full bg-zinc-900/5 px-3 py-1 text-[11px] font-semibold text-zinc-700">
-              📍 Real-Time Availability & Verified Salons
-            </span>
-            <h1 class="mt-2 text-2xl sm:text-3xl font-extrabold tracking-tight text-zinc-900">
-              Choose Your Salon
-            </h1>
-            <p class="text-xs text-zinc-500 mt-1">Select a salon below to view their services, stylists, live queue, and book appointments.</p>
-          </div>
-          <span class="rounded-full bg-emerald-500/10 px-3 py-1 text-xs font-bold text-emerald-700 border border-emerald-500/20">
-            3 Partner Salons Open Today
-          </span>
-        </div>
+    <!-- SINGLE SALON DETAIL & DIRECT BOOKING VIEW -->
+    <div id="salonDetailView" class="space-y-6">
 
-        <!-- Filter Controls -->
-        <div class="grid gap-2 sm:grid-cols-3 pt-2">
-          <input
-            id="searchInput"
-            type="text"
-            placeholder="Search salon or service..."
-            oninput="filterSalonsList()"
-            class="rounded-xl border border-zinc-200 bg-white px-3.5 py-2.5 text-xs font-semibold text-zinc-800 placeholder-zinc-400 focus:outline-none focus:ring-2 focus:ring-zinc-900"
-          />
-          <select id="locationSelect" onchange="filterSalonsList()" class="rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-xs font-semibold text-zinc-800">
-            <option value="all">All Locations (Bengaluru)</option>
-            <option value="indiranagar">Indiranagar (100ft Rd)</option>
-            <option value="koramangala">Koramangala (5th Block)</option>
-            <option value="hsr">HSR Layout (Sector 2)</option>
-          </select>
-          <select id="genderSelect" onchange="filterSalonsList()" class="rounded-xl border border-zinc-200 bg-white px-3 py-2.5 text-xs font-semibold text-zinc-800">
-            <option value="all">All Categories</option>
-            <option value="unisex">Unisex Salons</option>
-            <option value="men">Men's Grooming</option>
-            <option value="women">Women's Spa</option>
-          </select>
-        </div>
-      </div>
-
-      <!-- Salons Directory Cards -->
-      <div id="salonsListContainer" class="space-y-4">
-        <!-- Injected dynamically by renderSalonsList() -->
-      </div>
-    </div>
-
-    <!-- ============================================================= -->
-    <!-- VIEW B: SINGLE SALON DETAIL & BOOKING (When QR is scanned)    -->
-    <!-- ============================================================= -->
-    <div id="salonDetailView" class="hidden space-y-6">
-
-      <!-- Standee QR Scanned Notice Banner (Only shown when scanned from Standee) -->
+      <!-- Standee QR Scanned Notice Banner (Shown when scanned from Standee QR) -->
       <div id="qrBanner" class="hidden rounded-2xl border border-emerald-500/20 bg-emerald-50/80 p-3.5 sm:p-4 text-emerald-900 text-xs flex items-center justify-between gap-3 shadow-sm">
         <div class="flex items-center gap-2">
           <span class="flex h-6 w-6 items-center justify-center rounded-full bg-emerald-600 text-white font-bold text-xs">✓</span>
           <span>
-            <strong>Front Desk Standee Scanned:</strong> You are viewing live pricing for <span id="deskNameBadge" class="font-bold underline">Front Desk Counter</span>.
+            <strong>Front Desk Standee Scanned:</strong> You are viewing live pricing & chair allocation for <span id="deskNameBadge" class="font-bold underline">Front Desk Counter</span>.
           </span>
         </div>
-        <button onclick="showSalonList()" class="text-[11px] font-bold text-emerald-800 hover:text-emerald-950 underline whitespace-nowrap">
-          Browse All Salons →
-        </button>
+        <span class="text-[11px] font-bold text-emerald-800 bg-white/80 px-2.5 py-1 rounded-lg border border-emerald-200">
+          ⚡ Priority Pass Active
+        </span>
       </div>
 
-      <!-- Back Button to Directory -->
-      <div id="backNavRow" class="flex items-center justify-between text-xs">
-        <button onclick="showSalonList()" class="rounded-xl border border-zinc-200 bg-white px-3.5 py-2 font-semibold text-zinc-700 hover:bg-zinc-100 shadow-sm flex items-center gap-1.5 transition-colors">
-          <span>←</span>
-          <span>Back to All Salons</span>
-        </button>
-        <span class="text-zinc-500">Select any service below to lock your chair</span>
+      <!-- Service Selection Prompt -->
+      <div class="flex items-center justify-between text-xs text-zinc-500">
+        <span class="font-medium">Direct Chair Booking & Live Digital Menu</span>
+        <span>Select any service below to lock your chair</span>
       </div>
 
       <!-- Salon Profile Showcase -->
@@ -373,73 +311,42 @@
           <a id="waDirectBtn" href="#" target="_blank" class="w-full rounded-xl bg-emerald-600 px-5 py-3 text-xs font-bold text-white shadow-md hover:bg-emerald-700 flex items-center justify-center gap-2">
             <span>💬</span> Open WhatsApp Pass with Salon Desk
           </a>
-          <button onclick="showSalonList()" class="w-full rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-100">
-            ← Explore Other Salons
+          <button onclick="resetBookingSelection()" class="w-full rounded-xl border border-zinc-200 bg-white px-5 py-2.5 text-xs font-semibold text-zinc-700 hover:bg-zinc-100">
+            + Book Another Service
           </button>
         </div>
       </div>
 
-    </div>
-
-    <!-- Quick Register Salon Modal -->
-    <div id="quickRegisterModal" class="hidden fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm p-4">
-      <div class="glass-pearl rounded-3xl p-6 sm:p-7 max-w-md w-full space-y-4 shadow-2xl border border-white/90">
-        <div class="flex items-center justify-between border-b border-zinc-100 pb-3">
-          <h3 class="text-base font-bold text-zinc-900">Register Salon</h3>
-          <button onclick="closeQuickRegisterModal()" class="text-zinc-400 hover:text-zinc-700 text-lg">✕</button>
-        </div>
-        <div class="space-y-3 text-xs">
-          <div>
-            <label class="block font-semibold text-zinc-700 mb-1">Salon Name *</label>
-            <input id="newSalonName" type="text" placeholder="e.g. Signature Cuts & Spa" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900 font-semibold" />
-          </div>
-          <div class="grid grid-cols-2 gap-2">
-            <div>
-              <label class="block font-semibold text-zinc-700 mb-1">Location Area *</label>
-              <select id="newSalonArea" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900">
-                <option value="indiranagar">Indiranagar</option>
-                <option value="koramangala">Koramangala</option>
-                <option value="hsr">HSR Layout</option>
-                <option value="whitefield">Whitefield</option>
-                <option value="other">Other</option>
-              </select>
-            </div>
-            <div>
-              <label class="block font-semibold text-zinc-700 mb-1">Audience Focus</label>
-              <select id="newSalonGender" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900">
-                <option value="unisex">Unisex</option>
-                <option value="men">Men's Grooming</option>
-                <option value="women">Women's Salon</option>
-              </select>
-            </div>
-          </div>
-          <div>
-            <label class="block font-semibold text-zinc-700 mb-1">Address & Contact Phone</label>
-            <input id="newSalonAddress" type="text" placeholder="e.g. Main Street, Bengaluru · Phone: +91 98765 00000" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900" />
-          </div>
-          <div>
-            <label class="block font-semibold text-zinc-700 mb-1">Tagline / Specialties</label>
-            <input id="newSalonTagline" type="text" placeholder="e.g. Haircut, Color, Spa & Luxury Treatments" class="w-full rounded-xl border border-zinc-200 bg-white p-2.5 text-xs text-zinc-900" />
-          </div>
-        </div>
-        <div class="flex gap-2 pt-2">
-          <button onclick="submitQuickRegister()" class="btn-gloss-noir flex-1 rounded-xl py-2.5 text-xs font-bold">
-            Register & Publish Salon →
-          </button>
-          <button onclick="closeQuickRegisterModal()" class="rounded-xl border border-zinc-200 bg-white px-3 py-2 text-xs font-semibold text-zinc-700">
-            Cancel
-          </button>
-        </div>
-      </div>
     </div>
 
   </main>
 
   <script>
     // -------------------------------------------------------------
-    // SALON DATABASE (Dynamic Multi-Tenant Storage from localStorage)
+    // SALON STORAGE & CACHE PURGE
     // -------------------------------------------------------------
+    function cleanStaleDemoSalons() {
+      try {
+        const stored = localStorage.getItem('salonbridge_salons');
+        if (stored) {
+          const db = JSON.parse(stored);
+          const staleKeys = ['glow-studio-indiranagar', 'curl-dye-koramangala', 'the-groom-room-hsr'];
+          let changed = false;
+          staleKeys.forEach(k => {
+            if (db[k]) {
+              delete db[k];
+              changed = true;
+            }
+          });
+          if (changed) {
+            localStorage.setItem('salonbridge_salons', JSON.stringify(db));
+          }
+        }
+      } catch (e) {}
+    }
+
     function getSalonDatabase() {
+      cleanStaleDemoSalons();
       try {
         const stored = localStorage.getItem('salonbridge_salons');
         return stored ? JSON.parse(stored) : {};
@@ -448,16 +355,34 @@
       }
     }
 
-    function saveSalonDatabase(db) {
+    function getStoredCurrentSalon() {
       try {
-        localStorage.setItem('salonbridge_salons', JSON.stringify(db));
+        const s = localStorage.getItem('salonbridge_current_salon');
+        return s ? JSON.parse(s) : null;
       } catch (e) {
-        console.error('Failed saving salon db to localStorage:', e);
+        return null;
+      }
+    }
+
+    function getStoredCatalog() {
+      try {
+        const s = localStorage.getItem('salonbridge_catalog');
+        return s ? JSON.parse(s) : [];
+      } catch (e) {
+        return [];
+      }
+    }
+
+    function getStoredStylists() {
+      try {
+        const s = localStorage.getItem('salonbridge_stylists');
+        return s ? JSON.parse(s) : [];
+      } catch (e) {
+        return [];
       }
     }
 
     let SALON_DATABASE = getSalonDatabase();
-
     let currentSalon = null;
     let currentCategory = 'all';
     let currentDesk = 'Front Desk Counter';
@@ -467,9 +392,10 @@
     let lockTimerInterval = null;
 
     // -------------------------------------------------------------
-    // ROUTER: Checks if user entered via QR Standee or Normal Browse
+    // ROUTER: Loads Dedicated Single Salon View
     // -------------------------------------------------------------
     function initApp() {
+      cleanStaleDemoSalons();
       SALON_DATABASE = getSalonDatabase();
 
       const params = new URLSearchParams(window.location.search);
@@ -477,256 +403,36 @@
       const salonParam = params.get('salon');
       currentDesk = params.get('desk') || 'Front Desk Counter';
 
-      if (isQr && salonParam) {
-        // ENTERED THROUGH QR CODE -> Open that specific salon directly
-        if (!SALON_DATABASE[salonParam]) {
-          // Scanned from a desk QR standee; synthesize salon dynamically so it opens cleanly
-          const formattedName = salonParam
-            .split('-')
-            .map(w => w.charAt(0).toUpperCase() + w.slice(1))
-            .join(' ');
-          SALON_DATABASE[salonParam] = {
-            id: salonParam,
-            name: formattedName,
-            locationKey: 'all',
-            genderKey: 'unisex',
-            address: 'Partner Salon Location',
-            distance: 'Nearby',
-            rating: '5.0',
-            reviews: '0',
-            phone: '',
-            badge: 'Verified Salon Partner',
-            tagline: 'Direct Desk Booking and Live Digital Menu',
-            startingPrice: '₹0',
-            stylists: [],
-            services: []
-          };
-          saveSalonDatabase(SALON_DATABASE);
-        }
-        openSalonDetail(salonParam, true);
-      } else {
-        // NORMAL ENTRY -> Display list of salons so user can choose!
-        showSalonList();
-      }
-    }
+      const storedActive = getStoredCurrentSalon();
+      const storedCatalog = getStoredCatalog();
+      const storedStylists = getStoredStylists();
 
-    // -------------------------------------------------------------
-    // VIEW A: SALON DISCOVERY LIST
-    // -------------------------------------------------------------
-    function showSalonList() {
-      SALON_DATABASE = getSalonDatabase();
-      document.getElementById('salonDiscoveryView').classList.remove('hidden');
-      document.getElementById('salonDetailView').classList.add('hidden');
-      document.getElementById('navHeaderSubtitle').innerText = 'Choose Salon';
-      
-      // Update browser URL cleanly without reload
-      if (window.history && window.history.replaceState) {
-        const cleanUrl = window.location.pathname;
-        window.history.replaceState({}, '', cleanUrl);
-      }
-
-      renderSalonsList();
-      window.scrollTo({ top: 0, behavior: 'smooth' });
-    }
-
-    function renderSalonsList() {
-      const container = document.getElementById('salonsListContainer');
-      container.innerHTML = '';
-
-      const query = (document.getElementById('searchInput')?.value || '').toLowerCase().trim();
-      const loc = document.getElementById('locationSelect')?.value || 'all';
-      const gen = document.getElementById('genderSelect')?.value || 'all';
-
-      const allSalons = Object.values(SALON_DATABASE);
-
-      const salons = allSalons.filter(s => {
-        const matchesQuery = !query ||
-                             (s.name && s.name.toLowerCase().includes(query)) ||
-                             (s.tagline && s.tagline.toLowerCase().includes(query)) ||
-                             ((s.services || []).some(svc => svc.name && svc.name.toLowerCase().includes(query)));
-        const matchesLoc = loc === 'all' || s.locationKey === loc;
-        const matchesGen = gen === 'all' || s.genderKey === gen;
-        return matchesQuery && matchesLoc && matchesGen;
-      });
-
-      if (salons.length === 0) {
-        if (allSalons.length === 0) {
-          // Entirely empty database (clean state)
-          container.innerHTML = `
-            <div class="glass-pearl rounded-3xl p-8 sm:p-12 text-center text-xs text-zinc-500 space-y-4 max-w-xl mx-auto shadow-md">
-              <div class="h-14 w-14 rounded-3xl bg-zinc-900/5 text-zinc-500 flex items-center justify-center text-2xl mx-auto shadow-inner">
-                🏬
-              </div>
-              <div>
-                <h3 class="font-extrabold text-zinc-900 text-base">No Salons Listed Yet</h3>
-                <p class="text-zinc-500 mt-1">Configure your salon in the Partner Portal to publish your rate-card and live desk standees.</p>
-              </div>
-              <div class="flex items-center justify-center gap-3 pt-2 flex-wrap">
-                <a href="../salon/" class="btn-gloss-noir rounded-xl px-4 py-2.5 text-xs font-bold inline-flex items-center gap-1.5 shadow-sm">
-                  <span>⚡</span> Open Partner Portal →
-                </a>
-                <button onclick="openQuickRegisterModal()" class="rounded-xl border border-zinc-200 bg-white/90 px-4 py-2.5 text-xs font-semibold text-zinc-800 hover:bg-white shadow-sm">
-                  + Quick Register Salon
-                </button>
-              </div>
-            </div>
-          `;
-        } else {
-          // Filters matched nothing
-          container.innerHTML = `
-            <div class="glass-pearl rounded-3xl p-8 text-center text-xs text-zinc-500 space-y-3 max-w-md mx-auto">
-              <p class="font-bold text-zinc-700">No salons found matching your current filters.</p>
-              <button onclick="resetFilters()" class="btn-gloss-noir rounded-xl px-4 py-2 text-xs font-bold">Reset Filters</button>
-            </div>
-          `;
-        }
-        return;
-      }
-
-      salons.forEach(s => {
-        const card = document.createElement('div');
-        card.className = 'glass-pearl rounded-3xl p-6 sm:p-7 transition-all hover:scale-[1.008] border border-white/90 space-y-4 shadow-md';
-        const serviceCount = (s.services || []).length;
-        const stylistCount = (s.stylists || []).length;
-        const startingPrice = s.startingPrice || (serviceCount > 0 ? `₹${Math.min(...s.services.map(x => x.price || 0))}` : 'Live Menu');
-
-        card.innerHTML = `
-          <div class="flex flex-wrap items-start justify-between gap-3">
-            <div>
-              <div class="flex items-center gap-2 flex-wrap">
-                <span class="rounded-full bg-emerald-500/10 px-2.5 py-0.5 text-[10px] font-bold text-emerald-700 border border-emerald-500/20">
-                  ● Open Now
-                </span>
-                <span class="rounded-full bg-zinc-900/5 px-2.5 py-0.5 text-[10px] font-semibold text-zinc-700">
-                  ${s.badge || 'Verified Partner'}
-                </span>
-                <span class="text-xs font-semibold text-zinc-400">· ${s.distance || 'Local'}</span>
-              </div>
-              <h3 class="mt-2 text-xl font-bold text-zinc-900">${s.name}</h3>
-              <p class="text-xs text-zinc-500 mt-0.5">${s.address || 'Registered Salon'}</p>
-            </div>
-
-            <div class="text-right">
-              <div class="flex items-center gap-1 rounded-2xl bg-zinc-900 px-3 py-1 text-white shadow-sm">
-                <span class="text-amber-400 font-bold text-xs">★</span>
-                <span class="text-xs font-bold">${s.rating || '5.0'}</span>
-                <span class="text-[10px] text-zinc-400">(${s.reviews || '0'})</span>
-              </div>
-              <span class="text-[11px] text-zinc-500 font-medium block mt-1">Starting from <strong class="text-zinc-900">${startingPrice}</strong></span>
-            </div>
-          </div>
-
-          <p class="text-xs text-zinc-600 border-t border-zinc-100 pt-3">
-            ${s.tagline || 'Book hair, styling, and grooming services directly.'}
-          </p>
-
-          <!-- Featured Services Preview Pills -->
-          <div class="flex flex-wrap gap-1.5 text-[11px]">
-            ${(s.services || []).slice(0, 3).map(svc => `
-              <span class="rounded-lg bg-white/80 px-2.5 py-1 text-zinc-700 border border-zinc-200/80 font-medium">
-                ${svc.name} · <strong>₹${svc.price}</strong>
-              </span>
-            `).join('')}
-            ${serviceCount === 0 ? '<span class="text-zinc-400 italic text-[11px]">Rate-card pending upload</span>' : ''}
-          </div>
-
-          <!-- Select Salon Button -->
-          <div class="flex justify-end pt-2 border-t border-zinc-100">
-            <button onclick="openSalonDetail('${s.id}', false)" class="btn-gloss-noir rounded-xl px-5 py-2.5 text-xs font-bold flex items-center gap-2 shadow-sm">
-              <span>View Salon Menu & Book</span>
-              <span>→</span>
-            </button>
-          </div>
-        `;
-        container.appendChild(card);
-      });
-    }
-
-    function filterSalonsList() {
-      renderSalonsList();
-    }
-
-    function resetFilters() {
-      document.getElementById('searchInput').value = '';
-      document.getElementById('locationSelect').value = 'all';
-      document.getElementById('genderSelect').value = 'all';
-      renderSalonsList();
-    }
-
-    // Modal helpers for Customer Quick Registration
-    function openQuickRegisterModal() {
-      document.getElementById('quickRegisterModal').classList.remove('hidden');
-    }
-    function closeQuickRegisterModal() {
-      document.getElementById('quickRegisterModal').classList.add('hidden');
-    }
-    function submitQuickRegister() {
-      const name = (document.getElementById('newSalonName').value || '').trim();
-      if (!name) {
-        alert('Please enter a salon name.');
-        return;
-      }
-      const area = document.getElementById('newSalonArea').value;
-      const gender = document.getElementById('newSalonGender').value;
-      const address = (document.getElementById('newSalonAddress').value || '').trim() || `${name}, Bengaluru`;
-      const tagline = (document.getElementById('newSalonTagline').value || '').trim() || 'Custom salon styling and professional grooming.';
-      const slug = name.toLowerCase().replace(/[^a-z0-9]+/g, '-').replace(/(^-|-$)+/g, '');
-
-      const newSalon = {
-        id: slug,
-        name: name,
-        locationKey: area,
-        genderKey: gender,
-        address: address,
-        distance: 'Nearby',
-        rating: '5.0',
-        reviews: '0',
-        phone: '',
-        badge: 'Verified Salon Partner',
-        tagline: tagline,
-        startingPrice: '₹0',
-        stylists: [],
-        services: []
-      };
-
-      SALON_DATABASE[slug] = newSalon;
-      saveSalonDatabase(SALON_DATABASE);
-
-      // Also set as current salon in partner storage
-      try {
-        localStorage.setItem('salonbridge_current_salon', JSON.stringify({
-          id: slug,
-          slug: slug,
-          name: name,
-          address: address,
-          manager: 'Salon Manager',
-          phone: '',
-          rating: '5.0',
-          reviews: '0',
-          badge: 'Verified Partner'
-        }));
-      } catch (e) {}
-
-      closeQuickRegisterModal();
-      renderSalonsList();
-      alert(`Salon "${name}" registered successfully!`);
-    }
-
-    // -------------------------------------------------------------
-    // VIEW B: PARTICULAR SALON DETAIL & BOOKING
-    // -------------------------------------------------------------
-    function openSalonDetail(salonKey, fromQr = false) {
-      SALON_DATABASE = getSalonDatabase();
-      currentSalon = SALON_DATABASE[salonKey];
-
-      if (!currentSalon) {
-        // Fallback for direct links
-        const formattedName = (salonKey || 'Partner Salon')
+      if (salonParam && SALON_DATABASE[salonParam]) {
+        currentSalon = SALON_DATABASE[salonParam];
+      } else if (storedActive && (!salonParam || storedActive.slug === salonParam || storedActive.id === salonParam)) {
+        currentSalon = {
+          id: storedActive.id || storedActive.slug || 'my-salon',
+          name: storedActive.name || 'My Salon',
+          locationKey: storedActive.area || 'all',
+          genderKey: storedActive.gender || 'unisex',
+          address: storedActive.address || 'Partner Salon Location',
+          distance: 'Nearby',
+          rating: storedActive.rating || '5.0',
+          reviews: storedActive.reviews || '0',
+          phone: storedActive.phone || '',
+          badge: storedActive.badge || 'Verified Partner',
+          tagline: storedActive.tagline || 'Direct Salon Booking and Live Digital Menu',
+          startingPrice: storedCatalog.length > 0 ? `₹${Math.min(...storedCatalog.map(x => x.price || 0))}` : 'Live Menu',
+          stylists: storedStylists,
+          services: storedCatalog
+        };
+      } else if (salonParam) {
+        const formattedName = salonParam
           .split('-')
           .map(w => w.charAt(0).toUpperCase() + w.slice(1))
           .join(' ');
         currentSalon = {
-          id: salonKey || 'partner-salon',
+          id: salonParam,
           name: formattedName,
           locationKey: 'all',
           genderKey: 'unisex',
@@ -735,20 +441,52 @@
           rating: '5.0',
           reviews: '0',
           phone: '',
-          badge: 'Verified Partner',
-          tagline: 'Direct Salon Booking',
+          badge: 'Verified Salon Partner',
+          tagline: 'Direct Desk Booking and Live Digital Menu',
           startingPrice: '₹0',
-          stylists: [],
-          services: []
+          stylists: storedStylists,
+          services: storedCatalog
         };
+      } else {
+        const dbSalons = Object.values(SALON_DATABASE);
+        if (dbSalons.length > 0) {
+          currentSalon = dbSalons[0];
+        } else {
+          currentSalon = {
+            id: 'my-salon',
+            name: storedActive ? storedActive.name : 'Salon Services',
+            locationKey: 'all',
+            genderKey: 'unisex',
+            address: storedActive ? storedActive.address : 'Partner Salon Location',
+            distance: 'Nearby',
+            rating: '5.0',
+            reviews: '0',
+            phone: storedActive ? storedActive.phone : '',
+            badge: 'Verified Partner',
+            tagline: 'Direct Chair Booking and Live Digital Menu',
+            startingPrice: storedCatalog.length > 0 ? `₹${Math.min(...storedCatalog.map(x => x.price || 0))}` : 'Live Menu',
+            stylists: storedStylists,
+            services: storedCatalog
+          };
+        }
       }
+
+      openSalonDetail(currentSalon, isQr);
+    }
+
+    // -------------------------------------------------------------
+    // SALON DETAIL & BOOKING PORTAL
+    // -------------------------------------------------------------
+    function openSalonDetail(salonObj, fromQr = false) {
+      if (typeof salonObj === 'string') {
+        currentSalon = SALON_DATABASE[salonObj] || currentSalon;
+      } else if (salonObj) {
+        currentSalon = salonObj;
+      }
+
       currentCategory = 'all';
 
-      document.getElementById('salonDiscoveryView').classList.add('hidden');
-      document.getElementById('salonDetailView').classList.remove('hidden');
-
       if (fromQr) {
-        // User entered through QR Standee -> Show desk badge
         document.getElementById('qrBanner').classList.remove('hidden');
         document.getElementById('deskNameBadge').innerText = currentDesk;
         document.getElementById('navHeaderSubtitle').innerText = 'Standee Pass';
@@ -788,6 +526,13 @@
       });
 
       renderServices();
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+
+    function resetBookingSelection() {
+      document.getElementById('successBanner').classList.add('hidden');
+      document.getElementById('bookingDrawer').classList.add('hidden');
+      activeService = null;
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
 
